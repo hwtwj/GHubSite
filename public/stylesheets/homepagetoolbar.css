@@ -1,0 +1,72 @@
+.navbar-inverse {
+  background-color: rgb(0, 0, 0);
+  border-color: rgb(222, 222, 222);
+  font-weight: 500;
+}
+
+.navbar-inverse .navbar-brand {
+  color: rgb(255, 255, 255);
+}
+
+.navbar-inverse .navbar-nav > li > a {
+  color: rgb(255, 255, 255);
+}
+
+.navbar-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 20;
+}
+
+/* Flip around the padding for proper display in narrow viewports */
+.navbar-wrapper > .container {
+  padding-right: 0;
+  padding-left: 0;
+}
+.navbar-wrapper .navbar {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+.navbar-wrapper .navbar .container {
+  width: auto;
+}
+
+.dropdown-menu {
+  background-color: rgb(0, 0, 0);
+}
+.dropdown-menu .divider {
+  background-color: #ffffff;
+}
+.dropdown-menu > li > a {
+  color: #ffffff;
+  white-space: nowrap;
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  color: #000000;
+  background-color: #ffffff;
+}
+
+@media (min-width: 768px) {
+  /* Navbar positioning foo */
+  .navbar-wrapper {
+    margin-top: 0px;
+  }
+
+  .navbar-wrapper .container-fluid {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+
+  .navbar-wrapper .navbar {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  /* The navbar becomes detached from the top, so we round the corners */
+  .navbar-wrapper .navbar {
+    border-radius: 4px;
+  }
+}
