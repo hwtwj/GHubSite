@@ -1,0 +1,3118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计，在线三维数据处理，Geometry++，几何库">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，Geometry++，几何库">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>Geometry++文档(master)</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/gppdocument.css" rel="stylesheet">
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+  </head>
+
+  <body>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <h3>Geometry++文档</h3>
+                <h4><a href="/geometryplusplus">返回</a></h4>
+                <h4><a href="#overview">使用简介</a></h4>
+                <h4><a href="#pcinterface">点云</a></h4>
+                <ul class="sideul">
+                    <li class="sideli"><a href="#pcinterface">点云表示</a></li>
+                    <li class="sideli"><a href="#pcparser">导入导出</a></li>
+                    <li class="sideli"><a href="#pcgridpointcloud">有序点云</a></li>
+                    <li class="sideli"><a href="#pcsampling">采样</a></li>
+                    <li class="sideli"><a href="#pcnormal">法向量</a></li>
+                    <li class="sideli"><a href="#pcsmooth">光滑</a></li>
+                    <li class="sideli"><a href="#pcoutlier">去飞点孤立项</a></li>
+                    <li class="sideli"><a href="#pcoverlap">去重影</a></li>
+                    <li class="sideli"><a href="#pcreconstruction">曲面重建</a></li>
+                    <li class="sideli"><a href="#pcregistration">注册对齐</a></li>
+                    <li class="sideli"><a href="#pcsum">多帧去重</a></li>
+                    <li class="sideli"><a href="#pldeform">点云变形</a></li>
+                </ul>
+                <h4><a href="#meshinterface">网格</a></h4>
+                <ul class="sideul">
+                    <li class="sideli"><a href="#meshinterface">三角网格表示</a></li>
+                    <li class="sideli"><a href="#poepof">边点和面点</a></li>
+                    <li class="sideli"><a href="#meshparser">导入导出</a></li>
+                    <li class="sideli"><a href="#meshremovegeometrynoise">去噪光滑</a></li>
+                    <li class="sideli"><a href="#meshisolate">去孤立项</a></li>
+                    <li class="sideli"><a href="#meshdetailenhancement">几何细节增强</a></li>
+                    <li class="sideli"><a href="#meshtopologyconsolidation">拓扑几何修整</a></li>
+                    <li class="sideli"><a href="#meshfillhole">补洞</a></li>
+                    <li class="sideli"><a href="#meshloopsubdivision">细分加密</a></li>
+                    <li class="sideli"><a href="#meshsimplification">简化</a></li>
+                    <li class="sideli"><a href="#meshremesh">重新网格化</a></li>
+                    <li class="sideli"><a href="#meshoptimization">网格优化</a></li>
+                    <li class="sideli"><a href="#meshcompressheightfield">高度场压缩</a></li>
+                    <li class="sideli"><a href="#meshsplit">切割</a></li>
+                    <li class="sideli"><a href="#meshoffset">抽壳</a></li>
+                    <li class="sideli"><a href="#meshsampling">网格采样</a></li>
+                    <li class="sideli"><a href="#meshdeformation">网格变形</a></li>
+                </ul>
+                <h4><a href="#toolkit">纹理</a></h4>
+                <ul class="sideul">        
+                    <li class="sideli"><a href="#meshunfold">UV展开</a></li>
+                    <li class="sideli"><a href="#imagecolormapping">点像对应</a></li>
+                    <li class="sideli"><a href="#textureimage">纹理图制作</a></li>
+                    <li class="sideli"><a href="#colormerging">纹理色彩融合</a></li>
+                </ul>
+                <h4><a href="#toolkit">测量</a></h4>
+                <ul class="sideul">
+                    <li class="sideli"><a href="#meshgeodesics">测地线</a></li>
+                    <li class="sideli"><a href="#planecuttingline">平面截线</a></li>
+                    <li class="sideli"><a href="#smoothmeshcurve">网格曲线光滑</a></li>
+                    <li class="sideli"><a href="#meshareavolume">网格面积和体积</a></li>
+                    <li class="sideli"><a href="#meshcurvature">网格曲率</a></li>
+                    <li class="sideli"><a href="#pointtomeshdistance">点到网格距离</a></li>
+                    <li class="sideli"><a href="#rayintersectwithmesh">射线与网格求交点</a></li>
+                    <li class="sideli"><a href="#wallthickness">网格厚度</a></li>
+                    </ul>
+                <h4><a href="#toolkit">工具</a></h4>
+                <ul class="sideul">        
+                    <li class="sideli"><a href="#activation">用户激活</a></li>
+                    <li class="sideli"><a href="#apiprogress">API进度查询</a></li>
+                    <li class="sideli"><a href="#multithreadsetting">多线程设置</a></li>
+                    <li class="sideli"><a href="#dump">调试</a></li>
+                </ul>
+                <h4><a href="#faq">常见问题</a></h4>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2" main>
+                <a name="overview"><h5>简介</h5></a>
+                <p>Geometry++是一个关于三维数据(点云，网格)处理的几何库. 它包含了三维数据处理最基础的算法, 可以作为三维数据处理软件的几何引擎来使用. 它有如下特点:</p>
+                <ul class="sideul">
+                    <li class="sideli">算法前沿高效, 工程稳定可靠</li>
+                    <li class="sideli">使用简易, 非常容易集成进原有的系统: Geometry++的算法都是基于ITriMesh和IPointCloud两个接口类来实现的, 您只需要继承实现这两个接口类, 就可以调用所有的API, 三维数据的表示还是基于原有的系统</li>
+                    <li class="sideli">可维护: Bug反馈后会及时修正, 优于开源库的使用体验</li>
+                </ul>
+                <hr class="featurette-divider">
+
+                <a name="magic3d"><h5>Magic3D</h5></a>
+                <p>Geometry++开发的使用范例可以参考<a class="code" href="/magic3d" target="_blank">Magic3D</a>软件的实现. Magic3D提供了点云和网格数据处理的基本功能，底层的几何算法调用了Geometry++ SDK</p>
+                <hr class="featurette-divider">
+
+                <a name="usagescenario"><h5>使用场景</h5></a>
+                <p>1. 用户已经拥有了一套三维数据处理系统, 想调用Geometry++里面的一些功能. 这种情况只需要实现IPointCloud和ITriMesh两个接口类, 便可以调用所有的算法. 具体的用法可以参考<a href="#pcinterface">IPointCloud</a>, <a href="#meshinterface">ITriMesh</a>和相应API的介绍.</p>
+                <p>2. 用户的三维数据处理模块打算基于Geometry++. 这种情况用户可以使用PointCloud和TriMesh两个类来表示自己的三维数据, 再调用所有的算法. 具体的用法可以参考<a href="#pcinterface">IPointCloud</a>, <a href="#meshinterface">ITriMesh</a>以及相应ASPI的介绍.</p>
+                <hr class="featurette-divider">
+
+                <a name="usageintroduction"><h5>使用简介</h5></a>
+                <p>1. 头文件: 所有的头文件都在include文件夹里, 设置好头文件包含路径, 在使用api的源文件里包含Gpp.h</p>
+                <p>2. 库: 设置好对应版本动态链接库的路径. 如果是Windows平台，需要在预处理里定义宏GPP_DLL_EXPORT，WIN32</p>
+                <hr class="featurette-divider">
+
+                <a name="pcinterface"><h5>点云表示</h5></a>
+<pre class="prettyprint">
+class IPointCloud;
+</pre>
+                <p>点云数据结构接口. Geometry++点云算法都是基于IPointCloud接口来调用的.</p>
+                <p>用法：继承这个接口类，实现其成员函数.</p>
+                <p>优点：可以很方便的在已有的程序中使用Geometry++提供的点云算法，只需要实现这个接口类，就可以调用所有点云相关的算法</p>
+                <p>用法说明:</p>
+                <p>1. 假设用户表示点云数据的类为MyPointCloudData, 则可以定义一个类MyPointCloud</p>
+                <!-- <?prettify lang=scm?> -->
+<pre class="prettyprint">
+    class MyPointCloud : public IPointCloud
+    {
+        MyPointCloudData* mData;
+        MyPointCloud(MyPointCloudData* data) : mData(data) 
+        {}
+        virtual Int GetPointCount() const
+        { 
+            mData->GetPointCloud(); 
+        }
+        virtual Vector3 GetPointCoord() const 
+        { 
+            mData->GetPointCoord(); 
+        }
+        virtual void SetPointCoord(Int pid, const Vector& coord) 
+        { 
+            mData->SetPointCoord(pid, coord[0], coord[1], coord[2]); 
+        }
+        // 其它成员函数类似
+    };
+
+    MyPointCloud pointCloud(myPointCloudData); // 用自己的点云数据初始化MyPointCloud
+    ErrorCode res = ConsolidatePointCloud::LaplaceSmooth(pointCloud, 0.2, 5); // 调用点云算法API来修改自己的点云数据
+    res = ConsolidatePointCloud::CalculatePointCloudNormal(pointCloud);
+    // 其它点云算法API的具体用法可以参考相应模块的介绍
+</pre>
+
+                <p>2. 点云顶点的存储格式一般是线性的，获取方便，但是删除会存在一些效率问题. IPointCloud提供了SwapPoint函数把需要删除的元素交换到尾部，然后再通过PopbackPoints删除尾部元素.</p>
+                <p>3. Clear函数负责清除Point Coordinate, Point Normal. 回到构造类初始化时的状态.</p>
+                <p>4. HasNormal函数主要用意: 有时候点云创建后没有法线信息，IPointCloud提供这个函数查询点云是否有可靠法线信息. SetHasNormal函数可以设置点云是否有法线信息</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+class PointCloud;
+</pre>
+                <p>IPointCloud接口类和IGridPointCloud接口类的一个实现，用户可以直接使用它来表示点云数据</p>
+                <p>这是PointCloud的一个<a class="code" href="/file/PointCloud.cpp" target="_blank">实现示例</a>，用户自己实现IPointCloud的时候可以参考一下</p>
+                <p>UnifyCoords的典型使用场景：在多帧点云注册过程中，如果对第一帧点云应用了前一个UnifyCoords，为了保持之后帧的点云做同样的平移缩放变换，可以用前一个UnifyCoords的返回值来设置这个UnifyCoords，使得每一帧的点云做同样的变换</p>
+                <hr class="featurette-divider">
+
+                <a name="pcparser"><h5>点云导入导出</h5></a>
+<pre class="prettyprint">
+PointCloud* Parser::ImportPointCloud(std::string fileName);
+</pre>
+                <p>目前支持的文件格式：obj, asc. 用户也可以导入其它格式的点云数据, 只需要自己写一个Parser, 然后用导入的数据创建点云类(例如PointCloud)即可使用了</p>
+                <p>fileName: 格式为path/xxx.obj, path/xxx.asc, path可以是绝对路径，也可以相对路径</p>
+                <p>返回值: 如果导入失败则返回NULL</p>
+                <hr class="line-divider">
+<pre class="prettyprint">
+void Parser::ExportPointCloud(std::string fileName, const IPointCloud* pointCloud);
+</pre>
+                <p>目前支持的文件格式：obj, asc, ply.</p>
+                <p>fileName: 格式为path/xxx.obj, path/xxx.asc, path可以是绝对路径，也可以相对路径</p>
+                <hr class="featurette-divider">
+
+                <a name="pcgridpointcloud"><h5>有序点云</h5></a>
+                <pre class="prettyprint">
+class IGridPointCloud;
+</pre>
+                <p>有序点云的数据结构接口。</p>
+                <p>有序点云是一个方阵，如图所示。点云按照方阵一行一行的，从左上角到右下角排列。</p>
+                <img class="featurette-image img-responsive center-block" src="/images/grid_coordinate.jpg" alt="Grid Point Cloud">
+                <p>优点：相比IPointCloud，IGridPointCloud多了点云的位置连接关系信息。相关的计算可以更加快速。</p>
+                <p>用法说明：</p>
+                <li>InitGrid：初始化有序点云，设置长宽。初始化的点云格点默认为invalid</li>
+                <li>RemoveOuterBlankGrids：移出掉四周无效的点，并重新设置点云的长宽。如下图所示，原始点云变为了红色框内缩小长宽的有序点云。</li>
+                <img class="featurette-image img-responsive center-block" src="/images/RemoveOuterBlankGrids.jpg" alt="RemoveOuterBlankGrids">
+                <li>SetHasGridNormal：设置点云是否带有法线。如果有，需要为法线分配内存空间</li>
+                <li>SetGridCoord：为valid的格点设置空间坐标</li>
+                <li>SetGridNormal：为valid的格点设置法线信息</li>
+                <li>ValidGrid：有效格点的信息（坐标，法线等）也可以像IPointCloud里Point一样按某种顺序排列起来，根据索引顺序访问。</li>
+                <li>GetValidGridCount：获取有效格点的个数。类似IPointCloud::GetPointCount。</li>
+                <li>GetValidGridCoord：根据有效格点的索引，获取其坐标。类似IPointCloud::GetPointCoord。</li>
+                <li>GetValidGridNormal：根据有效格点的索引，获取其法线。类似IPointCloud::GetPointNormal。</li>
+                <li>GetGridPointId：获取格点对应的有效格点的索引。若格点无效，则返回-1</li>
+                <li>GetPointGridId：获取有效格点对应的格点坐标</li>
+                <li>导入导出：Geometry++里可以使用gbg和gtg格式的文件存储有序点云。具体的导入导出格式，可以参考<a class="code" href="/file/Parser.cpp" target="_blank">Parser</a></li>
+                <li>注：PointCloud是IGridPointCloud接口类的一个实现。</li>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode ConsolidateGrid::CalculateGridNormal(IGridPointCloud* pointCloud);
+</pre>
+                <p>计算有序点云法线</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode ConsolidateGrid::CalculateGridIsolation(const IGridPointCloud* pointCloud, std::vector< Real >* isolation, Real maxExtendNormalAngle);
+</pre>
+                <p>用法：计算每个点的孤立值. 孤立值代表了这个点所在局部块占整体点云的比例。其几何意义为，点云被分割为不同的块，每个块内点的孤立值为块内点数占总点数的比例。孤立值越小，孤立项的几率越大，范围是(0, 1). 比如可以认为孤立值小于0.1的点就为孤立项。</p>
+                <p>pointCloud：有序点云数据</p>
+                <p>isolation: 点云孤立值，范围是[0, 1]。isolation的顺序与有效格点的顺序一致。</p>
+                <p>maxExtendNormalAngle：邻居点法线的最大夹角：如果大于这个值，则不会判定为邻居点</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode ConsolidateGrid::CalculateGridDensity(const IGridPointCloud* pointCloud, Real& density);
+</pre>
+                <p>计算有序点云密度</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>density：点云密度</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode ConsolidateGrid::DetectGridBoundary(const IGridPointCloud* pointCloud, Int boundarySize, std::vector< std::pair< Int, Int > >& boundaryIds);
+</pre>
+                <p>计算有序点云边界点</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>boundarySize：点云边缘厚度</p>
+                <p>boundaryIds：点云边界点。std::pair<Int, Int>是点云的grid坐标值</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode ConsolidateGrid::SmoothGridGeometry(IGridPointCloud* pointCloud, Int neighborWidth, Int iterationCount);
+</pre>
+                <p>光滑有序点云几何</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>neighborWidth：点云光滑邻域大小</p>
+                <p>iterationCount：光滑迭代次数</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode ConsolidateGrid::SmoothGridNormal(IGridPointCloud* pointCloud, Int neighborWidth, Int iterationCount);
+</pre>
+                <p>光滑有序点云法线</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>neighborWidth：点云光滑邻域大小</p>
+                <p>iterationCount：光滑迭代次数</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode SampleGrid::UniformSample(const IGridPointCloud* pointCloud, Int sampleCount, std::vector< std::pair< Int, Int > >* sampleIndex);
+</pre>
+                <p>有序点云均匀采样</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>sampleCount：采样的目标点数，点数应小于点云点的个数</p>
+                <p>sampleIndex：返回采样点的索引结果</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode SampleGrid::GeometrySample(const IGridPointCloud* pointCloud, Int sampleCount, Real uniformWeight, std::vector< std::pair< Int, Int > >* sampleIndex);
+</pre>
+                <p>有序点云几何采样，采样结果在几何特征明显的地方数量会多一些</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>sampleCount：采样的目标点数，点数应小于点云点的个数</p>
+                <p>uniformWeight：采样结果的均匀性，范围[0, 1]. 参数越大，均匀性越好.</p>
+                <p>sampleIndex：返回采样点的索引结果</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode SampleGrid::Simplify(const IGridPointCloud* pointCloud, Real interval, GridSimplifyType type, IGridPointCloud* simplifiedCloud);
+</pre>
+                <p>有序点云简化：根据点间距做点云简化。</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>interval：简化目标点间距。注意，此间距是一个参考值，简化后的点云密度在此值附近，不一定严格相等。</p>
+                <p>type：GRID_SIMPLIFY_SAMPLE-从原始点云采样；GRID_SIMPLIFY_MERGE-简化时候会合并点云</p>
+                <p>simplifiedCloud：简化后的点云。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode RegistrateGrid::ICPRegistrate(const IGridPointCloud* pointCloudRef, const IGridPointCloud* pointCloudFrom, Matrix4x4* resultTransform, const Matrix4x4* initTransform = NULL, Int maxTryCount = 3);
+</pre>
+                <p>注意：点云必须带有法线信息。<p>
+                <p>有序点云的ICP注册对齐：pointCloudRef = resultTransform * initTransform * pointCloudFrom</p>
+                <p>pointCloudRef: 参考点云，需要注意的是点云需要有法线信息</p>
+                <p>pointCloudFrom: 需要做刚体变换对齐的点云，需要注意的是点云需要有法线信息</p>
+                <p>resultTransform: 所求的刚体变换</p>
+                <p>initTransform: pointCloudFrom的初始变换，如果为NULL，则解释为恒等变换</p>
+                <p>maxTryCount: 最大注册尝试次数。有时候，两个点云的初始位置差别比较大，ICP在注册失败后会调整参数再次尝试。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode RegistrateGrid::AlignGrid(const IGridPointCloud* pointCloudRef, const IGridPointCloud* pointCloudFrom, Matrix4x4* resultTransform, Real accuracy = 0);
+</pre>
+                <p>有序点云的无标记点对齐：pointCloudRef = resultTransform * pointCloudFrom</p>
+                <p>注意: pointCloudRef和pointCloudFrom需要计算好法向量. </p>
+                <p>使用场景: 无标记点的初始对齐变换，初始对齐之后再调用ICP注册进行精细对齐</p>
+                <p>pointCloudRef: 参考点云. 需要注意的是点云需要有法线信息.</p>
+                <p>pointCloudFrom: 需要做刚体变换对齐的点云. 需要注意的是点云需要有法线信息.</p>
+                <p>accuracy: 注册精度，参数范围是[0, 1]. 参数越大，成功率越高，计算速度也越慢。默认精度为0.</p>
+                <p>resultTransform: 所求的刚体变换</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+                <a name="pcsampling"><h5>点云采样</h5></a>
+<pre class="prettyprint">
+ErrorCode SamplePointCloud::UniformSample(const IPointCloud* pointCloud, Int sampleCount, Int* sampleIndex, Int seedId = 0, SampleQuality quality = SAMPLE_QUALITY_HIGH);
+</pre>
+                <p>均匀采样：采样结果分布均匀</p>
+                <p>pointCloud: 点云数据</p>
+                <p>sampleCount: 采样的目标点数，点数应小于点云点的个数</p>
+                <p>sampleIndex: 返回采样点的索引结果，需要在调用api之前分配好内存</p>
+                <p>seedId: 采样种子点，不同的种子点得到的采样结果不一样</p>
+                <p>quality: 采样质量，目前有SAMPLE_QUALITY_LOW和SAMPLE_QUALITY_HIGH两种类型</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+<pre class="prettyprint">
+    // 示例
+    GPP::Int* sampleIndex = new GPP::Int[targetPointCount];
+    GPP::ErrorCode res = GPP::SamplePointCloud::UniformSample(pointCloud, targetPointCount, sampleIndex);
+</pre>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode SamplePointCloud::GeometrySample(const IPointCloud* pointCloud, Int sampleCount, Int* sampleIndex, Real uniformWeight = 0.1, Int neighborCount = 9, Int seedId = 0, SampleQuality quality = SAMPLE_QUALITY_HIGH);
+</pre>
+                <p>几何采样：采样结果在几何特征明显的地方数量会多一些</p>
+                <p>pointCloud: 点云数据</p>
+                <p>sampleCount: 采样的目标点数，点数应小于点云点的个数</p>
+                <p>sampleIndex: 返回采样点的索引结果，需要在调用api之前分配好内存</p>
+                <p>uniformWeight: 采样结果的均匀性，范围[0, 1]. 参数越大，均匀性越好.</p>
+                <p>neighborCount: 点云邻域个数，主要用于计算几何特征. 默认参数为9，如果点云均匀性不好，可以提高此参数以获得更好的稳定性</p>
+                <p>seedId: 采样种子点，不同的种子点得到的采样结果不一样</p>
+                <p>quality: 采样质量，目前有SAMPLE_QUALITY_LOW和SAMPLE_QUALITY_HIGH两种类型</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode SamplePointCloud::GridSample(const IPointCloud* pointCloud, Real interval, std::vector< Int >& sampleIndex);
+</pre>
+                <p>格栅采样：根据点间距把空间分为一个一个的格子，每个格子采样一个点，并且使得采样的点云尽量均匀。</p>
+                <p>pointCloud: 点云数据</p>
+                <p>interval: 点间距</p>
+                <p>sampleIndex: 返回采样点的索引结果</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode SamplePointCloud::Simplify(const IPointCloud* pointCloud, Int resolution, IPointCloud* simplifiedCloud, const std::vector< Real >* pointFields = NULL, std::vector< Real >* simplifiedFields = NULL);
+</pre>
+                <p>点云简化：点云根据分辨率resolution把其所在的包围盒在xyz方向离散化为小方格，每个小方格内的点云会做平均，然后得到一个简化的点云</p>
+                <p>pointCloud: 点云数据</p>
+                <p>resolution: 简化分辨率。简化时先计算点云的包围盒，然后根据分辨率把包围盒在xyz方向做均匀细分。</p>
+                <p>simplifiedCloud: 简化后的点云，需要实现分配好内存。</p>
+                <p>pointFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样</p>
+                <p>simplifiedFields: 简化后点云的点属性，格式和pointFields一样。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+                <a name="pcnormal"><h5>点云法向量</h5></a>
+                <p>点云法线的介绍可以参考<a class="code" href="http://threepark.net/notes/pointcloudnormal" target="_blank">点云法线</a>，特别是如何给点云法线完美的定向。</p>
+<pre class="prettyprint">
+ErrorCode ConsolidatePointCloud::CalculatePointCloudNormal(IPointCloud* pointCloud, bool isDepthImage = false, Int neighborCount = 9);
+</pre>
+                <p>pointCloud：点云数据</p>
+                <p>isDepthImage: 如果点云是深度图数据(一般扫描仪扫描一帧的点云数据), 所有法线的z坐标会大于0(面向相机), 并且计算速度更加快</p>
+                <p>neighborCount: 计算法线时点邻域个数. 默认值是9，如果点云均匀性不好，可以适当调大参数来保证计算结果的稳定. 如果是深度点云，可以设置为5.</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode ConsolidatePointCloud::SmoothNormal(IPointCloud* pointCloud, Real normalWeight = 1.0, Int neighborCount = 9, const std::vector< Int >* fixedIndex = NULL);
+</pre>
+                <p>pointCloud：点云数据</p>
+                <p>normalWeight: 权重越大，Smooth程度越小. 参数范围是(0, infinity), 默认为1.0</p>
+                <p>neighborCount: 光滑法线时点邻域个数. 默认值是9，如果点云均匀性不好，可以适当调大参数来保证计算结果的稳定</p>
+                <p>fixedIndex: 法线需要固定的点索引。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode ConsolidatePointCloud::ReversePatchNormal(IPointCloud* pointCloud, Int pointId, Int neighborCount = 9);
+</pre>
+                <p>用法背景：如果点云有多个分开的部分，在计算点云法线时，可能点云的整体定向不一致，可以通过这个api来局部反向法线</p>
+                <p>pointCloud：点云数据</p>
+                <p>pointId: 局部patch里任意一个点的id</p>
+                <p>neighborCount: 点反向蔓延时的邻域个数，默认值是9，参数值越大，稳定性会更好，但是计算速度也会更慢</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <p>扫描点云数据的相关介绍可以参考<a class="code" href="http://threepark.net/notes/pointcloudrepresentation" target="_blank">有序点云</a>
+<pre class="prettyprint">
+ErrorCode ConsolidatePointCloud::ConsolidateRawScanData(IPointCloud* pointCloud, Int resolutionX, Int resolutionY, bool removeOutlier, bool zPositive, Real maxZAngle = 90.0 * ONE_RADIAN);
+</pre>
+                <p>原始扫描数据是一帧深度图，这个api提供了计算扫描数据的法线，移除非扫描点(z >= 0的点)以及飞点的功能</p>
+                <p>pointCloud: 深度图点云. 点云按照方阵一行一行的，从左上角到右下角排列，相机坐标系: x值正方向朝右，y值正方向朝上，z值负方向与相机朝向一致. 最终计算的点云法向量与相机朝向相反(z值正方向)</p>
+                <p>resolutionX: 点云X方向分辨率</p>
+                <p>resolutionY: 点云Y方向分辨率</p>
+                <p>removeOutlier: 是否需要移除飞点</p>
+                <p>zPositive: 点云的z坐标是否大于0 </p>
+                <p>maxZAngle: 去除normal[2] < cos(maxZAngle)的点。几何意义是去除掉边界点。具体说明可以参考<a class="code" href="http://threepark.net/notes/pointcloudrepresentation" target="_blank">有序点云</a>介绍 </p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <a name="pcsmooth"><h5>点云光滑</h5></a>
+<pre class="prettyprint">
+ErrorCode ConsolidatePointCloud::SmoothGeometry(IPointCloud* pointCloud, Int neighborCount, Int iterationCount, const std::vector< Int >* selectIndex = NULL);
+</pre>
+                <p>点云光滑：这个API把点云不断的往周围邻域拟合的平面上作投影.</p>
+                <p>pointCloud：点云数据</p>
+                <p>neighborCount: 点邻域个数. 范围>=4. 一般设置为25左右. 想要光滑性更好，可以适当增大邻域个数</p>
+                <p>iterationCount: 投影的迭代次数. 范围>=1. 一般设置为5左右. 想要光滑性更好，可以适当迭代次数. </p>
+                <p>selectIndex: 选择Smooth的点索引。如果为NULL，则全部点云都会Smooth</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode ConsolidatePointCloud::SmoothGeometryByNormal(IPointCloud* pointCloud, Int neighborCount = 9, Real sharpAngle = ONE_RADIAN * 20, Int iterationCount = 5);
+</pre>
+                <p>背景：根据点云法线信息优化点云几何，是其几何位置与法线协调。</p>
+                <p>pointCloud：点云数据, 需要有法向量</p>
+                <p>neighborCount: 点邻域个数. 默认值是9，如果点云均匀性不好，可以适当调大参数来保证计算结果的稳定</p>
+                <p>sharpAngle: 特征边角。相邻点的法线夹角大于特征边角时，会判断为特征边点，smooth时会尽量保持住特征边几何</p>
+                <p>iterationCount: smooth的迭代次数</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+<pre class="prettyprint">
+    // 结合点云法向量平滑函数, 给点云去噪示例
+    GPP::ErrorCode res = GPP::ConsolidatePointCloud::SmoothNormal(pointCloud);
+    res = GPP::ConsolidatePointCloud::SmoothGeometryByNormal(pointCloud);
+</pre>
+                <hr class="line-divider">
+
+                <a name="pcoutlier"><h5>点云去除飞点孤立项</h5></a>
+                <p>点云去除飞点和孤立项，推荐调用CalculateIsolation</p>
+<pre class="prettyprint">
+ErrorCode CalculateIsolation(const IPointCloud* pointCloud, std::vector< Real >* isolation, Int neighborCount = 20, const std::vector<Int>* cloudIds = NULL, Real maxExtendNormalAngle = 90 * ONE_RADIAN);
+</pre>
+                <p>用法：计算每个点的孤立值. 孤立值代表了这个点所在局部块占整体点云的比例. 其几何意义为，点云被分割为不同的块，每个块内点的孤立值为块内点数占总点数的比例。孤立值越小, 孤立项的几率越大，范围是(0, 1). 比如可以认为孤立值小于0.1的点就为孤立项</p>
+                <p>pointCloud：点云数据， 需要有法向量</p>
+                <p>isolation: 点云孤立值，范围是(0, 1].</p>
+                <p>neighborCount: 点邻域个数. 默认值是20，如果点云均匀性不好，可以调大neighborCount来保证计算结果的稳定. 如果想计算小块局部的孤立值，可以调小neighborCount</p>
+                <p>cloudIds: 每个点所属的点云Id。一般用于多帧点云去重叠后，去除掉不同帧点云间的孤立点。这个参数主要来源于SumPointCloud::ExtractPointCloud</p>
+                <p>maxExtendNormalAngle: 邻居点法线的最大夹角：如果大于这个值，则不会判定为邻居点</p>
+                <p>参数设置建议：如果需要去掉一大片一大片的孤立片，可以把整体参数（isolation, neighborCount, maxExtendNormalAngle）设置的大一些，比如(0.05, 20, 90)；如果需要去掉的孤立项很少，并且离曲面较近，可以把整体参数设置的小一些，比如(0.001, 5, 30)</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+<pre class="prettyprint">
+    // 去除点云孤立项示例
+    std::vector< GPP::Real > isolations;
+    GPP::ErrorCode res = GPP::ConsolidatePointCloud::CalculateIsolation(pointCloud, &isolations);
+    GPP::Real cutValue = 0.05;
+    std::vector< GPP::Int > deleteIndex;
+    for (GPP::Int pid = 0; pid < pointCount; pid++)
+    {
+        if (isolations.at(pid) < cutValue)
+        {
+            deleteIndex.push_back(pid);
+        }
+    }
+    res = DeletePointCloudElements(mpPointCloud, deleteIndex);
+</pre>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode CalculateOutlier(const IPointCloud* pointCloud, std::vector< Real >* outlierValue, Int neighborCount = 9);
+</pre>
+                <p>用法：计算每个点为飞点的概率值，值越大, 飞点的几率越大，范围是(0, 1). 比如可以认为均匀值大于0.8的点就为飞点</p>
+                <p>pointCloud：点云数据， 不需要有法向量</p>
+                <p>outlierValue: 点云飞点概率值，范围是[0, 1]</p>
+                <p>neighborCount: 点邻域个数. 默认值是9，如果点云均匀性不好，可以适当调大参数来保证计算结果的稳定</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+<pre class="prettyprint">
+    // 去除点云飞点示例
+    std::vector< GPP::Real > outlierValue;
+    GPP::ErrorCode res = GPP::ConsolidatePointCloud::CalculateOutlier(pointCloud, &outlierValue);
+    GPP::Real cutValue = 0.8;
+    std::vector< GPP::Int > deleteIndex;
+    for (GPP::Int pid = 0; pid < pointCount; pid++)
+    {
+        if (uniformity.at(pid) > cutValue)
+        {
+            deleteIndex.push_back(pid);
+        }
+    }
+    res = DeletePointCloudElements(mpPointCloud, deleteIndex);
+</pre>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode CalculateUniformity(const IPointCloud* pointCloud, std::vector< Real >* uniformaity, Int neighborCount = 9);
+</pre>
+                <p>用法：计算每个点的均匀值. 均匀值越大, 飞点的几率越大，范围是(0, 1)。比如可以认为均匀值大于0.8的点就为飞点。</p>
+                <p>pointCloud：点云数据， 需要有法向量</p>
+                <p>uniformaity: 点云均匀值，范围是[0, 1]</p>
+                <p>neighborCount: 点邻域个数. 默认值是9，如果点云均匀性不好，可以适当调大参数来保证计算结果的稳定</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+<pre class="prettyprint">
+    // 去除点云飞点示例
+    std::vector< GPP::Real > uniformity;
+    GPP::ErrorCode res = GPP::ConsolidatePointCloud::CalculateUniformity(pointCloud, &uniformity);
+    GPP::Real cutValue = 0.8;
+    std::vector< GPP::Int > deleteIndex;
+    for (GPP::Int pid = 0; pid < pointCount; pid++)
+    {
+        if (uniformity.at(pid) > cutValue)
+        {
+            deleteIndex.push_back(pid);
+        }
+    }
+    res = DeletePointCloudElements(mpPointCloud, deleteIndex);
+</pre>
+                <hr class="featurette-divider">
+
+                <a name="pcoverlap"><h5>点云去除重影</h5></a>
+<pre class="prettyprint">
+ErrorCode RemoveOverlap(const IPointCloud* pointCloud, Real maxOverlapDist, std::vector< Int >& overlapIndex);
+</pre>
+                <p>用法：去除点云重影部分。如果点法线方向上有点存在，且距离小于maxOverlapDist，则判定为重影点。</p>
+                <p>pointCloud：点云数据， 需要有法向量</p>
+                <p>maxOverlapDist: 最大重影距离。大于这个距离的点不会判定为重影点。</p>
+                <p>overlapIndex: 重影点索引</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+<pre class="prettyprint">
+    // 去除点云噪点示例（类似Geomagic里的Merge命令，区别是这个示例得到的是点云，Geomagic的Merge结果为网格）
+    
+    // 更新点云法线
+    int neighborCount = 5;
+    GPP::ErrorCode res = GPP::UpdatePointCloudNormal(pointCloud, neighborCount);
+    if (res != GPP_NO_ERROR) return;
+
+    // 去除飞点
+    neighborCount = 5;
+    GPP::Real extendAngle = 40 * GPP::ONE_RADIA;
+    std::vector< GPP::Real > isolation;
+    res = GPP::ConsolidatePointCloud::CalculateIsolation(pointCloud, &isolation, neighborCount, NULL, extendAngle);
+    if (res != GPP_NO_ERROR) return;
+    GPP::Real isolateValue = 0.001;
+    std::vector< GPP::Int > deleteIndex;
+    GPP::Int pointCount = pointCloud->GetPointCount();
+    for (GPP::Int pid = 0; pid < pointCount; pid++)
+    {
+        if (isolation.at(pid) < isolateValue)
+        {
+            deleteIndex.push_back(pid);
+        }
+    }
+    res = GPP::DeletePointCloudElements(&magicPointCloud, deleteIndex);
+    if (res != GPP_NO_ERROR) return;
+
+    // 去除重影
+    double density = 0;
+    GPP::PointCloudPointList pointList(pointClout);
+    res = GPP::CalculatePointListDensity(&pointList, 2, density);
+    if (res != GPP_NO_ERROR) return;
+    double maxOverlapDist = density * 10.0;
+    std::vector< GPP::Int > overlapIndex;
+    res = GPP::ConsolidatePointCloud::RemoveOverlap(pointCloud, maxOVerlapDist, overlapIndex);
+    if (res != GPP_NO_ERROR) return;
+    res = GPP::DeletePointCloudElements(pointCloudd, overlapIndex);
+    if (res != GPP_NO_ERROR) return;
+
+    // 再次去除飞点（可选），代码和上面的一样
+
+    // 去噪光滑
+    neighborCount = 25;
+    int iterationCount = 1;
+    res = GPP::ConsolidatePointCloud::SmoothGeometry(pointCloud, neighborCount, iterationCount, NULL);
+    if (res != GPP_NO_ERROR) return;
+
+    // 更新点云法线
+    int neighborCount = 5;
+    GPP::ErrorCode res = GPP::UpdatePointCloudNormal(pointCloud, neighborCount);
+    if (res != GPP_NO_ERROR) return;
+</pre>
+                <hr class="featurette-divider">
+
+                <a name="pcreconstruction"><h5>点云重建网格</h5></a>
+<pre class="prettyprint">ErrorCode Reconstruct(const IPointCloud* pointCloud, ITriMesh* recontructedMesh, Int quality = 5, bool needFillHole = false, const std::vector< Real >* pointFields = NULL, std::vector< Real >* vertexField = NULL, Real maxHoleAreaRatio = 1);
+</pre>
+                <p>pointCloud: 点云需要有法向量</p>
+                <p>reconstructedMesh: 返回的三角化网格，需要事先分配好内存</p>
+                <p>quality: 重建结果的质量，参数范围[0, 6]：值越大，重建的网格点数越多，计算速度越慢. 默认参数为5</p>
+                <p>needFillHole: 重建后的网格是否需要补洞</p>
+                <p>pointFields: 点云可以自带一些属性，如颜色，分类信息等. 属性是一个向量，存储格式为Point0_Vector0, Point0_Vector1......, Point0_VectorK, Point1_Vector0, Point1_Vector1......</p>
+                <p>vertexField: 重建网格的顶点属性</p>
+                <p>maxHoleAreaRatio: 如果needFillHole为true，并且洞面积与网格面积的比值小于maxHoleAreaRatio的洞，才会被填上。这个参数常用于阻止边界区域被填上的情况发生。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+<pre class="prettyprint">
+    // 带颜色点云重建示例
+    std::vector< GPP::Real > pointColorFields(pointCount * 3);
+    for (GPP::Int pid = 0; pid < pointCount; pid++)
+    {
+        GPP::Vector3 color = mpPointCloud->GetPointColor(pid);
+        pointColorFields.at(pid * 3) = color[0];
+        pointColorFields.at(pid * 3 + 1) = color[1];
+        pointColorFields.at(pid * 3 + 2) = color[2];
+    }
+    std::vector< GPP::Real > vertexColorField;
+    GPP::TriMesh* triMesh = new GPP::TriMesh;
+    Int quality = 5;
+    GPP::ErrorCode res = ReconstructMesh::Reconstruct(pointCloud, triMesh, quality, false, &pointColorFields, &vertexColorField);
+</pre>
+                <hr class="featurette-divider">
+                
+
+                <a name="pcregistration"><h5>点云注册对齐</h5></a>
+                <p>点云拼接注册的相关介绍可以参考<a class="code" href="http://threepark.net/notes/registration" target="_blank">点云拼接注册</a>
+<pre class="prettyprint">
+ErrorCode RegistratePointCloud::_AlignPointPair(const std::vector< Vector3 >& pointsRef, const std::vector< Vector3 >& pointsFrom, Matrix4x4* resultTransform, const Matrix4x4* initTransform = NULL);
+</pre>
+                <p>计算点对对齐的刚体变换：pointsRef = resultTransform * initTransform * pointsFrom</p>
+                <p>注意: pointsRef和pointsFrom需要一一对应</p>
+                <p>pointsRef: 参考点</p>
+                <p>pointsFrom: 需要做刚体变换对齐的点</p>
+                <p>resultTransform: 所求的刚体变换</p>
+                <p>initTransform: pointsFrom的初始变换，如果为NULL，则解释为恒等变换</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode RegistratePointCloud::ICPRegistrate(const IPointCloud* pointCloudRef, const std::vector< Vector3 >* marksRef, const IPointCloud* pointCloudFrom, const std::vector< Vector3 >* marksFrom, Matrix4x4* resultTransform, const Matrix4x4* initTransform = NULL, bool hasNormalInfo = true);
+</pre>
+                <p>点云的ICP注册对齐：pointCloudRef = resultTransform * initTransform * pointCloudFrom</p>
+                <p>pointCloudRef: 参考点云</p>
+                <p>marksRef: pointCloudRef的标记点，如果没有则设置为NULL. 一般情况下ICP是没有标记点的，但如果扫描数据有可靠的标记点信息，则会大大提升ICP的可靠精度.</p>
+                <p>pointCloudFrom: 需要做刚体变换对齐的点云。需要注意的是，点云如果有法线信息，计算会更快，精度更高。</p>
+                <p>marksFrom: pointCloudFrom的标记点，如果没有则设置为NULL. 注意：marksRef与marksFrom不需要一一对应</p>
+                <p>resultTransform: 所求的刚体变换</p>
+                <p>initTransform: pointCloudFrom的初始变换，如果为NULL，则解释为恒等变换</p>
+                <p>hasNormalInfo: 注册点云是否有法线信息. 如果点云有法线信息，注册结果质量会更高，速度也更快</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode RegistratePointCloud::AlignPointCloud(const IPointCloud* pointCloudRef, const IPointCloud* pointCloudFrom, Matrix4x4* resultTransform, Real accuracy = 0);
+</pre>
+                <p>无标记点的点云初始对齐：pointCloudRef = resultTransform * pointCloudFrom</p>
+                <p>注意: pointCloudRef和pointCloudFrom需要计算好法向量. </p>
+                <p>使用场景: 无标记点的初始对齐变换，初始对齐之后再调用ICP注册进行精细对齐</p>
+                <p>pointCloudRef: 参考点云. 需要注意的是点云需要有法线信息.</p>
+                <p>pointCloudFrom: 需要做刚体变换对齐的点云. 需要注意的是点云需要有法线信息.</p>
+                <p>accuracy: 注册精度，参数范围是[0, 1]. 参数越大，成功率越高，计算速度也越慢。默认精度为0.</p>
+                <p>resultTransform: 所求的刚体变换</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode RegistratePointCloud::AlignPointCloudByMark(const IPointCloud* pointCloudRef, const std::vector< Vector3 >* marksRef, const IPointCloud* pointCloudFrom, const std::vector< Vector3 >* marksFrom, Matrix4x4* resultTransform);
+</pre>
+                <p>带标记点的点云初始对齐：pointCloudRef = resultTransform * pointCloudFrom</p>
+                <p>注意: pointCloudRef和pointCloudFrom需要计算好法向量. marksRef和marksFrom不需要一一对应, 但是至少需要3个点</p>
+                <p>使用场景: 带标记点的初始对齐变换，如果点云有用户标记的标记点，或者扫描时点云有标记点信息，请使用此函数做初始对齐</p>
+                <p>pointCloudRef: 参考点云. 需要注意的是点云需要有法线信息.</p>
+                <p>marksRef: pointCloudRef的标记点，数量至少为3个.</p>
+                <p>pointCloudFrom: 需要做刚体变换对齐的点云. 需要注意的是点云需要有法线信息.</p>
+                <p>marksFrom: pointCloudFrom的标记点，数量至少为3个. 注意：marksRef与marksFrom不需要一一对应</p>
+                <p>resultTransform: 所求的刚体变换</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode RegistratePointCloud::GlobalRegistrate(const std::vector< IPointCloud* >* pointCloudList, Int maxIterationCount, std::vector< Matrix4x4 >* resultTransformList, const std::vector< Matrix4x4 >* initTransformList = NULL, bool hasNormalInfo = true, Int fixId = 0, const std::vector< std::vector< Vector3 > >* markList = NULL);
+</pre>
+                <p>点云全局注册优化</p>
+                <p>注意: pointCloudList如果带法线信息，注册精度会更好一些</p>
+                <p>使用场景: 逐帧注册的点云数据，往往有累积误差. 全局注册可以把累积误差分散到每一帧中去，从而减少整体的注册误差</p>
+                <p>pointCloudList: 点云序列</p>
+                <p>maxIterationCount: 最大迭代次数. 如果数据精度不错，10左右就足够了，数据精度低，比如Kinect数据，15左右就可以了.</p>
+                <p>resultTransformList: 所求的刚体变换</p>
+                <p>initTransformList: pointCloudList的初始变换，如果为NULL，则解释为恒等变换</p>
+                <p>hasNormalInfo: 注册点云是否有法线信息. 如果点云有法线信息，注册结果质量会更高，速度也更快</p>
+                <p>fixId: 固定某个点云位置不变</p>
+                <p>markList: 点云标记点。如果输入为NULL，则表示没有标记点。如果不是NULL，markList与pointCloudList对应，并且在同一个坐标系下。其中某些点云的标记点可以为空。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode DeformPointList::NonRigidICP(const IPointCloud* pointCloudRef, IPointCloud* pointCloudFrom, const Matrix4x4* initTransform = NULL, Int nonRigidSize = 25);
+</pre>
+                <p>pointCloudRef: 参考点云</p>
+                <p>pointCloudFrom：需要做非刚体对齐的点云。需要注意的是，点云如果有法线信息，计算会更快，精度更高</p>
+                <p>initTransform：pointCloudFrom的初始变换，如果为NULL，则解释为恒等变换</p>
+                <p>nonRigidSize：非刚体变换的数量，每个刚体变换作用于点云的一个子片区。数量越多，非刚性越强。数量为1时，即为刚体变换。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode DeformPointList::GlobalNonRigidRegistrate(std::vector< IPointCloud* >* pointCloudList, Int maxIterationCount, const std::vector< Matrix4x4 >* initTransformList = NULL, Int nonRigidSize = 25);
+</pre>
+                <p>pointCloudList：点云序列。pointCloudList如果带法线信息，注册精度会更好一些。</p>
+                <p>maxIterationCount：最大迭代次数。</p>
+                <p>initTransformList：pointCloudList的初始变换，如果为NULL，则解释为恒等变换。</p>
+                <p>nonRigidSize：非刚体变换的数量，每个刚体变换作用于点云的一个子片区。数量越多，非刚性越强。数量为1时，即为刚体变换。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+                <a name="pcsum"><h5>多帧点云去重</h5></a>
+<pre class="prettyprint">
+SumPointCloud.h" target="_blank">class SumPointCloud;
+</pre>
+                <p>目的: 点云在注册对齐后, 往往会有重叠的部分. 如果简单的叠加, 点云的数量会增加很多, 并且也不均匀. 点云去重就是在重叠的地方，只取一帧点云的内容.</p>
+                <p>用法: SumPointCloud通过UpdateSumFunction把点云融合进这个类, 去掉重叠的部分, 然后通过ExtractPointCloud得到融合后的点云.</p>
+                <hr class="line-divider">
+ <pre class="prettyprint">
+SumPointCloud(Real interval, const Vector3& bboxMin, const Vector3& bboxMax, bool hasNormalInfo, Int blendNeighborCount = 25, Int blendIterationCount = 2);
+</pre>
+                <p>SumPointCloud的基本原理是，把点云不断的放入一个包围盒里，后放入的点云如果和前面的点云有重叠的部分，则重叠部分会被去掉. 点距小于interval的点会被标示为有重叠.</p>
+                <p>interval: 点云内点与点的间距，不同点云的点距小于interval的点会被认为是重叠的. 可以使用CalculatePointListDensity计算点云间距</p>
+                <p>bboxMin, bboxMax: 所有需要融合的点云的包围盒大小. </p>
+                <p>hasNormalInfo: 点云是否有法线信息.</p>
+                <p>blendNeighborCount: 如果需要点云重叠部分有融合效果，可以设置这个参数，范围>=4. 一般取默认参数就可以了. 如果不需要融合效果，可以设置为0.</p>
+                <p>blendIterationCount: 如果需要点云重叠部分有融合效果，可以设置这个参数，范围>=1. 一般取默认参数就可以了. 如果不需要融合效果，可以设置为0.</p>
+                <p>需要注意的是，包围盒大小要设置成最终融合后点云的大小，而不是其中某一帧点云的大小，以防融合后的点云超出包围盒范围</p>
+                <hr class="line-divider">
+<pre class="prettyprint">
+ErrorCode UpdateSumFunction(const IPointCloud* pointCloud, const Matrix4x4* transform, const std::vector< Real >* pointFields = NULL)；</a>
+</pre>
+                <p>pointCloud: 需要融合进SumPointCloud的点云. 需要注意的是, 如果初始化的类有法线信息，则pointCloud需要带法线信息.</p>
+                <p>transform: 点云的刚体变化, 如果NULL, 则为恒等变换</p>
+                <p>pointFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样。常见的pointFields，可以是颜色，也可以是点索引。点索引配合ExtractPointCloud的cloudIds参数，可以精确的索引原始点云点。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+<pre class="prettyprint">
+ErrorCode ExtractPointCloud(IPointCloud* pointCloud, std::vector< Real >* pointFields = NULL, std::vector< Int >* cloudIds = NULL);
+</pre>
+                <p>pointCloud: 从FusePointCloud取出的点云, 需要事先分配好内存, 并且是一个空点云</p>
+                <p>pointFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样</p>
+                <p>cloudIds: 代表了每个点的原始点云Id.</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+<pre class="prettyprint">
+    // 多帧点云去重叠，并传递颜色信息，点ID信息到整体点云
+    GPP::PointCloudPointList pointList(pointCloudList.at(0));
+    GPP::Real interval = 0;
+    GPP::CalculatePointListDensity(&pointList, 4, interval);
+    GPP::SumPointCloud* sumPointCloud = new GPP::SumPointCloud(interval, bboxMin, bboxMax, true);
+    int fieldDim = 4; // color: 3, pointId: 1
+    for (std::vector< GPP::PointCloud* >::iterator cloudItr = pointCloudList.begin(); cloudItr != ponitCloudList.end(); ++cloudItr)
+    {
+        int curPointCount = (*cloudItr)->GetPointCount();
+        std::vector< GPP::Real > pointFields;
+        pointFields.reserve(curPointCount * fieldDim);
+        for (int pid = 0; pid < curPointCount; pid++)
+        {
+            GPP::Vector3 curColor = (*cloudItr)->GetPointColor(pid);
+            pointFields.push_back(curColor[0]);
+            pointFields.push_back(curColor[1]);
+            pointFields.push_back(curColor[2]);
+            pointFields.push_back(pid);
+        }
+        ErrorCode res = sumPointCloud.UpdateSumFunction(*cloudItr, NULL, &pointFields);
+        if (res != GPP_NO_ERROR) return res;
+    }
+    std::vector< GPP::Real > pointFieldsFused;
+    std::vector< int > cloudIds;
+    GPP::PointCloud* extractPointCloud = new GPP::PointCloud;
+    ErrorCode res = sumPointCloud.ExtractPointCloud(extractPointCloud, &pointFieldsFused, &cloudIds);
+    if (res != GPP_NO_ERROR) return res;
+    GPP::Int pointCountFused = extractPointCloud->GetPointCount();
+    std::vector< int > pointIds(pointCountFused);
+    extractPointCloud->SetHasColor(true);
+    for (GPP::Int pid = 0; pid < pointCountFused; pid++)
+    {
+        GPP::Int baseIndex = pid * fieldDim;
+        extractPointCloud->SetPointColor(pid, GPP::Vector3(pointFieldsFused.at(baseIndex), pointFieldsFused.at(baseIndex + 1), pointFieldsFused.at(baseIndex + 2)));
+        pointIds.at(pid) = int(pointFieldsFused.at(baseIndex + 3));
+    }
+</pre>
+                <hr class="featurette-divider">
+
+                <a name="pldeform"><h5>点云变形</h5></a>
+                <p>点云的非刚性变形。原理是分片刚性变形：在点云中采样N个控制点，每个控制点附着一个刚性变换。控制点越多，变形的非刚性越强。控制点数为1的时候，即为刚性变形。</p>
+<pre class="prettyprint">
+ErrorCode ComputeControlInfo(const IPointList* pointList, Int controlPointCount, DeformPointList::ControlInfo* controlInfo);
+</pre>
+                <p>计算点云的控制点。ControlInfo用于记录点列的控制点信息，可以预计算保存起来，用于DeformPointList::Deform。</p>
+                <p>pointList：输入点列</p>
+                <p>controlPointCount: 控制点数目。</p>
+                <p>controlInfo: 计算的控制点信息。 </p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode Deform(ITriMesh* triMesh, ControlInfo* controlInfo, const std::vector< Int >& targetIndex, const std::vector< Vector3 >& targetCoords, const std::vector< bool >& constrainFlags);
+</pre>
+<pre class="prettyprint">
+ErrorCode Deform(IPointCloud* pointCloud, ControlInfo* controlInfo, const std::vector< Int >& targetIndex, const std::vector< Vector3 >& targetCoords, const std::vector< bool>& constrainFlags);
+</pre>
+                <p>基于控制点的点云变形</p>
+                <p>triMesh / pointCloud：需要变形的点列，可以是点云，也可以是三角网格（网格抛掉连接关系就是一个点云了）。</p>
+                <p>controlInfo：变形的控制点信息。若为NULL，则会重新计算。也可以调用ComputeControlInfo预计算保存起来。</p>
+                <p>targetIndex: 变形时位置约束对应的控制点索引</p>
+                <p>targetCoords: 变形时位置约束对应的控制点目标位置</p>
+                <p>constrainFlags: 控制点类型：0-自由刚性变换，1-恒等刚性变换</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+
+                <a name="meshinterface"><h5>三角网格表示</h5></a>
+<pre class="prettyprint">
+class ITriMesh;
+</pre>
+                <p>网格数据结构接口. Geometry++网格算法都是基于ITriMesh接口来调用的.</p>
+                <p>用法：继承这个接口类，实现其成员函数.</p>
+                <p>优点：可以很方便的在已有的程序中使用Geometry++提供的网格算法，只需要实现这个接口类，就可以调用所有网格相关的算法</p>
+                <p>用法说明：</p>
+                <p>1. 假设用户表示三角网格数据的类为MyTriMeshData, 则可以定义一个类MyTriMesh:</p>
+<pre class="prettyprint">
+    class MyTriMesh : public ITriMesh
+    {
+        MyTriMeshData* mData;
+        MyTriMesh(MyTriMeshData* data) : mData(data) 
+        {}
+        virtual Int GetVertecCount() const 
+        { 
+            return mData->GetVertecCount(); 
+        }
+        virtual Vector3 GetVertexCoord(Int vid) const 
+        { 
+            return mData->GetVertexCoord(); 
+        }
+        virtual void SetVertexCoord(Int vid, const Vector3& coord) 
+        { 
+            mData->SetVertexCoord(vid, coord[0], coord[1], coord[2]); 
+        }
+        virtual Int InsertVertex(const Vector3& coord) 
+        { 
+            mData->InsertVertex(coord); 
+            return insertVertexId; 
+        }
+        // 其它成员函数类似
+    };
+
+    MyTriMesh triMesh(myTriMeshData); // 用自己的三角网格数据初始化MyTriMesh
+    ErrorCode res = ConsolidateMesh::LaplaceSmooth(triMesh, 0.2, 5, true); // 调用网格算法API来修改自己的网格数据
+    res = ConsolidateMesh::MakeTriMeshManifold(triMesh);
+    // 其它网格算法API的具体用法可以参考相应模块的介绍
+</pre>
+                <p>2. 构建网格示例:</p>
+<pre class="prettyprint">
+    for (GPP::Int vid = 0; vid < vertexCount; vid++)
+    {
+        triMesh->InsertVertex(vertexCoord[vid]);
+    }
+    for (GPP::Int fid = 0; fid < faceCount; fid++)
+    {
+        triMesh->InsertTriangle(triangleIndex[fid][0], triangleIndex[fid][1], triangleIndex[fid][2]);
+    }
+    triMesh->UpdateNormal();
+</pre>       
+                <hr class="line-divider">
+                <p>3. 三角网格顶点和面的存储格式是线性的，获取方便，但是删除会存在一些效率问题. ITriMesh提供了SwapVertex(SwapTriangles) 函数把需要删除的元素交换到尾部，然后再通过PopbackVertices(PopbackTriangles)删除尾部元素.</p>
+                <p>4. Clear函数负责清除Vertex Coordinate, Vertex Normal, Triangle Index, Triangle Normal. 回到构造类初始化时的状态.</p>
+                <p>5. UpdateNormal负责重新计算网格的顶点和三角面的法线信息.</p>
+                <hr class="featurette-divider">
+                
+<pre class="prettyprint">
+class TriMesh;
+</pre>
+                <p>ITriMesh接口类的一个实现，用户可以直接使用它来表示网格数据</p>
+                <p>这是ITriMesh的一个<a class="code" href="/file/TriMesh.cpp" target="_blank">实现示例</a>，用户自己实现ITriMesh的时候可以参考一下</p>
+                <p>用法说明：</p>
+                <p>1. FuseVertex用于建立STL格式网格的连接关系. 顶点位置相同的点会被处理为一个顶点. STL格式不能表示带缝的网格，因为它没有拓扑信息, 属于Triangle Soup. 建议使用OBJ格式的网格</p>
+                <p>2. UnifyCoords使得TriMesh的顶点坐标会被平移和均匀缩放到范围(-bboxSize, bboxSize)以内</p>
+                <hr class="featurette-divider">
+                
+                <a name="halfedgemesh"><h5>网格半边结构</h5></a>
+<pre class="prettyprint">
+class HalfMesh;
+</pre>
+                <p>HalfMesh类是网格半边结构的一个实现，用户可以直接使用它来表示网格数据. 半边结构的介绍可以参考这个<a class="code" href="http://www.flipcode.com/archives/The_Half-Edge_Data_Structure.shtml" target="_blank">网页</a></p>
+                <img class="featurette-image img-responsive center-block" src="/images/halfedgestructure.jpg" alt="Half Edge Structure">
+                <div class="imgtext">图示：半边数据结构示例. 左边红点为内点，右边红点为边界点</div>
+                <p>用法说明：</p>
+                <p>1. 构建网格示例:</p>
+<pre class="prettyprint">
+    for (GPP::Int vid = 0; vid < vertexCount; vid++)
+    {
+        halfMesh->InsertVertex(vertexCoord[vid]);
+    }
+    std::vector< Vertex3D* > vertexList;
+    for (GPP::Int fid = 0; fid < faceCount; fid++)
+    {
+        vertexList.clear();
+        vertexList.push_back(halfMesh->GetVertex(triangleIndex[fid][0]));
+        vertexList.push_back(halfMesh->GetVertex(triangleIndex[fid][1]));
+        vertexList.push_back(halfMesh->GetVertex(triangleIndex[fid][2]));
+        halfMesh->InsertFace(vertexList);
+    }
+    halfMesh->SetBoundaryVertexEdge();
+    halfMesh->UpdateNormal();
+</pre>
+                <hr class="line-divider">
+                <p>2. 如果知道Vertex, Edge, Face的数量，在做Insert前，可以调用ReverseVertex, ReserveEdge, ReserveFace来提升Insert的效率，原理类似std::vector::reserve</p>
+                <p>3. 访问顶点邻域示例:</p>
+<pre class="prettyprint">
+    Edge3D* startEdge = vertex->GetEdge();
+    Edge3D* curEdge = startEdge;
+    do {
+        if (curEdge->GetPair()->GetFace() == NULL)
+            break;
+        curEdge = curEdge->GetPair()->GetNext();
+    } while (curEdge != startEdge);
+</pre>
+                <hr class="line-divider">   
+                <p>4. 对于边界点，函数SetBoundaryVertexEdge使得其出边(GetEdge)位于边界边(如上图右红边所示)</p>
+                <p>5. ValidateTopology做了3件事情: a. 移出没有Face的Edge; b. SetBoundaryVertexEdge; c. 移出孤立Vertex. 一般对HalfMesh做了拓扑改变后用</p>
+                <p>6. 边界点判断：vertex->GetEdge()->GetFace() == NULL; 边界边判断: edge->GetFace() == NULL || edge->GetPair()->GetFace() == NULL</p>
+                <p>7. Edge3D的Pair Edge(GetPair)一定不是NULL. 如果Edge3D的Face(GetFace)不是NULL, 则Pre Edge(GetPre)和Next Edge(GetNext)一定不是NULL</p>
+                <p></p>
+                <hr class="featurette-divider">
+
+                <a name="poepof"><h5>边点和面点</h5></a>
+<pre class="prettyprint">
+struct PointOnEdge;
+</pre>
+
+                <p>边点：位于网格边上的点。含有三个数据成员。mVertexIdStart, mVertexIdEnd为该网格点所在的边；mWeight为插值坐标，取值范围为[0, 1]，mWeight越大，边点越接近mVertexIdStart顶点。</p>
+                <p>注意：在某些API中，mVertexIdEnd有可能为-1，此时表示该边点完全和顶点mVertexIdStart重合，此时mWeight应为1.0。</p>
+
+<pre class="prettyprint">
+struct PointOnFace;
+</pre>
+                <p>面点：位于网格三角形内（或边界上）的点。含有2个数据成员。mFaceId为面点位于的三角形Id，mCoords为面点关于该三角形的重心坐标。</p>
+                <p>注意：</p><p>1. 重心坐标的顺序(mCoords[0], mCoords[1], mCoords[2])和从网格接口GetTriangleVertexIds(mFaceId, vertexIds)中的vertexIds[3]的顺序对应。</p>
+                <p>2. 当面点刚好位于三角的边上或者顶点上时，面点的表示不唯一。</p>
+                <p>3. 在某些API中，mCoords[i]有可能为-1.0，此时表示面点刚好位于三角形的边界（仅有一个mCoords[i]为-1.0，其它两个mCoords[i]相加为1.0）或顶点（有两个mCoords[i]为-1.0，且第三个重心坐标为1.0）上。</p>
+
+<pre class="prettyprint">
+    // 计算边点和面点的位置
+    GPP::Vector3 poeCoord(0, 0, 0);
+    if (poe.mVertexEnd == -1)
+        poeCoord = triMesh->GetVertexCoord(poe.mVertexStartId);
+    else
+        poeCoord = triMesh->GetVertexCoord(poe.mVertexStartId) * poe.mWeight + triMesh->GetVertexCoord(poe.mVertexEndId) * (1.0 - poe.mWeight);
+    // poeCoord 即为边点的位置
+    
+    GPP::Vector3 pofCoord(0, 0, 0);
+    GPP::Int vertexIds[3] = {-1, -1, -1};
+    triMesh->GetTriangleVertexIds(pof.mFaceId, vertexIds);
+    for (int fvid = 0; fvid < 3; ++fvid)
+    {
+        if (pof.mCoords[fvid] < 0.0)
+            continue;
+        else
+            pofCoord += triMesh->GetVertexCoord(vertexIds[fvid]) * pof.mCoords[fvid];
+    }
+    // pofCoord 即为面点的位置
+
+    // 给定网格顶点处的一组数值（如颜色，纹理等），插值出面点或边点的对应值
+    // vertexColors: 定义在顶点上的颜色
+    GPP::Vector3 pofColor(0, 0, 0);
+    for (int fvid = 0; fvid < 3; ++fvid)
+    {
+        if (pof.mCoords[fvid] < 0.0)
+            continue;
+        else
+            pofColor += vertexColors[vertexIds[fvid]] * pof.mCoords[fvid];
+    }
+    // pofColor 即为面点的插值颜色
+</pre>
+
+                <hr class="featurette-divider">
+
+                <a name="meshparser"><h5>网格导入导出</h5></a>
+<pre class="prettyprint">
+TriMesh* Parser::ImportTriMesh(std::string fileName);
+</pre>
+                <p>目前支持的文件格式: obj, stl, off, ply. 用户也可以导入其它格式的网格数据, 只需要自己写一个Parser, 然后用导入的数据创建网格类(例如TriMesh)即可使用了</p>
+                <p>fileName: 格式为path/xxx.obj, path/xxx.stl, path可以是绝对路径，也可以相对路径</p>
+                <p>返回值: 如果导入失败则返回NULL</p>
+                <hr class="featurette-divider">
+<pre class="prettyprint">
+void Parser::ExportTriMesh(std::string fileName, const ITriMesh* triMesh);
+</pre>
+                <p>目前支持的文件格式: obj, stl, ply</p>
+                <p>fileName: 格式为path/xxx.obj, path/xxx.stl, path可以是绝对路径，也可以相对路径</p>
+                <hr class="featurette-divider">
+
+                <a name="meshremovegeometrynoise"><h5>网格去噪</h5></a>
+<pre class="prettyprint">
+ErrorCode RemoveGeometryNoise(ITriMesh* triMesh, Real sharpAngle = 70.0 * ONE_RADIAN, Real positionWeight = 1.0);
+</pre>
+                <p>triMesh: 网格数据</p>
+				<p>sharpAngle: 锐利边的二面角大小，大于这个角度的边在去噪过程中不会被光滑掉，参数范围是(0, 180 * ONE_RADIAN)，单位是弧度</p>
+                <p>positionWeight: 去噪的时候，顶点位置固定的权重，权重越大，去噪程度越小，参数范围是(0, infinity), 默认为1.0</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode LaplaceSmooth(ITriMesh* triMesh, bool keepBoundary = true, Real positionWeight = 1.0);
+</pre>
+                <p>triMesh: 网格数据</p>
+                <p>keepBoundary: 是否保持边界固定</p>
+                <p>positionWeight: 光滑网格的时候，顶点位置固定的权重，权重越大，Smooth程度越小，参数范围是(0, infinity), 默认为1.0</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+                <a name="meshisolate"><h5>网格去除孤立项</h5></a>
+<pre class="prettyprint">
+ErrorCode CalculateIsolation(ITriMesh* triMesh, std::vector< Real >* isolation);
+</pre>
+                <p>用法：计算网格每个顶点的孤立值. 孤立值越小, 孤立项的几率越大，范围是(0, 1). 比如可以认为孤立值小于0.1的点就为孤立项</p>
+                <p>triMesh：网格数据</p>
+                <p>isolation: 网格顶点孤立值，范围是(0, 1］</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+<pre class="prettyprint">
+    // 去除点云孤立项示例
+    std::vector< GPP::Real > isolations;
+    GPP::ErrorCode res = GPP::ConsolidateMesh::CalculateIsolation(triMesh, &isolations);
+    GPP::Real cutValue = 0.1;
+    std::vector< GPP::Int > deleteIndex;
+    for (GPP::Int vid = 0; vid < vertexCount; vid++)
+    {
+        if (isolations.at(vid) < cutValue)
+        {
+            deleteIndex.push_back(vid);
+        }
+    }
+    res = DeleteTriMeshVertiecs(triMesh, deleteIndex);
+</pre>
+                <hr class="featurette-divider">
+
+                <a name="meshdetailenhancement"><h5>几何细节增强</h5></a>
+<pre class="prettyprint">
+ErrorCode EnhanceDetail(ITriMesh* triMesh, Real intensity = 2.0);
+</pre>
+                <p>triMesh: 网格数据</p>
+                <p>intensity: 网格细节增强强度，强度越大，增强越多，参数范围是(1.0, infinity), 默认为2.0</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+                <a name="meshtopologyconsolidation"><h5>网格拓扑修整</h5></a>
+                <p>网格拓扑的相关介绍可以参考<a class="code" href="http://threepark.net/notes/stlformat" target="_blank">从STL文件到网格拓扑</a>
+<pre class="prettyprint">
+bool _IsTriMeshManifold(ITriMesh* triMesh);
+</pre>
+                <p>判断三角网格是否流形结构. 非流形结构包括: 孤立顶点, 顶点邻域包含多个连通区域, 三角面片定向不统一协调</p>
+                <p>triMesh: 网格数据</p>
+                <p>返回值: 如果是流形结构则返回true，不是则返回false</p>
+                <hr class="line-divider">
+<pre class="prettyprint">
+ErrorCode MakeTriMeshManifold(ITriMesh* triMesh, std::map< Int, Int >* insertVertexIdMap = NULL);
+</pre>
+                <p>移除非流形结构</p>
+                <p>triMesh: 网格数据</p>
+                <p>insertVertexIdMap: 拓扑修复的时候，有可能会添加网格顶点，新加的顶点是从原始顶点做的拷贝。这个map是新加顶点到其拷贝顶点的映射。主要用处在，计算新加顶点的属性，比如颜色值。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+                <a name="meshgeometryconsolidation"><h5>网格几何修整</h5></a>
+<pre class="prettyprint">
+ErrorCode ConsolidateGeometry(ITriMesh* triMesh, Real minTriangleAngle, Real minEdgeLength, Real foldoverAngleTol);
+</pre>
+                <p>优化退化三角形角, 退化三角边，折叠三角形，不改变网格的拓扑结构</p>
+                <p>triMesh: 网格数据</p>
+                <p>minTriangleAngle: 三角面片最小角度，单位是弧度，如果小于这个角度，就会被优化使其角度增大</p>
+                <p>minEdgeLength: 三角面片最小边长，如果小于这个值，就会被优化使其边长增长</p>
+                <p>foldoverAngleTol: 相邻三角面片最大夹角，单位是弧度，如果大于这个值，夹角会被优化使其减小</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+                <a name="meshfillhole"><h5>网格补洞</h5></a>
+<pre class="prettyprint">
+ErrorCode FindHoles(const ITriMesh* triMesh, std::vector< std::vector< Int > > *holesIds);
+</pre>
+                <p>找网格的洞</p>
+                <p>triMesh: 网格数据</p>
+                <p>holesIds: 返回一个二维数组，记录了hole loop vertex ids，每一个一维vector< Int >记录了一条洞的边界顶点，顶点是顺序排列的</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode FillHoles(ITriMesh* triMesh, const std::vector< Int >* boundarySeedIds = NULL, FillMeshHoleType method = FILL_MESH_HOLE_FLAT,
+            const std::vector< Real >* vertexFields = NULL, std::vector< Real >* insertedVertexFields = NULL);
+</pre>
+                <p>补网格的洞</p>
+                <p>triMesh: 网格数据</p>
+                <p>boundarySeedIds: 需要补的洞的顶点集合，不需要提供洞所有的顶点，一部分即可。如果它为NULL，则会把网格所有的洞都补上</p>
+                <p>FillMeshHoleType: 补洞类型，目前有FILL_MESH_HOLE_FLAT, FILL_MESH_HOLE_TANGENT和FILL_MESH_HOLE_CURVATURE, FILL_MESH_HOLE_TRIANGULATION四种类型</p>
+                <li>FILL_MESH_HOLE_TRIANGULATION: 对洞的多边形做一个三角化，不添加新顶点</li>
+                <li>FILL_MESH_HOLE_FLAT：在洞的三角化的基础上，加密洞网格</li>
+                <li>FILL_MESH_HOLE_TANGENT：在加密洞的基础上，让洞的边缘光滑，类似G1连续的效果</li>
+                <li>FILL_MESH_HOLE_CURVATURE：在加密洞的基础上，让洞部分的曲率顺接洞边缘的曲率，类似G2的效果</li>
+                <p>vertexFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样</p>
+                <p>insertedVertexFields: 补洞新增加顶点的属性</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <p>注意：洞的边界对补洞效果影响很大，如果洞边界很大，或者边界不规整，比较杂乱，建议在网格重建的时候修复洞比较好，因为重建时候修复洞是利用点云整体的几何信息，不依赖于洞的边界. 具体信息参考<a href="#pcreconstruction">曲面重建API</a></p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode BridgeEdges(ITriMesh* triMesh, const Int edge1VertexIds[2], const Int edge2VertexIds[2], const std::vector< Real >* vertexFields = NULL, std::vector< Real >* insertedVertexFields = NULL);
+</pre>
+                <p>桥接网格任意边界上的一对边</p>
+                <p>triMesh：网格数据</p>
+                <p>edge1VertexIds：需要桥接的边的顶点Id</p>
+                <p>edge2VertexIds：另一条需要桥接的边的顶点Id</p>
+                <p>vertexFields：网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样</p>
+                <p>insertedVertexFields: 桥接新增加顶点的属性</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+                <a name="meshloopsubdivision"><h5>Loop细分</h5></a>
+<pre class="prettyprint">
+ErrorCode LoopSubdivideMesh(ITriMesh* triMesh, const std::vector< Real >* vertexFields = NULL, std::vector< Real >* insertedVertexFields = NULL);
+</pre>
+                <p>triMesh: 网格数据</p>
+                <p>vertexFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样</p>
+                <p>insertedVertexFields: 新增加顶点的属性</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+                <a name="meshdesify"><h5>网格加密</h5></a>
+<pre class="prettyprint">
+ErrorCode DensifyMesh(ITriMesh* triMesh, Int targetVertexCount, const std::vector< Real >* vertexFields = NULL, std::vector< Real >* insertedVertexFields = NULL);
+</pre>
+                <p>加密网格顶点，新增加的顶点位于输入网格的三角面片上，加密后的网格不会改变输入网格的几何</p>
+                <p>triMesh: 网格数据</p>
+                <p>targetVertexCount: 加密网格的目标顶点个数，应大于输入网格顶点个数</p>
+                <p>vertexFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样</p>
+                <p>insertedVertexFields: 新增加顶点的属性</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+                <a name="meshsimplification"><h5>网格简化</h5></a>
+<pre class="prettyprint">
+ErrorCode QuadricSimplify(ITriMesh* triMesh, Int targetVertexCount, bool keepBoundary = true, const std::vector< Real >* vertexFields = NULL, std::vector< Real >* simplifiedVertexFields = NULL);
+</pre>
+                <p>减少网格顶点个数，并尽量保持输入网格的几何不变</p>
+                <p>triMesh: 网格数据</p>
+                <p>targetVertexCount: 简化网格的目标顶点个数，应小于输入网格顶点个数</p>
+                <p>keepBoundary: 是否保持网格边界的点不变，默认参数为true</p>
+                <p>vertexFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样</p>
+                <p>simplifiedVertexFields: 简化后网格的顶点属性</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode SimplifyWithTextureCoords(ITriMesh* triMesh, Int targetVertexCount, const std::vector< Vector3 >* texCoords, std::vector< Vector3 >* simplifiedTexCoords, const std::vector< Real >* vertexFields = NULL, std::vector< Real >* simplifiedVertexFields = NULL);
+</pre>
+                <p>减少网格顶点个数，并尽量保持输入网格的几何和纹理坐标不变. 简化过程中，会保持网格边界和纹理坐标边界不变</p>
+                <p>triMesh: 网格数据</p>
+                <p>targetVertexCount: 简化网格的目标顶点个数，应小于输入网格顶点个数</p>
+                <p>texCoords: 网格纹理坐标，按照triMesh中三角面片顺序排列：texCoord_tri0_v0, texCoord_tri0_v1, texCoord_tri0_v2, ......</p>
+                <p>simplifiedTexCoords: 简化后网格的纹理坐标，也是按照三角面片顺序排列</p>
+                <p>vertexFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样</p>
+                <p>simplifiedVertexFields: 简化后网格的顶点属性</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+<pre class="prettyprint">
+    // 带纹理坐标网格简化示例
+    GPP::Int faceCount = triMesh->GetTriangleCount();
+    std::vector< GPP::Vector3 > texCoords;
+    texCoords.reserve(faceCount * 3);
+    for (GPP::Int fid = 0; fid < faceCount; fid++)
+    {
+        texCoords.push_back(triMesh->GetTriangleTexcoord(fid, 0));
+        texCoords.push_back(triMesh->GetTriangleTexcoord(fid, 1));
+        texCoords.push_back(triMesh->GetTriangleTexcoord(fid, 2));
+    }
+    std::vector< GPP::Vector3 > simplifiedTexCoords;
+    GPP::ErrorCode res = GPP::SimplifyMesh::SimplifyWithTextureCoords(triMesh, targetVertexCount, &texCoords, &simplifiedTexCoords, NULL, NULL);
+    if (res != GPP_NO_ERROR)
+    {
+        return res;
+    }
+    faceCount = triMesh->GetTriangleCount();
+    for (GPP::Int fid = 0; fid < faceCount; fid++)
+    {
+        int baseIndex = fid *  3;
+        triMesh->SetTriangleTexcoord(fid, 0, simplifiedTexCoords.at(baseIndex));
+        triMesh->SetTriangleTexcoord(fid, 1, simplifiedTexCoords.at(baseIndex + 1));
+        triMesh->SetTriangleTexcoord(fid, 2, simplifiedTexCoords.at(baseIndex + 2));
+    }
+</pre>
+                <hr class="featurette-divider">
+
+
+                <a name="meshremesh"><h5>重新网格化</h5></a>
+<pre class="prettyprint">
+ErrorCode UniformRemesh(ITriMesh* triMesh, Int targetVertexCount, Real sharpAngle, Int optimiseCount = 2, const std::vector< Real >* vertexFields = NULL, std::vector< Real >* remeshVertexFields = NULL);
+</pre>
+                <p>重新网格化（Remesh）：网格顶点分布更加均匀。相关概念可以参考<a class="code" href="http://threepark.net/notes/delaunaytriangulation" target="_blank">从Delaunay三角化到网格质量</a></p>
+                <p>triMesh: 网格数据</p>
+                <p>targetVertexCount: 重新网格化的目标顶点个数。</p>
+                <p>sharpAngle: 网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。重新网格化的时候，会保持住sharp边的几何。参数范围是(0, 180 * ONE_RADIAN)。</p>
+                <p>optimiseCount: 顶点均匀优化采用了迭代的方法，optimiseCount是迭代次数。迭代次数越多，顶点分布越均匀，计算速度也越慢。一般取默认值2。范围是大于0的整数。</p>
+                <p>vertexFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样。</p>
+                <p>remeshVertexFields: 重新网格化后网格的顶点属性。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+
+                <a name="meshoptimization"><h5>网格优化</h5></a>
+<pre class="prettyprint">
+ErrorCode ConstrainedDelaunayOptimization(ITriMesh* triMesh, Real* sharpAngle, const std::vector< std::vector< Int > >* polylineList, const std::vector< Int >* forbiddenEdges);
+</pre>
+                <p>带约束的Delaunay网格优化：优化网格三角形为Delaunay三角形。相关概念可以参考<a class="code" href="http://threepark.net/notes/delaunaytriangulation" target="_blank">从Delaunay三角化到网格质量</a></p>
+                <p>triMesh: 网格数据</p>
+                <p>sharpAngle: 网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。Delaunay优化的时候，会保持住sharp边不变。参数范围是(0, 180 * ONE_RADIAN)。可以设置为NULL。</p>
+                <p>polylineList: 约束多边形。多边形上的边会保持连接关系不变。这是个二维数组，每一维是一条多边形。可以设置为NULL。</p>
+                <p>forbiddenEdges: Delaunay优化不会产生的边。格式为edge_0_v0, edge_0_v1, edge_1_v0, edge_1_v1, ......, edge_n_v0, edge_n_v1。可以设置为NULL。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode CentroidVoronoiOptimization(ITriMesh* triMesh, Real* sharpAngle, std::vector< Real >* vertexFields, const std::vector< Int >* forbiddenEdges, const std::vector< Int >* fixVertices, const std::vector< std::vector< Int > >* fixPolylines);
+</pre>
+                <p>重心Voronoi优化：优化网格三角形为Delaunay三角形，并且三角形分布更加均匀。相关概念可以参考<a class="code" href="http://threepark.net/notes/delaunaytriangulation" target="_blank">从Delaunay三角化到网格质量</a></p>
+                <p>triMesh: 网格数据</p>
+                <p>sharpAngle: 网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。Delaunay优化的时候，会保持住sharp边不变。参数范围是(0, 180 * ONE_RADIAN)。可以设置为NULL。</p>
+                <p>vertexFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样。注意这个变量既是输入，又是输出。可以设置为NULL。</p>
+                <p>forbiddenEdges: 优化时不会产生的边。格式为edge_0_v0, edge_0_v1, edge_1_v0, edge_1_v1, ......, edge_n_v0, edge_n_v1。可以设置为NULL。</p>
+                <p>fixVertices: 优化时不会改变顶点位置的点。可以设置为NULL。</p>
+                <p>polylineList: 约束多边形。多边形上的边会保持连接关系不变。这是个二维数组，每一维是一条多边形。可以设置为NULL。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+
+				<a name="meshcompressheightfield"><h5>高度场压缩</h5></a>
+<pre class="prettyprint">
+ErrorCode CompressHeightField(std::vector< Real >* heightField, Int resolutionX, Int resolutionY, Real compressRatio);
+</pre>
+                <p>注意：高度场按照resolutionX * resolutionY的方格按行排列</p>
+				<p>heightField: 高度场数据</p>
+                <p>resolutionX: X方向分辨率</p>
+				<p>resolutionY: Y方向分辨率</p>
+				<p>compressRatio: 压缩比例，范围(0, 1]，值越小，则压缩得越多</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+				<hr class="featurette-divider">  
+
+                <a name="meshsplit"><h5>切割网格</h5></a>
+				<p>切割网格一般需要两个步骤：</p>
+				<p>1. 在网格上生成切割曲线（网格线），并在原始网格上插入这些新生成的顶点；</p>
+				<p>2. 利用刚才生成的网格线（这时网格线是由一系列通过新网格的顶点连成的折线段或多边形），在切割线处插入新的（复制）顶点，并真正将网格割裂成多个部分.</p>
+				<hr class="line-divider">
+<pre class="prettyprint">
+ErrorCode SplitByPlane(ITriMesh* triMesh, const Plane3* plane, std::vector< bool >* triangleFlags, const std::vector< Real >* vertexFields = NULL, std::vector< Real >* insertedVertexFields = NULL);
+</pre>
+                <p>用平面切割网格，该API为切割网格步骤1的一种方法</p>
+                <p>triMesh: 被切割的网格数据</p>
+                <p>plane: 切割平面</p>
+                <p>triangleFlags: 网格切割后，三角面片相对于平面位置的标志：1－在平面上方；0-在平面下方</p>
+                <p>vertexFields: 原网格顶点fields</p>
+                <p>insertedVertexFields：新插入网格顶点的field</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+				
+<pre class="prettyprint">
+ErrorCode InsertSplitLinesByEdgePoints(ITriMesh* triMesh, const std::vector< std::vector< PointOnEdge > >& edgePointLines, std::vector< std::vector< Int> >* newSplitLineVertexIds = NULL, const std::vector< Vector3 >* texCoords = NULL, std::vector< Vector3 >* newTexCoords = NULL);
+ErrorCode InsertSplitLinesByFacePoints(ITriMesh* triMesh, const std::vector< std::vector< PointOnFace> >& facePointLines, std::vector< std::vector< Int > >* newSplitLinesVertexIds = NULL, const std::vector< Vector3 >* texCoords = NULL, std::vector< Vector3 >* newTexCoords = NULL);
+</pre>
+				<p>将网格线（附着在网格表面的曲线）插入网格，该API为切割网格步骤1的一种方法</p>
+				<p>triMesh: 被切割的网格数据</p>
+				<p>edgePointLines/facePointLines: 一组网格曲线。edgePointLines.at(lineId)/facePointLines.at(lineId)为一条切割曲线段，线段顶点均位于网格边（表面）。如果需要传入闭合的曲线，请保证其首末顶点为同一个点。</p>
+				<p>newSplitLineVertexIds: 网格线插入后，输入曲线上的每个点将变为新网格的顶点。这一数据和原始网格曲线一一对应，其存储了原始网格曲线在新的网格上的对应表示，即存储了网格线在对应的新网格上的顶点索引。</p>
+				<p>texCoords: 原始网格的所有三角形纹理坐标</p>
+				<p>newTexCoords: 曲线插入后网格的所有三角形纹理坐标</p>
+				<p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+				<p>注意：1. 输入网格曲线需保证为合理的输入（见这一<a href="/geometryplusplus/meshcurve" target="_blank">网页</a>），且不能包含自交情况，否则该函数会失败。
+				<p>      2. 如果输入网格的纹理坐标是基于顶点的，那么新插入的面点的纹理坐标可以直接通过该面点的重心坐标插值得到，因为此API并不影响原有顶点的索引。而如果原始纹理坐标为基于三角形的，则需要在API中传入三角形纹理坐标来计算新生成的三角形纹理坐标，此时网格线经过的三角形的顶点索引有可能发生变化。
+				<hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode SplitByLines(ITriMesh* triMesh, const std::vector< std::vector< Int > >& splitLines, std::vector< Int >* insertVertexIdMap = NULL);
+</pre>
+                <p>用网格顶点构成的线段切割网格，即切割网格的步骤2</p>
+                <p>注意：关于面点属性，此api只会修改割缝处面点的顶点索引，不会修改其它面点属性，比如面点纹理坐标。</p>
+                <p>triMesh: 被切割的网格数据</p>
+                <p>splitLines: 一组切割线段。splitLines.at(lineid)是一条切割线段，vector内容为线段顶点ID。</p>
+                <p>insertVertexIdMap: 插入的顶点与原网格顶点的对应：切割网格的时候，在割缝处会插入新的顶点，这些新顶点是原网格顶点的一个复制。由于新顶点的id是顺序push_back进网格顶点列表的，其对应关系为：insertVertexIdMap.at(insertedVertexId - originVertexCount) = originVertexId。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+<pre class="prettyprint">
+//使用曲线切割网格示例
+
+// 生成网格曲线
+std::vector< GPP::PointOnFace > facePointLines;
+//std::vector< GPP::PointOnEdge > edgePointLines;
+// 生成曲线有很多方法，如这里使用测地线连接网格上的若干个点
+std::vector< GPP::Vector3 > pathPositions;
+GPP::Real distance = 0;
+GPP::Real accuracy = 0.5;
+res = GPP::MeasureMesh::FastComputeExactGeodesics(triMesh, selectedPoints, 
+	isClosedCurve, pathPositions, distance, &facePointLines, accuracy);
+if (res != GPP_NO_ERROR) return res;
+// 收集原网格的三角形纹理坐标
+std::vector< GPP::Vector3 > texCoords;
+if (triMesh->HasTriangleTexCoord())
+{
+    int faceCount = triMesh->GetTriangleCount();
+    texCoords.resize(faceCount * 3);
+    for (int fid = 0; fid < faceCount; ++fid)
+    {
+        for (int fvid = 0; fvid < 3; ++fvid)
+        {
+            texCoords.at(fid * 3 + fvid) = triMesh->GetTriangleTexcoord(fid, fvid);
+        }
+    }
+}
+// 将该曲线插入网格
+std::vector< GPP::Vector3 > newTexCoords;
+std::vector< std::vector< GPP::Int > > newInsertSplitLines;
+res = GPP::SplitMesh::InsertSplitLinesByFacePoints(triMesh, facePointLines, 
+     &newInsertSplitLines, texCoords.empty() ? NULL : &texCoords, &newTexCoords);
+if (res != GPP_NO_ERROR) return res;
+// 将新的纹理坐标赋值给改变后的网格
+if (!newTexCoords.empty())
+{
+    int faceCount = triMesh->GetTriangleCount();
+    for (int fid = 0; fid < faceCount; ++fid)
+    {
+        for (int fvid = 0; fvid < 3; ++fvid)
+        {
+            triMesh->SetTriangleTexcoord(fid, fvid, newTexCoords.at(fid * 3 + fvid));
+        }
+    }
+}
+// 最后将网格真正切开
+res = GPP::SplitMesh::SplitByLines(triMesh, newInsertSplitLines);
+if (res != GPP_NO_ERROR) return res;
+// 此时可以根据连通性将新网格彻底分离
+</pre>				
+				<hr class="featurette-divider">
+
+                <a name="meshoffset"><h5>网格抽壳</h5></a>
+<pre class="prettyprint">
+ErrorCode UniformApproximate(ITriMesh* triMesh, Real offsetValue);
+</pre>
+                <p>网格均匀抽壳：计算网格的近似等距网格，如果是开网格，会把原始网格和等距网格的边界连接起来形成一个封闭网格。</p>
+                <p>triMesh: 网格数据</p>
+                <p>offsetValue: 等距值。正值代表平移方向朝网格外，负值代表平移方向朝网格内。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+                <a name="meshsampling"><h5>网格采样</h5></a>
+<pre class="prettyprint">
+ErrorCode UniformSample(const ITriMesh* triMesh, Int sampleCount, Real sharpAngle, std::vector< PointOnFace >& pointsOnFace, std::vector< PointOnEdge >& pointsOnEdge, std::vector< Int >& pointsOnVertex, bool excludeBoundary);
+</pre>
+                <p>网格采样：在网格上均匀采样点。</p>
+                <p>triMesh: 网格数据。</p>
+                <p>sampleCount: 采样点数。</p>
+                <p>sharpAngle: 网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。sharp边上一定会采点。参数范围是(0, 180 * ONE_RADIAN)。</p>
+                <p>pointsOnFace: 采样点－三角形内部的点</p>
+                <p>pointsOnEdge: 采样点－网格边上的点</p>
+                <p>pointsOnVertex: 采样点－网格顶点上的点</p>
+                <p>excludeBoundary: 采样时是否排除网格边界。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+                <a name="meshdeformation"><h5>网格变形</h5></a>
+<pre class="prettyprint">
+class DeformMesh</a>
+</pre>
+                <hr class="line-divider">
+
+<pre class="prettyprint">ErrorCode Init(ITriMesh* triMesh, const std::vector< bool >& vertexFixFlags, bool consolidateGeometry = true);</pre>
+                <p>初始化网格变形</p>
+                <p>triMesh: 网格数据。</p>
+                <p>vertexFixFlags: 网格顶点类型：0-自由顶点；1-固定顶点。</p>
+                <p>consolidateGeometry: 是否处理退化几何，默认参数为true。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">ErrorCode Deform(const std::vector< Int >& targetVertexIds, const std::vector< Vector3 >& targetCoords, DeformMeshType deformType);</pre>
+                <p>网格变形</p>
+                <p>targetVertexIds: 网格变形位置约束的顶点索引。</p>
+                <p>targetCoords: 网格变形的位置约束，目标位置。targetVertexIds和targetCoords是一一对应的。特别注意，约束顶点一定是Init中的固定顶点。</p>
+                <p>deformType: 网格变形类型：快速变形或精确变形。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+                <a name="meshunfold"><h5>网格UV展开</h5></a>
+                <p>网格UV展开的相关介绍可以参考<a class="code" href="http://threepark.net/notes/uvunfold" target="_blank">网格UV展开</a>
+<pre class="prettyprint">
+ErrorCode ConformalMap(const ITriMesh* triMesh, const std::vector< Int >* fixedVertexIndices, const std::vector< Real >* fixedVertexCoords, std::vector< Real >* texCoords);
+</pre>
+                <p>单连通圆盘拓扑结构的网格UV展开，性质是共形映射，尽量保持三角形的内角不变</p>    
+                <p>triMesh: 网格数据，需要单连通圆盘拓扑结构</p>
+                <p>fixedVertexIndices: 网格每一个连通区域需要指定至少2个固定点，fixedVertexIndices是固定顶点索引。如果没有指定，则api会自动指定两个边界点。</p>
+                <p>fixedVertexCoords: 固定顶点的纹理坐标，排列顺序：coord0_X, coord0_Y, coord1_X, coord1_Y......</p>
+                <p>texCoords: 纹理坐标结果，顺序和顶点顺序一一对应。排列顺序：coord0_X, coord0_Y, coord1_X, coord1_Y......</p>
+                <p>texCoords的范围跟指定的固定点的纹理坐标范围相关。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode OptimizeIsometric(const ITriMesh* triMesh, std::vector< Real >* texCoords, Int iterationCount, const std::vector< Int >* fixedVertexIndex = NULL);
+</pre>
+                <p>单连通圆盘拓扑结构的网格UV展开优化，使得纹理映射更加等距</p>
+                <p>triMesh: 网格数据，需要单连通圆盘拓扑结构</p>
+                <p>texCoords: 初始纹理坐标，顺序和顶点顺序一一对应。排列顺序：coord0_X, coord0_Y, coord1_X, coord1_Y......</p>
+                <p>iterationCount: 优化迭代次数，一般设置为10</p>
+                <p>fixedVertexIndex : 需要固定住的顶点索引。注意，等距优化目的是让UV空间中的三角形形状与原网格尽量接近，约束越多，优化空间也就越小</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+    // 单连通圆盘拓扑结构网格UV展开示例
+
+    // 展开到自由边界示例
+    std::vector< std::vector< GPP::Int > > holeIds;
+    GPP::ErrorCode res = GPP::FillMeshHole::FindHoles(triMesh, &holeIds);
+    if (res != GPP_NO_ERROR || holeIds.size() != 1) return res;
+    std::vector< GPP::Int > fixedVertexIndices(2);
+    std::vector< GPP::Real > fixedVertexCoords(4);
+    fixedVertexIndices.at(0) = holeIds.at(0).at(0);
+    fixedVertexIndices.at(1) = holeIds.at(0).at(holeIds.at(0).size() / 2);
+    fixedVertexCoords.at(0) = -1.0;
+    fixedVertexCoords.at(1) = -1.0;
+    fixedVertexCoords.at(2) = 1.0;
+    fixedVertexCoords.at(3) = 1.0;
+    std::vector< GPP::Real > texCoords;
+    res = GPP::UnfoldMesh::ConformalMap(triMesh, &fixedVertexIndices, &fixedVertexCoords, &texCoords);
+    if (res != GPP_NO_ERROR) return res;
+    res = GPP::UnfoldMesh::OptimizeIsometric(triMesh, &texCoords, 10, NULL);
+    if (res != GPP_NO_ERROR) return res;
+    triMesh->SetHasVertexTexCoord(true);
+    GPP::Int vertexCount = triMesh->GetVertexCount();
+    for (GPP::Int vid = 0; vid < vertexCount; vid++)
+    {
+        triMesh->SetVertexTexcoord(vid, GPP::Vector3(texCoords.at(vid * 2), texCoords.at(vid * 2 + 1), 0));
+    }
+    // If you want to use triangle texture coordinates, you could set it like this
+    triMesh->SetHasTriangleTexCoord(true);
+    GPP::Int faceCount = triMesh->GetTriangleCount();
+    int vertexIds[3] = {-1};
+    for (int fid = 0; fid < faceCount; fid++)
+    {
+        triMesh->GetTriangleVertexIds(fid, vertexIds);
+        for (int lid = 0; lid < 3; lid++)
+        {
+            triMesh->SetTriangleTexcoord(fid, lid, triMesh->GetVertexTexcoord(vertexIds[lid]));
+        }
+    }
+
+    // 展开到圆盘示例
+    std::vector< std::vector< GPP::Int > > holeIds;
+    GPP::ErrorCode res = GPP::FillMeshHole::FindHoles(triMesh, &holeIds);
+    if (res != GPP_NO_ERROR || holeIds.size() != 1) return res;
+    std::vector< GPP::Int > fixedVertexIndices = holeIds.at(0);
+    int boundaryVertexSize = fixedVertexIndices.size();
+    double theta = -2.0 * GPP::GPP_PI / double(boundaryVertexSize);
+    std::vector< GPP::Real > fixedVertexCoords;
+    fixedVertexCoords.reserve(boundaryVertexSize * 2);
+    for (int pid = 0; pid < boundaryVertexSize; pid++)
+    {
+        fixedVertexCoords.push_back(sin(pid * theta));
+        fixedVertexCoords.push_back(cos(pid * theta));
+    }
+    std::vector< GPP::Real > texCoords;
+    res = GPP::UnfoldMesh::ConformalMap(triMesh, &fixedVertexIndices, &fixedVertexCoords, &texCoords);
+    if (res != GPP_NO_ERROR) return res;
+    // 注意，这里不需要等距优化了
+    triMesh->SetHasVertexTexCoord(true);
+    GPP::Int vertexCount = triMesh->GetVertexCount();
+    for (GPP::Int vid = 0; vid < vertexCount; vid++)
+    {
+        triMesh->SetVertexTexcoord(vid, GPP::Vector3(texCoords.at(vid * 2), texCoords.at(vid * 2 + 1), 0));
+    }
+</pre>
+                <img class="featurette-image img-responsive center-block" src="/images/free_fix_boundary.jpg" alt="free_fix_boundary">
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode PackUVAtlas(const std::vector< ITriMesh* >& singleRegionList, std::vector< std::vector< Real > >& texCoordList);
+</pre>
+                <p>纹理坐标打包：把多个网格的纹理坐标打包到一个方形区域内。</p>
+                <p>singleRegionList: 网格需要是单连通圆盘拓扑结构。这样网格的顶点和纹理坐标才能是一一对应。</p>
+                <p>texCoordList: 对应网格的纹理坐标。单个网格纹理坐标的排列顺序：coord0_X, coord0_Y, coord1_X, coord1_Y......序号和网格顶点顺序一致。打包后的纹理坐标存在这个数据结构内。返回的纹理坐标范围是[0, 1]。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode GenerateUVAtlas(const ITriMesh* triMesh, Int initChartCount, std::vector< Real >* texCoords, std::vector< Int >* faceTexIds, bool needInitSplit, bool needSplitFoldOver, bool needSplitOverlap);
+</pre>
+                <p>任意拓扑网格全自动UV展开，性质：自动找纹理割缝，自动UV展开，如果展开扭曲大，会自动进行再分割展开，最后自动纹理坐标打包</p>
+                <p>triMesh: 网格数据，任意拓扑结构</p>
+                <p>initChartCount: 网格初始分割数目. 如果遇到高亏格或者展开扭曲大，网格会自动进行再分割。注意，这只是一个期望值，最终结果可能会大于这个值。</p>
+                <p>texCoords: 纹理坐标结果。排列顺序：coord0_X, coord0_Y, coord1_X, coord1_Y......</p>
+                <p>faceTexIds: 三角面的纹理索引。面点顺序和原始网格的面点顺序一致。排列顺序：texIndex_tri0_vert0, texIndex_tri0_vert1, texIndex_tri0_vert2, texIndex_tri1_vert0, texIndex_tri1_vert1, texIndex_tri1_vert2......</p>
+                <p>needInitSplit: 展开过程中是否需要做初始的纹理割缝，割缝一般位于特征线地方。</p>
+                <p>needSplitFoldOver: 网格展开结果如果有foldover情况，是否需要自动分割再展。</p>
+                <p>needSplitOverlap: 网格展开结果如果有overlap情况，是否需要自动分割再展。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+<pre class="prettyprint">
+    // 任意网格UV展开示例
+    std::vector< GPP::Real > texCoords;
+    std::vector< GPP::Int > faceTexIds;
+    int initChartCount = 25;
+    bool needInitSplit = true;
+    bool needSplitFoldOver = true;
+    bool needSplitOverlap = true;
+    GPP::ErrorCode res = GPP::UnfoldMesh::GenerateUVAtlas(triMesh, initChartCount, &texCoords, &faceTexIds, needInitSplit, needSplitFoldOver, needSplitOverlap);
+    if (res != GPP_NO_ERROR) return res;
+    triMesh->SetHasTriangleTexCoord(true);
+    int uvFaceCount = faceTexIds.size() / 3;
+    for (int fid = 0; fid < uvFaceCount; fid++)
+    {
+        for (int fvid = 0; fvid < 3; fvid++)
+        {
+            GPP::Int tid = faceTexIds.at(fid * 3 + fvid);
+            triMesh->SetTriangleTexcoord(fid, fvid, GPP::Vector3(texCoords.at(tid * 2), texCoords.at(tid * 2 + 1), 0));
+        }
+    }
+</pre>
+                <hr class="featurette-divider">
+
+                
+                <a name="imagecolormapping"><h5>点像对应</h5></a>
+                <pre class="prettyprint">
+ErrorCode TransferMappingToMesh(const IPointCloud* pointCloud, const std::vector< ImageColorId >& pointColorIds, ITriMesh* triMesh, std::vector< ImageColorId >& meshColorIds, Real densityScale = 1.0, bool smoothGeometry = false);
+</pre>
+                <p>在点云重建成网格后，把点云的点像对应信息传递到网格顶点上</p>
+                <p>pointCloud：点云</p>
+                <p>pointColorIds：点云的点像对应信息。注意，所有点的点像对应信息必须是有效的，且imageIndex >= 0</p>
+                <p>triMesh：pointCloud重建出的网格。注意，点云和网格的位置要一致。</p>
+                <p>meshColorIds：输出的网格顶点点像对应信息</p>
+                <p>densityScale：api会给点云计算密度信息，并乘以一个densityScale值。网格顶点到点云距离小于这个密度值时，则会把点云的点像对应传递给网格顶点。其余网格顶点的点像对应则根据这些已传递的信息来进行计算。默认值为1.0。如果点云是线激光数据，非常不均匀，可以适当提高，比如1.5.</p>
+                <p>smoothGeometry：网格是否需要做光滑处理。背景是，光滑的网格，贴图效果更好一些。如果光滑了网格，则其对应的点像对应信息会根据光滑的几何来计算。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode InterpolateImageColorIdsOnMesh(const ITriMesh* triMesh, const std::vector< Int >& validFlags, std::vector< ImageColorId >& imageColorIds);
+</pre>
+                <p>插值网格顶点的点像对应</p>
+                <p>triMesh：输入网格</p>
+                <p>validFlags：网格顶点的点像对应是否有效。无效的点像对应会做插值计算。</p>
+                <p>imageColorIds：网格顶点的点像对应</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode ProjectImageColorIdToMesh(const IPointCloud* pointCloud, const Matrix4x4* transform, const std::vector< ImageColorId >& pointColorIds, Real pointDensity, const ITriMesh* triMesh, std::vector< std::pair< Int, ImageColorId > >& meshColorIds);
+</pre>
+                <p>投影深度点云的点像对应到网格上。API输入信息是，一个深度点云，每个点有图像的点像对应信息，并且和输入网格是对齐的。输出信息是，点云把点像对应投影到网格上，投影区域的网格顶点带有点像对应信息。</p>
+                <p>pointCloud：输入点云，需要是深度点云，并且带有法线，法线朝向和网格法线一致。</p>
+                <p>transform：输入点云的变换。如果是NULL，则为恒等变换。</p>
+                <p>pointColorIds：输入点云的点像对应。长度为点云点数，并且每个点的点像对应必须是有效的。</p>
+                <p>pointDensity：输入点云密度。点云本身是没有面积的，点云密度用于计算投影区域。只有投影区域之内的网格顶点才有点像对应传递。</p>
+                <p>triMesh：输入网格。网格需要提供有效的法线信息。</p>
+                <p>meshColorIds：输出网格顶点的点像对应。只有投影区域内的顶点有点像对应信息，所以用pair来记录，pair.first为网格顶点索引。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode FuseImageColorIds(const ITriMesh* triMesh, const std::vector< std::vector< ImageColorId > >& imageColorIdList, std::vector< ImageColorId >& imageColorIds, std::vector< Int >& faceColorIds, FuseImageColorIdType fuseType = FUSE_IMAGECOLORID_SEQUENTIAL, const std::vector< Vector3 >* cameraDirList = NULL, const std::vector< std::vector< Color4> >* refImageList = NULL, const std::vector< Int >* refImageInfos = NULL, const std::vector< Real >* refImageWeights = NULL);
+</pre>
+                <p>优化网格点像对应割缝。背景是，有些网格顶点带有多个点像对应信息，也就是在网格某些区域有多副图重叠。API的目的是，给每个三角片计算一个唯一的点像对应，并且具有不同图之间的割缝色差最小的性质。注意，API只是对原有的多个点像对应的一个选择的过程，并不改变原有点像对应信息。</p>
+                <p>triMesh：输入网格。</p>
+                <p>imageColorIdList：输入网格顶点点像对应信息。每个顶点对应一个std::vector< ImageColorId >。如果没有对应，则vector可以为empty。</p>
+                <p>imageColorIds：输出的点像对应信息。用于faceColorIds索引。</p>
+                <p>faceColorIds：输出的三角片点像对应索引。如果没有有效对应，则索引为-1。三角片的索引顺序与ITriMesh.GetTriangleVertexIds的索引顺序一致。</p>
+                <p>fuseType：优化方法类型。目前有两种类型：FUSE_IMAGECOLORID_SEQUENTIAL-给每个三角片顶点的点像对应选择图像索引号最小的ImageColorId；FUSE_IMAGECOLORID_OPTIMAL-优化方法，使得不同图之间的割缝色差最小。</p>
+                <p>cameraDirList：用于FUSE_IMAGECOLORID_OPTIMAL类型的参数。每张图片，其实有一个相机对应。相机经过变换后，把图片按照新的相机方向投影到网格上。cameraDirList就是这个方向。注意，这个方向和网格的法线是相反的。如果设置为NULL，则会自动计算。</p>
+                <p>refImageList：用于FUSE_IMAGECOLORID_OPTIMAL类型的参数。参考图像数据，每一列为一个图像，每张图片按照行优先存储，Color4为图像像素颜色。</p>
+                <p>refImageInfos：用于FUSE_IMAGECOLORID_OPTIMAL类型的参数。参考图像的宽度和高度，排列为：imagewidth0, imageheight0, imagewidth1, imageheight1......</p>
+                <p>refImageWeights: 每张图片有个权重，默认为1.0。权重越大，则被选中为贴图的几率越大。比如希望某张图片被选中，可以适当提高其权重，比如设为1.5。注意，此权重参数为绝对参数值，如果不想改变图片的权重，可以设置为1.0。当refImageWeights为NULL的时候，其权重设置为默认的1.0.</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <img class="featurette-image img-responsive center-block" src="/images/fuse_imagecolorid.jpg" alt="fuse_imagecolorid">
+                <p>左图为FUSE_IMAGECOLORID_SEQUENTIAL结果，右图为FUSE_IMAGECOLORID_OPTIMAL结果。上面的图，不同颜色代表了不同的图片，下面的图为贴图效果。</p>
+<pre class="prettyprint">
+    // 优化网格点像对应割缝，优化纹理贴图图像割缝颜色，并且生成纹理贴图示例
+    // 输入：注册好的深度点云+点像对应+图片
+    // 输出：带纹理贴图的网格
+
+    // Create point cloud
+    GPP::Vector3 bboxMin, bboxMax;
+    GPP::ErrorCode res = GPP::CalculatePointCloudListBoundingBox(pointCloudList, &transformList, bboxMin, bboxMax);
+    if (res != GPP_NO_ERROR) return;
+    GPP::PointCloudPointList pointList(pointCloudList.at(0));
+    double density = 0;
+    res = GPP::CalculatePointListDensity(&pointList, 5, density);
+    if (res != GPP_NO_ERROR) return;
+    density *= intervalCount;
+    GPP::SumPointCloud sumPointCloud(density, bboxMin, bboxMax, true, 25, 2);
+    int cloudCount = pointCloudList.size();
+    for (int cid = 0; cid < cloudCount; cid++)
+    {
+        res = sumPointCloud.UpdateSumFunction(pointCloudList.at(cid), &transformList.at(cid), NULL);
+        if (res != GPP_NO_ERROR) return;
+    }
+    GPP::PointCloud extractPointCloud;
+    res = sumPointCloud.ExtractPointCloud(&extractPointCloud, NULL, NULL);
+    if (res != GPP_NO_ERROR) return;
+
+    // Reconstruct mesh
+    GPP::TriMesh triMesh;
+    res = GPP::ReconstructMesh::Reconstruct(&extractPointCloud, &triMesh, 5, false, NULL, NULL, 0);
+    if (res != GPP_NO_ERROR) return;
+
+    // Compute textureCoords and textureIds, which will be used in CreateTextureImageByRefImages
+    std::vector< GPP::Real > texCoords;
+    std::vector< GPP::Int > faceTexIds;
+    res = GPP::UnfoldMesh::GenerateUVAtlas(&triMesh, 36, &texCoords, &faceTexIds, true, true, true);
+    if (res != GPP_NO_ERROR) return;
+    int faceCount = triMesh.GetTriangleCount();
+    std::vector< double > textureCoords(faceCount * 3 * 2);
+    std::vector< int > textureIds(faceCount *  3);
+    for (int fid = 0; fid < faceCount; ++fid)
+    {
+        for (int fvid = 0; fvid < 3; ++fvid)
+        {
+            GPP::Int baseIndex = fid * 3 + fvid;
+            textureCoords.at(baseIndex * 2) = texCoords.at(faceTexIds.at(baseIndex) * 2);
+            textureCoords.at(baseIndex * 2 + 1) = texCoords.at(faceTexIds.at(baseIndex) * 2 + 1);
+            textureIds.at(baseIndex) = baseIndex;
+        }
+    }
+
+    // Compute vertexColorIdList which will be used in FuseImageColorIds
+    int vertexCount = triMesh.GetVertexCount();
+    std::vector< std::vector< GPP::ImageColorId > > vertexColorIdList(vertexCount, std::vector< GPP::ImageColorId >());
+    for (int cid = 0; cid < cloudCount; cid++)
+    {
+        GPP::PointCloudPointList curPointList(pointCloudList.at(cid));
+        double pointDensity = 0;
+        if (GPP::CalculatePointListDensity(&curPointList, 5, pointDensity) != GPP_NO_ERROR) return;
+        std::vector< std::pair< int, GPP::ImageColorId > > meshColorIds;
+        res = GPP::OptimiseMapping::ProjectImageColorIdToMesh(pointCloudList.at(cid), &transformList.at(cid), pointColorIds.at(cid), pointDensity * intervalCount, &triMesh, meshColorIds); 
+        if (res != GPP_NO_ERROR) return;
+        for (std::vector< std::pair< int, GPP::ImageColorId > >::iterator pitr = meshColorIds.begin(); pitr != meshColorIds.end(); ++pitr)
+        {
+            int imageIndex = pitr->second.GetImageIndex();
+            if (imageIndex < 0)
+            {
+                continue;
+            }
+            if (pitr->second.GetLocalX() < 0 || pitr->second.GetLocalX() >= refImageInfos.at(imageIndex * 2) || 
+                pitr->second.GetLocalY() < 0 || pitr->second.GetLocalY() >= refImageInfos.at(imageIndex * 2 + 1))
+            {
+                continue;
+            }
+            vertexColorIdList.at(pitr->first).push_back(pitr->second);
+        }
+    }
+
+    // Compute faceVertexColorIds which will be used in CreateTextureImageByRefImages
+    std::vector< GPP::ImageColorId > imageColorIds;
+    std::vector< int > faceColorIds;
+    res = GPP::OptimiseMapping::FuseImageColorIds(&triMesh, vertexColorIdList, imageColorIds, 
+        faceColorIds, GPP::FUSE_IMAGECOLORID_OPTIMAL, NULL, refImageList, refImageInfos);
+    if (res != GPP_NO_ERROR) return;
+    res = GPP::OptimiseMapping::InterpolateFaceImageColorIds(&triMesh, imageColorIds, faceColorIds);
+    if (res != GPP_NO_ERROR) return;
+    std::vector< GPP::ImageColorId > faceVertexColorIds(faceCount * 3);
+    for (int fid = 0; fid < faceCount; fid++)
+    {
+        for (int fvid = 0; fvid < 3; fvid++)
+        {
+            if (faceColorIds.at(fid * 3 + fvid) < 0)
+            {
+                faceVertexColorIds.at(fid * 3 + fvid).Set(0, 0, 0);
+            }
+            else
+            {
+                faceVertexColorIds.at(fid * 3 + fvid) = imageColorIds.at(faceColorIds.at(fid * 3 + fvid));
+            }
+        }       
+    }
+
+    // Create texture image
+    int textureSize = 2048;
+    std::vector< GPP::Color4 > imageData;
+    res = GPP::TextureImage::CreateTextureImageByRefImages(textureCoords, textureIds, faceVertexColorIds, 
+        refImageList, refImageInfos, textureSize, textureSize, imageData, NULL);
+    if (res != GPP_NO_ERROR) return;
+
+    // Tune texture image color
+    std::vector< GPP::Color4 > faceVertexColors(faceCount * 3, GPP::Color4(0, 0, 0, 0));
+    std::vector< int > faceVertexImageIds(faceCount * 3);
+    for (int fid = 0; fid < faceCount; fid++)
+    {
+        for (int fvid = 0; fvid < 3; fvid++)
+        {
+            int fvindex = fid * 3 + fvid;
+            faceVertexImageIds.at(fvindex) = faceVertexColorIds.at(fvindex).GetImageIndex();
+            if (faceVertexImageIds.at(fvindex) < 0)
+            {
+                faceVertexImageIds.at(fvindex) = -1;
+                continue;
+            }
+            int imageWidth = refImageInfos.at(faceVertexImageIds.at(fvindex) * 2);
+            faceVertexColors.at(fvindex) = refImageList.at(faceVertexImageIds.at(fvindex)).at(imageWidth * faceVertexColorIds.at(fvindex).GetLocalY() + faceVertexColorIds.at(fvindex).GetLocalX());
+        }
+    }
+    res = GPP::IntrinsicColor::TuneTextureImageColor(&triMesh, textureCoords, faceVertexColors, faceVertexImageIds, 
+        textureSize, textureSize, imageData, GPP::Vector3(0.1, 0.5, 0.5));
+    if (res != GPP_NO_ERROR) return;
+
+    // output texture image
+    cv::Mat textureImage(textureSize, textureSize, CV_8UC4);
+    for (int y = 0; y < textureSize; ++y)
+    {
+        for (int x = 0; x < textureSize; ++x)
+        {
+            cv::Vec4b& col = textureImage.at< cv::Vec4b >(textureSize - 1 - y, x);
+            GPP::Color4 cColor = imageData.at(x + y * textureSize);
+            col[0] = cColor[2];
+            col[1] = cColor[1];
+            col[2] = cColor[0];
+            col[3] = cColor[3];
+        }
+    }
+</pre>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode InterpolateFaceImageColorIds(const ITriMesh* triMesh, std::vector< ImageColorId >& imageColorIds, std::vector< Int >& faceColorIds);
+</pre>
+                <p>插值网格三角片顶点的点像对应。</p>
+                <p>triMesh：输入网格</p>
+                <p>imageColorIds：输入和输出的点像对应，用于faceColorIds索引。</p>
+                <p>faceColorIds：输入和输出的三角片顶点点像对应索引。索引值为-1的面点为会做插值计算，并赋予新的点像对应索引。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+                <a name="textureimage"><h5>纹理图制作</h5></a>
+                <p>纹理图制作的相关介绍可以参考<a class="code" href="http://threepark.net/notes/colormesh" target="_blank">彩色网格</a>
+<pre class="prettyprint">
+ErrorCode CreateTextureImageByVertexColors(const std::vector< Real >& texCoordinates, const std::vector< Int >& faceTextureIds, const std::vector< Color4 >& texColors, Int outputImageWidth, Int outputImageHeight, std::vector< Color4 >& outputImageData, std::vector< Int >* pixelResultInfos = NULL);
+</pre>
+                <p>应用网格顶点颜色制作纹理贴图</p>
+                <p>texCoordinates: 网格三角片的纹理坐标，排列顺序为texCoord0_X, texCoord0_Y, texCoord1_X, texCoord1_Y......</p>
+                <p>faceTextureIds: 网格三角片的纹理坐标索引。面点顺序和原始网格的面点顺序一致。排列顺序：texIndex_tri0_vert0, texIndex_tri0_vert1, texIndex_tri0_vert2, texIndex_tri1_vert0, texIndex_tri1_vert1, texIndex_tri1_vert2......</p>
+                <p>texColors: 网格三角形顶点的颜色，顺序与texCoordinates对应</p>
+                <p>outputImageWidth: 输出的纹理贴图宽度</p>
+                <p>outputImageHeight: 输出的纹理贴图高度</p>
+                <p>outputImageData: 输出的纹理贴图颜色数据，按行排列</p>
+                <p>pixelResultInfos: 纹理贴图辅助数据，意义为pixel的类型：0-背景色，1-扩展的像素，2-纹理像素</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode CreateTextureImageByRefImages(const std::vector< Real >& texCoordinates, const std::vector< Int >& faceTextureIds, const std::vector< ImageColorId >& texColorIds, const std::vector< std::vector< Color4 > > refImageListData, const std::vector< Int >& refImageInfos, Int outputImageWidth, Int outputImageHeight, std::vector< Color4 >& outputImageData, std::vector< Int >* pixelResultInfos = NULL);
+</pre>
+                <p>应用网格对应的图片制作纹理贴图</p>
+                <p>texCoordinates: 网格三角片的纹理坐标，排列顺序为texCoord0_X, texCoord0_Y, texCoord1_X, texCoord1_Y......</p>
+                <p>faceTextureIds: 网格三角片的纹理坐标索引。面点顺序和原始网格的面点顺序一致。排列顺序：texIndex_tri0_vert0, texIndex_tri0_vert1, texIndex_tri0_vert2, texIndex_tri1_vert0, texIndex_tri1_vert1, texIndex_tri1_vert2......注意，(texCoordinates, faceTextureIds)和(texColorIds, faceTextureIds)分别构成了两个2D网格，并且共享一个三角形面点索引faceTextureIds。有的时候，这两个网格的拓扑结构并不一样，比如UV网格的割缝并不等于图像域网格的割缝。这时候，可以把这两个2D网格看成是一堆三角片(Triangle Soup)来构建，那么两个网格的拓扑结构就一样了。这个想法可以类比OBJ和STL的网格格式。</p>
+                <p>texColorIds: 网格三角片顶点在图像中的对应ID</p>
+                <p>注意: 如图所示，texCoordinates和texColorIds是一一对应的（size有个两倍的关系）。faceTextureIds是一个一个三角面片对texCoordinates和texColorids的索引。三角面片的顶点顺序和网格的面点顺序一致（GetTriangleVertexIds)。</p>
+                <img class="featurette-image img-responsive center-block" src="/images/CreateTexture_Input.jpg" alt="CreateTexture_Input">
+                <p>refImageListData: 参考图像数据，每一列为一个图像，每张图片按照行优先存储，Color4为图像像素颜色</p>
+                <p>refImageInfos: 参考图像的宽度和高度，排列为：imagewidth0, imageheight0, imagewidth1, imageheight1......</p>
+                <p>outputImageWidth: 输出纹理贴图宽度</p>
+                <p>outputImageHeight: 输出纹理贴图高度</p>
+                <p>outputImageData: 输出纹理贴图颜色数据，按行排列</p>
+                <p>pixelResultInfos: 纹理贴图辅助数据，意义为pixel的类型：0-背景色，1-扩展的像素，2-按顶点插值类型的像素，id(>=3)-参考图像ID＋3。下面是一个详细说明：</p>
+                <li>1-扩展像素：一般UV坐标系下三角形覆盖的区域，会往外扩展，防止图像分辨率带来的割缝痕迹</li>
+                <li>2-按顶点插值类型的像素：如果一个三角片的三个顶点的点像对应不是同一张图，则这个三角片的颜色由三个顶点插值得到。这种情况一般出现在不同图片交接的地方。如果三角形的点像对应不规则，图片有相互渗透的情况，则会导致这个区域的纹理分辨率下降，需要考虑点像对应的优化。</li>
+                <li>id(>=3)-参考图像ID＋3：这个区域的三角片的三个顶点对应于同一张图，纹理由对应的图像三角片拷贝得到。</li>
+                <p>下图是一个典型的pixelResultInfos图像：蓝色-0，绿色-1，红色-2，灰色-id>=3的不同区域</p>
+                <img class="featurette-image img-responsive center-block" src="/images/alpha_image.jpg" alt="alpha_image">
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+
+<pre class="prettyprint">
+    // 网格纹理贴图制作示例
+    std::vector<GPP::ImageColorId> originImageColorIds = ModelManager::Get()->GetImageColorIds();
+    if (isByVertexColor)
+    {
+        if (triMesh->HasColor() == false)
+        {
+            MessageBox(NULL, "输入需要带颜色的网格", "温馨提示", MB_OK);
+            return;
+        }
+    }
+    else
+    {
+        if (originImageColorIds.size() != triMesh->GetVertexCount())
+        {
+            MessageBox(NULL, "顶点与图片对应文件有错", "温馨提示", MB_OK);
+            return;
+        }
+    }
+
+    GPP::Int faceCount = triMesh->GetTriangleCount();
+    std::vector< GPP::Real > textureCoords(faceCount * 3 * 2);
+    std::vector< GPP::Int > textureIds(faceCount *  3);
+    for (GPP::Int fid = 0; fid < faceCount; ++fid)
+    {
+        for (int fvid = 0; fvid < 3; ++fvid)
+        {
+            GPP::Vector3 texCoord = triMesh->GetTriangleTexcoord(fid, fvid);
+            GPP::Int baseIndex = fid * 3 + fvid;
+            textureCoords.at(baseIndex * 2) = texCoord[0];
+            textureCoords.at(baseIndex * 2 + 1) = texCoord[1];
+            textureIds.at(baseIndex) = baseIndex;
+        }
+    }
+    
+    std::vector< GPP::Color4 > imageData;
+    std::vector< Int > pixelResultInfos;
+    GPP::ErrorCode res = GPP_NO_ERROR;
+    if (isByVertexColor)
+    {
+        std::vector< GPP::Color4 > vertexColors(faceCount * 3);
+        GPP::Int vertexIds[3] = {-1};
+        for (GPP::Int fid = 0; fid < faceCount; ++fid)
+        {
+            triMesh->GetTriangleVertexIds(fid, vertexIds);
+            for (int fvid = 0; fvid < 3; ++fvid)
+            {
+                vertexColors.at(fid * 3 + fvid) = GPP::Color4::Vector3ToColor4(triMesh->GetVertexColor(vertexIds[fvid]));
+            }
+        }
+        res = GPP::TextureImage::CreateTextureImageByVertexColors(textureCoords, textureIds, 
+            vertexColors, mTextureImageSize, mTextureImageSize, imageData, &pixelResultInfos);
+    }
+    else
+    {
+        std::vector< GPP::ImageColorId > imageColorIds(faceCount * 3);
+        GPP::Int vertexIds[3] = {-1};
+        for (GPP::Int fid = 0; fid < faceCount; ++fid)
+        {
+            triMesh->GetTriangleVertexIds(fid, vertexIds);
+            for (int fvid = 0; fvid < 3; ++fvid)
+            {
+                imageColorIds.at(fid * 3 + fvid) = originImageColorIds.at(vertexIds[fvid]);
+            }
+        }
+        std::vector< std::string > textureImageFiles = ModelManager::Get()->GetTextureImageFiles();
+        int imageCount = textureImageFiles.size();
+        std::vector< std::vector< GPP::Color4 > > imageListData;
+        imageListData.reserve(imageCount);
+        std::vector< GPP::Int > imageInfos;
+        imageInfos.reserve(imageCount * 2);
+        for (int iid = 0; iid < imageCount; ++iid)
+        {
+            cv::Mat image = cv::imread(textureImageFiles.at(iid));
+            if (image.data == NULL)
+            {
+                return;
+            }
+            int width = image.cols;
+            int height = image.rows;
+
+            std::vector< GPP::Color4 > oneImageData(width * height);
+            for (int y = 0; y < height; ++y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    const unsigned char* pixel = image.ptr(height - 1 - y, x);
+                    GPP::Color4 color(pixel[2], pixel[1], pixel[0]);
+                    oneImageData.at(x + y * width) = color;
+                }
+            }
+            imageListData.push_back(oneImageData);
+            imageInfos.push_back(width);
+            imageInfos.push_back(height);
+        }
+        res = GPP::TextureImage::CreateTextureImageByRefImages(textureCoords, textureIds, imageColorIds, 
+            imageListData, imageInfos, mTextureImageSize, mTextureImageSize, imageData, &pixelResultInfos);
+    }
+    if (res != GPP_NO_ERROR)
+    {
+        MessageBox(NULL, "纹理图生成失败", "温馨提示", MB_OK);
+        return;
+    }
+    cv::Mat textureImage(mTextureImageSize, mTextureImageSize, CV_8UC4);
+    cv::Mat alphaImage(mTextureImageSize, mTextureImageSize, CV_8UC4);
+    GPP::Int maxAlpha = *std::max_element(pixelResultInfos.begin(), pixelResultInfos.end());
+    if (maxAlpha == 0)
+    {
+        maxAlpha = 1;
+    }
+    for (int y = 0; y < mTextureImageSize; ++y)
+    {
+        for (int x = 0; x < mTextureImageSize; ++x)
+        {
+            cv::Vec4b& col = textureImage.at< cv::Vec4b >(mTextureImageSize - 1 - y, x);
+            GPP::Color4 vCol = imageData.at(x + y * mTextureImageSize);
+            col[0] = vCol[2];
+            col[1] = vCol[1];
+            col[2] = vCol[0];
+            col[3] = 255;
+
+            cv::Vec4b& alpha = alphaImage.at< cv::Vec4b >(mTextureImageSize - 1 - y, x);
+            int mask = mTextureImageMasks.at(x + y * mTextureImageSize);
+            if (mask < 3)
+            {
+                alpha[0] = 0;
+                alpha[1] = 0;
+                alpha[2] = 0;
+                alpha[3] = 255;
+                alpha[mask] = 255;
+            }
+            else
+            {
+                alpha[0] = mask * 255 / maxAlpha;
+                alpha[1] = mask * 255 / maxAlpha;
+                alpha[2] = mask * 255 / maxAlpha;
+                alpha[3] = 255;
+            }
+        }
+    }
+    cv::imwrite(mTextureImageName, textureImage);
+</pre>
+                <hr class="line-divider">
+<pre class="prettyprint">
+    // 一个从点云到贴图网格的制作流程：点云需要有初始对应
+    // 注意：这个例子中，CreateTextureImageByRefImages的参数texCoordinates，faceTextureIds，texColorIds，构造的方法和前面例子“网格纹理贴图制作示例”是有区别的。
+    // 前面的例子类似STL格式的思想，每个三角面是独立的。这个例子类似OBJ格式的思想，有些顶点的纹理坐标和点像对应是共享的。用户可以根据具体情况来选择方法。
+    void CreateTextureMesh(
+        const std::vector< GPP::IPointCloud* >& pointCloudList, 
+        const std::vector< std::vector< GPP::ImageColorId > >& imageColorIdList, 
+        const std::vector< std::string >& textureImageFiles,
+        bool needRegistration, int intervalCount, bool needRemoveIsolate, int textureSize)
+    {
+        if (needRegistration)
+        {
+            std::vector< GPP::Matrix4x4 > resultTransform;
+            GPP::ErrorCode res = GPP::RegistratePointCloud::GlobalRegistrate(&pointCloudList, 10, &resultTransform, 
+                    NULL, true, 0, NULL);
+            if (res != GPP_NO_ERROR)
+            {
+                MessageBox(NULL, "全局注册失败", "温馨提示", MB_OK);
+                return;
+            }
+            int pointListCount = pointCloudList.size();
+            for (int cloudid = 0; cloudid < pointListCount; cloudid++)
+            {
+                GPP::IPointCloud* curPointCloud = pointCloudList.at(cloudid);
+                int curPointCount = curPointCloud->GetPointCount();
+                for (int pid = 0; pid < curPointCount; pid++)
+                {
+                    curPointCloud->SetPointCoord(pid, resultTransform.at(cloudid).TransformPoint(curPointCloud->GetPointCoord(pid)));
+                    curPointCloud->SetPointNormal(pid, resultTransform.at(cloudid).RotateVector(curPointCloud->GetPointNormal(pid)));
+                }
+            }
+        }
+        // Fuse to one point cloud
+        GPP::PointCloud fusedPointCloud;
+        std::vector< GPP::ImageColorId > imageColorIds_point;
+        {
+            GPP::Vector3 bboxMin, bboxMax;
+            GPP::ErrorCode res = GPP::CalculatePointCloudListBoundingBox(pointCloudList, NULL, bboxMin, bboxMax);
+            if (res != GPP_NO_ERROR)
+            {
+                MessageBox(NULL, "包围盒计算失败", "温馨提示", MB_OK);
+                return;
+            }
+            GPP::PointCloudPointList pointList(pointCloudList.at(0));
+            double density = 0;
+            res = GPP::CalculatePointListDensity(&pointList, 5, density);
+            if (res != GPP_NO_ERROR)
+            {
+                MessageBox(NULL, "点云密度计算失败", "温馨提示", MB_OK);
+                return;
+            }
+            density *= intervalCount;
+            GPP::SumPointCloud sum(density, bboxMin, bboxMax, true, 0, 0);
+            int pointCloudCount = pointCloudList.size();
+            for (int cid = 0; cid < pointCloudCount; cid++)
+            {
+                GPP::IPointCloud* curPointCloud = pointCloudList.at(cid);
+                GPP::Int curPointCount = curPointCloud->GetPointCount();
+ 
+                int fieldDim = 1;
+                std::vector< GPP::Real > pointFields(curPointCount * fieldDim, 0);
+                for (int pid = 0; pid < curPointCount; pid++)
+                {
+                    pointFields.at(pid * fieldDim) = pid;
+                }
+                res = sum.UpdateSumFunction(curPointCloud, NULL, &pointFields);
+                if (res != GPP_NO_ERROR)
+                {
+                    MessageBox(NULL, "点云融合失败", "温馨提示", MB_OK);
+                    return;
+                }
+            }
+            std::vector< GPP::Real > pointFieldsFused;
+            std::vector< int > cloudIds;
+            res = sum.ExtractPointCloud(&fusedPointCloud, &pointFieldsFused, &cloudIds);
+            if (res != GPP_NO_ERROR)
+            {
+                MessageBox(NULL, "点云抽取失败", "温馨提示", MB_OK);
+                return;
+            }
+            int fieldDim = 1;
+            int pointCountFused = fusedPointCloud.GetPointCount();
+            std::vector< int > pointIds(pointCountFused);
+            for (int pid = 0; pid < pointCountFused; pid++)
+            {
+                pointIds.at(pid) = int(pointFieldsFused.at(pid * fieldDim));
+            }
+            imageColorIds_point.reserve(pointCountFused);
+            for (int pid = 0; pid < pointCountFused; pid++)
+            {
+                imageColorIds_point.push_back(imageColorIdList.at(cloudIds.at(pid)).at(pointIds.at(pid)));
+            }
+        }
+
+        if (needRemoveIsolate)
+        {
+            std::vector< GPP::Real > isolation;
+            GPP::ErrorCode res = GPP::ConsolidatePointCloud::CalculateIsolation(&fusedPointCloud, &isolation, 20, NULL);
+            if (res != GPP_NO_ERROR)
+            {
+                MessageBox(NULL, "点云去除孤立项失败", "温馨提示", MB_OK);
+                return;
+            }
+            int fusedPointCount = fusedPointCloud.GetPointCount();
+            std::vector< GPP::Int > deleteIndex;
+            GPP::Real isolateValue = 0.05; // parameter
+            for (GPP::Int pid = 0; pid < fusedPointCount; pid++)
+            {
+                if (isolation[pid] < isolateValue)
+                {
+                    deleteIndex.push_back(pid);
+                }
+            }
+            MagicPointCloud magicPointCloud(&fusedPointCloud);
+            magicPointCloud.SetImageColorIds(&imageColorIds_point);
+            res = GPP::DeletePointCloudElements(&magicPointCloud, deleteIndex);
+            if (res != GPP_NO_ERROR)
+            {
+                MessageBox(NULL, "点云删点失败", "温馨提示", MB_OK);
+                return;
+            }
+        }
+
+        // Reconstruct Mesh
+        GPP::TriMesh triMesh;
+        std::vector< GPP::ImageColorId > imageColorIds_mesh;
+        {
+            int quality = 5;
+            GPP::ErrorCode res = GPP::ReconstructMesh::Reconstruct(&fusedPointCloud, &triMesh, quality, false, NULL, NULL);
+            if (res != GPP_NO_ERROR)
+            {
+                MessageBox(NULL, "点云三角化失败", "温馨提示", MB_OK);
+                return;
+            }
+            res = GPP::OptimiseMapping::TransferMappingToMesh(&fusedPointCloud, imageColorIds_point,
+                &triMesh, imageColorIds_mesh, 1.5, true);
+            if (res != GPP_NO_ERROR)
+            {
+                MessageBox(NULL, "TransferMappingToMesh Failed", "温馨提示", MB_OK);
+                return;
+            }
+            fusedPointCloud.Clear();
+            std::vector< GPP::ImageColorId >().swap(imageColorIds_point);
+        }
+
+        // Compute texture coordinates
+        std::vector< GPP::Real > texCoords;
+        std::vector< GPP::Int > faceTexIds;
+        {
+            int initChartCount = 40;
+            GPP::ErrorCode res = GPP::UnfoldMesh::GenerateUVAtlas(&triMesh, initChartCount, &texCoords, &faceTexIds, true, true, true);
+            if (res != GPP_NO_ERROR)
+            {
+                MessageBox(NULL, "UV Atlas 生成失败", "温馨提示", MB_OK);
+                return;
+            }
+        }
+
+        // Compute texture image
+        std::vector< GPP::Color4 > imageData;
+        std::vector< GPP::Int > textureImageMasks;
+        {
+            int texCoordSize = texCoords.size() / 2;
+            std::vector< GPP::ImageColorId > imageColorIds(texCoordSize);
+            int faceCount = triMesh.GetTriangleCount();
+            GPP::Int vertexIds[3] = {-1};
+            for (GPP::Int fid = 0; fid < faceCount; ++fid)
+            {
+                triMesh.GetTriangleVertexIds(fid, vertexIds);
+                for (int fvid = 0; fvid < 3; ++fvid)
+                {
+                    imageColorIds.at(faceTexIds.at(fid * 3 + fvid)) = imageColorIds_mesh.at(vertexIds[fvid]);
+                }
+            }
+            int imageCount = textureImageFiles.size();
+            std::vector< ImageBoundingBox > imageBBoxList(imageCount, ImageBoundingBox(GPP::INT_LARGE, GPP::INT_LARGE, 0, 0));
+            for (std::vector< GPP::ImageColorId >::iterator itr = imageColorIds_mesh.begin(); itr != imageColorIds_mesh.end(); ++itr)
+            {
+                int imageIndex = itr->GetImageIndex();
+                if (itr->GetLocalX() < imageBBoxList.at(imageIndex).mStartX)
+                {
+                    imageBBoxList.at(imageIndex).mStartX = itr->GetLocalX();
+                }
+                else if (itr->GetLocalX() > imageBBoxList.at(imageIndex).mEndX)
+                {
+                    imageBBoxList.at(imageIndex).mEndX = itr->GetLocalX();
+                }
+                if (itr->GetLocalY() < imageBBoxList.at(imageIndex).mStartY)
+                {
+                    imageBBoxList.at(imageIndex).mStartY = itr->GetLocalY();
+                }
+                else if (itr->GetLocalY() > imageBBoxList.at(imageIndex).mEndY)
+                {
+                    imageBBoxList.at(imageIndex).mEndY = itr->GetLocalY();
+                }
+            }
+            for (std::vector< GPP::ImageColorId >::iterator itr = imageColorIds.begin(); itr != imageColorIds.end(); ++itr)
+            {
+                int imageIndex = itr->GetImageIndex();
+                int localX = itr->GetLocalX();
+                int localY = itr->GetLocalY();
+                itr->Set(imageIndex, localX - imageBBoxList.at(imageIndex).mStartX, localY - imageBBoxList.at(imageIndex).mStartY);
+            }
+
+            std::vector< std::vector< GPP::Color4 > > imageListData;
+            imageListData.reserve(imageCount);
+            std::vector< GPP::Int > imageInfos;
+            imageInfos.reserve(imageCount * 2);
+            for (int iid = 0; iid < imageCount; ++iid)
+            {
+                int width = imageBBoxList.at(iid).mEndX + 1 - imageBBoxList.at(iid).mStartX;
+                int height = imageBBoxList.at(iid).mEndY + 1 - imageBBoxList.at(iid).mStartY;
+                if (width > 0 && height > 0)
+                {
+                    cv::Mat image = cv::imread(textureImageFiles.at(iid));
+                    if (image.data == NULL)
+                    {
+                        MessageBox(NULL, "图片读取失败", "温馨提示", MB_OK);
+                        return;
+                    }
+                    std::vector< GPP::Color4 > oneImageData(width * height);
+                    int startX = imageBBoxList.at(iid).mStartX;
+                    int startY = imageBBoxList.at(iid).mStartY;
+                    int imageHeight = image.rows;
+                    for (int y = 0; y < height; ++y)
+                    {
+                        for (int x = 0; x < width; ++x)
+                        {
+                            const unsigned char* pixel = image.ptr(imageHeight - 1 - y - startY, startX + x);
+                            GPP::Color4 color(pixel[2], pixel[1], pixel[0]);
+                            oneImageData.at(x + y * width) = color;
+                        }
+                    }
+                    imageListData.push_back(oneImageData);
+                    imageInfos.push_back(width);
+                    imageInfos.push_back(height);
+                }
+                else
+                {
+                    std::vector< GPP::Color4 > oneImageData;
+                    imageListData.push_back(oneImageData);
+                    imageInfos.push_back(0);
+                    imageInfos.push_back(0);
+                }
+            }
+
+            GPP::ErrorCode res = GPP::TextureImage::CreateTextureImageByRefImages(texCoords, faceTexIds, imageColorIds, 
+                imageListData, imageInfos, textureSize, textureSize, imageData, &textureImageMasks);
+            if (res != GPP_NO_ERROR)
+            {
+                MessageBox(NULL, "纹理图生成失败", "温馨提示", MB_OK);
+                return;
+            }
+        }
+
+        // Output to obj file
+        {
+            cv::Mat textureImage(textureSize, textureSize, CV_8UC4);
+            cv::Mat alphaImage(textureSize, textureSize, CV_8UC4);
+            GPP::Int maxAlpha = *std::max_element(textureImageMasks.begin(), textureImageMasks.end());
+            if (maxAlpha == 0)
+            {
+                maxAlpha = 1;
+            }
+            for (int y = 0; y < textureSize; ++y)
+            {
+                for (int x = 0; x < textureSize; ++x)
+                {
+                    cv::Vec4b& col = textureImage.at< cv::Vec4b >(textureSize - 1 - y, x);
+                    GPP::Color4 cColor = imageData.at(x + y * textureSize);
+                    col[0] = cColor[2];
+                    col[1] = cColor[1];
+                    col[2] = cColor[0];
+                    col[3] = 255;
+
+                    cv::Vec4b& alpha = alphaImage.at< cv::Vec4b >(textureSize - 1 - y, x);
+                    int mask = textureImageMasks.at(x + y * textureSize);
+                    if (mask < 3)
+                    {
+                        alpha[0] = 0;
+                        alpha[1] = 0;
+                        alpha[2] = 0;
+                        alpha[3] = 255;
+                        alpha[mask] = 255;
+                    }
+                    else
+                    {
+                        alpha[0] = mask * 255 / maxAlpha;
+                        alpha[1] = mask * 255 / maxAlpha;
+                        alpha[2] = mask * 255 / maxAlpha;
+                        alpha[3] = 255;
+                    }
+                }
+            }
+            cv::imwrite("texture_mesh.png", textureImage);
+            cv::imwrite("Overlapped.png", alphaImage);
+
+            std::string objName = "texture_mesh.obj";
+            std::ofstream objOut(objName.c_str());
+            objOut << "mtllib texture_mesh.mtl" << std::endl;
+            objOut << "usemtl texture_mesh" << std::endl;
+            GPP::Int vertexCount = triMesh.GetVertexCount();
+            for (GPP::Int vid = 0; vid < vertexCount; vid++)
+            {
+                GPP::Vector3 coord = triMesh.GetVertexCoord(vid);
+                objOut << "v " << coord[0] << " " << coord[1] << " " << coord[2] << "\n";
+            }
+            GPP::Int faceCount = triMesh.GetTriangleCount();
+            for (GPP::Int fid = 0; fid < faceCount; fid++)
+            {
+                for (int localId = 0; localId < 3; localId++)
+                {
+                    GPP::Int tid = faceTexIds.at(fid * 3 + localId);
+                    objOut << "vt " << texCoords.at(tid * 2) << " " << texCoords.at(tid * 2 + 1) << "\n";
+                }
+            }
+            GPP::Int vertexIds[3];
+            for (GPP::Int fid = 0; fid < faceCount; fid++)
+            {
+                triMesh.GetTriangleVertexIds(fid, vertexIds);
+                objOut << "f " << vertexIds[0] + 1 << "/" << fid * 3 + 1 << " " 
+                    << vertexIds[1] + 1 << "/" << fid * 3 + 2 << " " << vertexIds[2] + 1 << "/" << fid * 3 + 3 << "\n"; 
+            }
+            objOut.close();
+
+            // export mtl file
+            std::string mtlName = "texture_mesh.mtl";
+            std::ofstream mtlOut(mtlName.c_str());
+            mtlOut << "newmtl texture_mesh" << std::endl;
+            mtlOut << "Kd " << 0.75 << " " << 0.75 << " " << 0.75 << std::endl;
+            mtlOut << "map_Kd texture_mesh.png" << std::endl;
+            mtlOut.close();
+        }
+    }
+</pre>
+
+                <hr class="featurette-divider">
+
+                <a name="colormerging"><h5>纹理色彩融合</h5></a>
+<pre class="prettyprint">
+ErrorCode TuneColorFromMultiFrame(const IPointCloud* pointCloud, Int neighborCount, const std::vector< Int >& colorIds, std::vector< Vector3 >& pointColors, const Vector3& sharpColorDiff = Vector3(0.1, 1.0, 0.5));
+</pre>
+                <p>多角度点云颜色融合：详细介绍可以参考<a href="http://threepark.net/notes/colormesh" target="_blank">多角度点云颜色融合</a></p>
+                <p>注意：同一个colorId的点认为是颜色协调的。不同colorId的点颜色通过colorId的边界地方扩散融合，所以colorId的边界部分如果有黑边存在，融合效果会不理想。去除黑边可以参考API TuneColorFromSingleLight</p>
+                <p>pointCloud: 需要融合颜色的点云。点云需要均匀分布。如果分布的非常不均匀，比如线激光点云，可以参考TuneMeshColorFromMultiPatch的使用。</p>
+                <p>neighborCount: 颜色融合时，点云邻域个数，建议参数为12</p>
+                <p>colorIds: 每个点所属的colorId。同一个colorId的点认为是颜色协调的。</p>
+                <p>pointColors：点云输入颜色，颜色值范围是[0, 1]。api执行后，点云修改后的颜色可以从这里得到</p>
+                <p>sharpColorDiff：三个分量参数为颜色分量最大色差融合阈值，范围是[0, 1]，如果colorId边界处的色差大于这个阈值的地方，则不做颜色融合。三个分量的意义分别为色度，饱和度，亮度。比如想尽量保持住色度，则可以调小其阈值。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode TuneMeshColorFromMultiPatch(const ITriMesh* triMesh, const std::vector< Int >& colorIds, std::vector< Vector3 >& vertexColors, const Vector3& sharpColorDiff = Vector3(0.1, 1.0, 0.5));
+</pre>
+                <p>网格颜色融合：原理和TuneColorFromMultiFrame一样。不同的地方是，网格有顶点的连接关系，可以自然得到邻域信息，并且局部邻域成片状。点云如果不均匀，其局部邻域不成片状，比如线激光数据。所以颜色融合在网格上计算更加稳定。</p>
+                <p>triMesh: 需要融合颜色的网格</p>
+                <p>colorIds: 每个点所属的colorId。同一个colorId的点认为是颜色协调的。</p>
+                <p>vertexColors：网格顶点输入颜色，api执行后，网格顶点修改后的颜色可以从这里得到</p>
+                <p>sharpColorDiff：三个分量参数为颜色分量最大色差融合阈值，范围是[0, 1]，如果colorId边界处的色差大于这个阈值的地方，则不做颜色融合。三个分量的意义分别为色度，饱和度，亮度。比如想尽量保持住色度，则可以调小其阈值。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode TuneColorFromSingleLight(const std::vector< IPointCloud* >& pointCloudList, std::vector< std::vector< Vector3 > >& colorList, bool needBlend, const Real* pointDensity, const std::vector< std::vector< Int > >* originColorIdList, std::vector< std::vector< Int > >* tunedColorIdList);
+</pre>
+                <p>单光源光照的点云颜色融合：详细介绍可以参考<a href="http://threepark.net/notes/colormesh" target="_blank">单光源点云颜色修正</a></p>
+                <p>注：这个API常用于多帧点云去除黑边。黑边地方的点云必须有重叠的部分，且重叠部分有非黑边颜色分布。API原理是通过多帧点云的颜色信息来提升颜色效果，如果没有重合部分，或者重合部分的颜色都是黑的，那么提升的效果就会不理想。</p>
+                <p>pointCloudList: 点云序列，必须是已经注册对齐好的</p>
+                <p>colorList: 点云序列对应的颜色，颜色范围为[0, 1]</p>
+                <p>needBlend: 是否需要在不同colorId处的颜色做光滑</p>
+                <p>pointDensity: 点云密度。可以设置为NULL，则默认的计算方法是计算点的4邻域的平局距离。API会通过点云密度来寻找不同点云之间的对应点。如果点云注册的不好，或者点云分布非常不均匀，可以把点云密度人工设置高一些，不然点云的点找不到对应。</p>
+                <p>originColorIdList: 输入点云的colorId。同一个colorId的点认为是颜色协调的。可以设置为NULL，则默认认为同一个点云的点属于同一个colorId。</p>
+                <p>tunedColorIdList: 颜色融合后点云的colorId。同一个colorId的点认为是颜色协调的。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+<pre class="prettyprint">
+    // 模型颜色融合示例
+
+    // 单光源光照的点云颜色融合
+    std::vector< std::vector< GPP::Vector3 > > colorList(cloudCount);
+    for (int cloudId = 0; cloudId < cloudCount; cloudId++)
+    {
+        GPP::PointCloud* curPointCloud = mPointCloudList.at(cloudId);
+        int pointCount = curPointCloud->GetPointCount();
+        std::vector< GPP::Vector3 > curColors;
+        curColors.reserve(pointCount);
+        for (int pid = 0; pid < pointCount; pid++)
+        {
+            curColors.push_back(curPointCloud->GetPointColor(pid));
+        }
+        colorList.at(cloudId) = curColors;
+    }
+    GPP::PointCloudPointList pointList(pointCloudList.at(0));
+    double density = 0;
+    GPP::ErrorCode res = GPP::CalculatePointListDensity(&pointList, 5, density);
+    density *= intervalCount;
+    bool needBlend = false;
+    std::vector< std::vector< int> > colorIdList;
+    res = GPP::IntrinsicColor::TuneColorFromSingleLight(pointCloudList, colorList, needBlend, &density, NULL, &colorIdList);
+    if (res != GPP_NO_ERROR) return;
+    for (int cloudId = 0; cloudId < cloudCount; cloudId++)
+    {
+        GPP::PointCloud* curPointCloud = mPointCloudList.at(cloudId);
+        int pointCount = curPointCloud->GetPointCount();
+        for (int pid = 0; pid < pointCount; pid++)
+        {
+            curPointCloud->SetPointColor(pid, colorList.at(cloudId).at(pid));
+        }
+    }
+
+    // 去掉点云重叠部分，融合成一个点云
+    GPP::PointCloudPointList pointList(pointCloudList.at(0));
+    GPP::Real interval = 0;
+    GPP::CalculatePointListDensity(&pointList, 5, interval);
+    GPP::SumPointCloud* sumPointCloud = new GPP::SumPointCloud(interval, bboxMin, bboxMax, true);
+    int fieldDim = 4; // color: 3, colorId: 1
+    int cloudId = 0;
+    for (std::vector< GPP::PointCloud* >::iterator cloudItr = pointCloudList.begin(); cloudItr != ponitCloudList.end(); ++cloudItr)
+    {
+        int curPointCount = (*cloudItr)->GetPointCount();
+        std::vector< GPP::Real > pointFields;
+        pointFields.reserve(curPointCount * fieldDim);
+        for (int pid = 0; pid < curPointCount; pid++)
+        {
+            GPP::Vector3 curColor = (*cloudItr)->GetPointColor(pid);
+            pointFields.push_back(curColor[0]);
+            pointFields.push_back(curColor[1]);
+            pointFields.push_back(curColor[2]);
+            pointFields.push_back(colorIdList.at(cloudId).at(pid));
+        }
+        ErrorCode res = sumPointCloud.UpdateSumFunction(*cloudItr, NULL, &pointFields);
+        if (res != GPP_NO_ERROR) return res;
+        cloudId++;
+    }
+    std::vector< GPP::Real > pointFieldsFused;
+    GPP::PointCloud* extractPointCloud = new GPP::PointCloud;
+    ErrorCode res = sumPointCloud.ExtractPointCloud(extractPointCloud, &pointFieldsFused, NULL);
+    if (res != GPP_NO_ERROR) return res;
+    GPP::Int pointCountFused = extractPointCloud->GetPointCount();
+    std::vector< int > colorIds(pointCountFused);
+    extractPointCloud->SetHasColor(true);
+    for (GPP::Int pid = 0; pid < pointCountFused; pid++)
+    {
+        GPP::Int baseIndex = pid * fieldDim;
+        extractPointCloud->SetPointColor(pid, GPP::Vector3(pointFieldsFused.at(baseIndex), pointFieldsFused.at(baseIndex + 1), pointFieldsFused.at(baseIndex + 2)));
+        colorIds.at(pid) = int(pointFieldsFused.at(baseIndex + 3));
+    }
+    
+    // 多角度点云颜色融合（点云均匀的情况）
+    std::vector< GPP::Vector3 > pointColors(pointCount);
+    for (int pid = 0; pid < pointCount; pid++)
+    {
+        pointColors.at(pid) = extractPointCloud->GetPointColor(pid);
+    }
+    int neighborCount = 12;
+    res = GPP::IntrinsicColor::TuneColorFromMultiFrame(extractPointCloud, neighborCount, colorIds, pointColors);
+    if (res != GPP_NO_ERROR) return;
+    for (int pid = 0; pid < pointCount; pid++)
+    {
+        extractPointCloud->SetPointColor(pid, pointColors.at(pid));
+    }
+
+    // 多角度点云颜色融合（点云非均匀的情况，改用TuneMeshColorFromMultiPatch）
+    // 先重建网格
+    GPP::Int pointCount = extractPointCloud->GetPointCount();
+    std::vector< GPP::Real > pointColorFields(pointCount * 3);
+    for (GPP::Int pid = 0; pid < pointCount; pid++)
+    {
+        GPP::Vector3 color = extractPointCloud->GetPointColor(pid);
+        GPP::Int baseId = pid * 3;
+        pointColorFields.at(baseId) = color[0];
+        pointColorFields.at(baseId + 1) = color[1];
+        pointColorFields.at(baseId + 2) = color[2];
+    }
+    std::vector< GPP::Real > vertexColorField;
+    GPP::TriMesh* triMesh = new GPP::TriMesh;
+    res = GPP::ReconstructMesh::Reconstruct(extractPointCloud, triMesh, quality, needFillHole, &pointColorFields, &vertexColorField);
+    if (res != GPP_NO_ERROR) return;
+    GPP::Int vertexCount = triMesh->GetVertexCount();
+    triMesh->SetHasColor(true);
+    for (GPP::Int vid = 0; vid < vertexCount; vid++)
+    {
+        GPP::Int baseId = vid * 3;
+        triMesh->SetVertexColor(vid, GPP::Vector3(vertexColorField.at(baseId), vertexColorField.at(baseId + 1), vertexColorField.at(baseId + 2)));
+    }
+    // 把colorIds传递给网格顶点
+    GPP::PointCloudPointList pointList(extractPointCloud);
+    GPP::Ann ann;
+    GPP::ErrorCode res = ann.Init(&pointList);
+    int vertexCount = triMesh->GetVertexCount();
+    std::vector< GPP::ImageColorId > imageColorIds(vertexCount);
+    std::vector< GPP::Int > meshColorIds(vertexCount);
+    double searchData[3] = {-1};
+    int indexRes[1] = {-1};
+    for (int vid = 0; vid < vertexCount; vid++)
+    {
+        GPP::Vector3 coord = triMesh->GetVertexCoord(vid);
+        searchData[0] = coord[0];
+        searchData[1] = coord[1];
+        searchData[2] = coord[2];
+        res = ann.FindNearestNeighbors(searchData, 1, 1, indexRes, NULL);
+        if (res != GPP_NO_ERROR) return;
+        meshColorIds.at(vid) = colorIds.at(indexRes[0]);
+    }
+    // 网格顶点颜色融合
+    std::vector< GPP::Vector3 > vertexColors(vertexCount);
+    for (int vid = 0; vid < vertexCount; vid++)
+    {
+        vertexColors.at(vid) = triMesh->GetVertexColor(vid);
+    }
+    res = GPP::IntrinsicColor::TuneMeshColorFromMultiPatch(triMesh, meshColorIds, vertexColors);
+    if (res != GPP_NO_ERROR) return;
+    for (int vid = 0; vid < vertexCount; vid++)
+    {
+        triMesh->SetVertexColor(vid, vertexColors.at(vid));
+    }
+</pre>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode TuneTextureImageColor(const ITriMesh* triMesh, const std::vector< Real >& textureCoords, const std::vector< Color4 >& faceVertexColors, const std::vector< Int >& faceVertexImageIds, Int imageWidth, Int imageHeight, std::vector< Color4 >& textureColors, const Vector3& sharpColorDiff = Vector3(0.1, 0.5, 0.5));
+</pre>
+                <p>融合纹理贴图颜色：纹理贴图一般是多幅图片贴到一个网格上。由于光照原因，不同图片在图片接缝处会有一些色差，而同一个图片的颜色认为是相容的。所以需要融合不同图片在图片接缝处的颜色，使其色差痕迹尽量的小。如图所示，图一的颜色代表了贴图的图片索引号，图二是纹理贴图效果。可以看出，图片接缝处有明显的色差痕迹。图三是颜色融合后的效果。</p>
+                <img class="featurette-image img-responsive center-block" src="/images/TuneTextureImageColor_body.jpg" alt="TuneTextureImageColor_body">
+                <p>triMesh: 纹理贴图的网格。注意，网格如果有割缝，则割缝处的颜色是不会融合的。颜色融合只发生在网格的连通区域。</p>
+                <p>textureCoords: 网格的纹理坐标序列。此纹理坐标为面点纹理坐标，TriMesh用户可以通过GetTriangleTexcoord查询，顺序为面点顺序：(texCoord0_X, texCoord0_Y, texCoord1_X, texCoord1_Y, ...)</p>
+                <p>faceVertexColors: 网格面点对应的图象颜色。顺序为面点顺序。</p>
+                <p>faceVertexImageIds: 网格面点对应的图片索引号。如果没有对应的图片，设置为-1。</p>
+                <p>imageWidth: 纹理贴图宽度</p>
+                <p>imageHeight: 纹理贴图高度</p>
+                <p>textureColors: 贴图颜色数据，按行排列</p>
+                <p>sharpColorDiff: 三个分量参数为颜色分量最大色差融合阈值，范围是[0, 1]，如果图片割缝处的色差大于这个阈值的地方，则不做颜色融合。三个分量的意义分别为色度，饱和度，亮度。比如想尽量保持住色度，则可以调小其阈值。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+
+                <hr class="line-divider">
+<pre class="prettyprint">
+    // 纹理颜色融合示例
+
+    GPP::Int faceCount = triMesh->GetTriangleCount();
+    std::vector< GPP::Real > textureCoords(faceCount * 3 * 2);
+    for (GPP::Int fid = 0; fid < faceCount; ++fid)
+    {
+        for (int fvid = 0; fvid < 3; ++fvid)
+        {
+            GPP::Vector3 texCoord = triMesh->GetTriangleTexcoord(fid, fvid);
+            GPP::Int baseIndex = fid * 3 + fvid;
+            textureCoords.at(baseIndex * 2) = texCoord[0];
+            textureCoords.at(baseIndex * 2 + 1) = texCoord[1];
+        }
+    }
+
+    cv::Mat textureImage = cv::imread(textureImageName);
+    int imageWith = textureImage.cols;
+    int imageHeight = textureImage.rows;
+    std::vector< GPP::Color4 > imageData(imageWith * imageHeight);
+    for (int y = 0; y < imageHeight; ++y)
+    {
+        for (int x = 0; x < imageWidth; ++x)
+        {
+            const unsigned char* pixel = textureImage.ptr(imageHeight - 1 - y, x);
+            imageData.at(x + y * imageWidth) = GPP::Color4(pixel[2], pixel[1], pixel[0]);
+        }
+    }
+
+    std::vector< std::vector< GPP::Color4 > > imageListData;
+    std::vector< GPP::Int > imageInfos;
+    LoadTextureImages(imageListData, imageInfos)
+
+    std::vector< GPP::ImageColorId > imageColorIds = ModelManager::Get()->GetFaceImageColorIds();
+
+    std::vector< GPP::Color4 > faceVertexColors(faceCount * 3, GPP::Color4(0, 0, 0, 0));
+    std::vector< int > faceVertexImageIds(faceCount * 3);
+    for (int fid = 0; fid < faceCount; fid++)
+    {
+        for (int fvid = 0; fvid < 3; fvid++)
+        {
+            int fvindex = fid * 3 + fvid;
+            faceVertexImageIds.at(fvindex) = imageColorIds.at(fvindex).GetImageIndex();
+            if (faceVertexImageIds.at(fvindex) < 0)
+            {
+                faceVertexImageIds.at(fvindex) = -1;
+                continue;
+            }
+            int imageWidth = imageInfos.at(faceVertexImageIds.at(fvindex) * 2);
+            faceVertexColors.at(fvindex) = imageListData.at(faceVertexImageIds.at(fvindex)).at(imageWidth * imageColorIds.at(fvindex).GetLocalY() + imageColorIds.at(fvindex).GetLocalX());
+        }
+    }
+
+    GPP::ErrorCode res = GPP::IntrinsicColor::TuneTextureImageColor(triMesh, textureCoords, faceVertexColors, faceVertexImageIds, imageWith, imageHeight, imageData, GPP::Vector3(sharpDiff_H, sharpDiff_S, sharpDiff_V));
+    if (res != GPP_NO_ERROR)
+    {
+        MessageBox(NULL, "TuneTextureImageColor Failed", "温馨提示", MB_OK);
+    }
+
+    cv::Mat textureImage(imageHeight, imageWidth, CV_8UC4);
+    for (int y = 0; y < imageHeight; ++y)
+    {
+        for (int x = 0; x < imageWidth; ++x)
+        {
+            cv::Vec4b& col = textureImage.at< cv::Vec4b >(imageHeight - 1 - y, x);
+            GPP::Color4 cColor = imageData.at(x + y * imageWidth);
+            col[0] = cColor[2];
+            col[1] = cColor[1];
+            col[2] = cColor[0];
+            col[3] = cColor[3];
+        }
+    }
+    cv::imwrite(textureName, textureImage);
+</pre>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode TuneImageByPointColor(const std::vector< Int >& pointCoords, const std::vector< Vector3 & pointColors, Int imageWidth, Int imageHeight, std::vector< Color4 >& imageColors);
+</pre>
+                <p>应用点云颜色作为约束，驱动彩色图像颜色融合</p>
+                <p>pointCoords: 点云在图像中的坐标，排列顺序为coord0_X, coord0_Y, coord1_X, coord1_Y......</p>
+                <p>pointColors: 点云颜色</p>
+                <p>imageWidth: 纹理贴图宽度</p>
+                <p>imageHeight: 纹理贴图高度</p>
+                <p>imageColors: 贴图颜色数据，按行排列</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+<pre class="prettyprint">
+    // 应用点云颜色融合彩色图像颜色
+    for (int iid = 0; iid < imageCount; iid++)
+    {
+        std::vector< int > pointCoords;
+        std::vector< GPP::Vector3 > pointColors;
+        for (int pid = 0; pid < pointCount; pid++)
+        {
+            if (imageColorIds.at(pid).GetImageIndex() != iid) continue;
+            pointCoords.push_back(imageColorIds.at(pid).GetLocalX());
+            pointCoords.push_back(imageColorIds.at(pid).GetLocalY());
+            pointColors.push_back(pointCloud->GetPointColor(pid));
+        }
+        if (pointColors.empty()) continue;
+        cv::Mat image = cv::imread(textureImageFiles.at(iid));
+        if (image.data == NULL)
+        {
+            MessageBox(NULL, "图片读取失败", "温馨提示", MB_OK);
+            return;
+        }
+        int imageWidth = image.cols;
+        int imageHeight = image.rows;
+        std::vector< GPP::Vector3 > imageData(imageWidth * imageHeight);
+        for (int y = 0; y < imageHeight; ++y)
+        {
+            for (int x = 0; x < imageWidth; ++x)
+            {
+                const unsigned char* pixel = image.ptr(imageHeight - 1 - y, x);
+                imageData.at(x + y * imageWidth) = GPP::Color4(pixel[2], pixel[1], pixel[0]);
+            }
+        }
+        GPP::ErrorCode res = GPP::IntrinsicColor::TuneImageByPointColor(pointCoords, pointColors, imageWidth, imageHeight, imageData); 
+        if (res != GPP_NO_ERROR) return;
+        for (int y = 0; y < imageHeight; ++y)
+        {
+            for (int x = 0; x < imageWidth; ++x)
+            {
+                GPP::Color4 curColor = imageData.at(x + y * imageWidth);
+                unsigned char* pixel = image.ptr(imageHeight - y - 1, x);
+                pixel[0] = curColor[2];
+                pixel[1] = curColor[1];
+                pixel[2] = curColor[0];
+            }
+        }
+        std::string tuneImageName = textureImageFiles.at(iid) + "_tune_point.jpg";
+        cv::imwrite(tuneImageName, image);
+        textureImageFiles.at(iid) = tuneImageName;
+    }
+</pre>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode TuneImageByTriangleColor(const std::vector< Int >& vertexCoords, const std::vector< Vector3 >& vertexColors, const std::vector< Int > vertexFlags, const std::vector< Int >& faceVertexIds, Int imageWidth, Int imageHeight, std::vector< Color4 >& imageColors);
+</pre>
+                <p>应用网格三角形顶点颜色作为约束，驱动彩色图像颜色融合</p>
+                <p>vertexCoords: 网格顶点在图像中的坐标，排列顺序为coord0_X, coord0_Y, coord1_X, coord1_Y......</p>
+                <p>vertexColors: 网格顶点的颜色</p>
+                <p>vertexFlags: 网格顶点标记。若1，则会融合其颜色；若0，则不会应用其颜色约束</p>
+                <p>faceVertexIds: 三角形顶点索引。三角形内的图像像素颜色会被融合。</p>
+                <p>imageWidth: 纹理贴图宽度</p>
+                <p>imageHeight: 纹理贴图高度</p>
+                <p>imageColors: 贴图颜色数据，按行排列</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+<pre class="prettyprint">
+    // 应用网格三角形顶点颜色融合彩色图像颜色示例
+    std::vector< int > vertex2ImageMap(vertexCount, -1);
+    std::vector< bool > faceVisitFlag(faceCount, 0);
+    for (int iid = 0; iid < imageCount; iid++)
+    {
+        std::vector< int > vertexCoords;
+        std::vector< GPP::Vector3 > vertexColors;
+        for (int vid = 0; vid < vertexCount; vid++)
+        {
+            if (imageColorIds.at(vid).GetImageIndex() != iid) continue;
+            vertex2ImageMap.at(vid) = vertexColors.size();
+            vertexCoords.push_back(imageColorIds.at(vid).GetLocalX());
+            vertexCoords.push_back(imageColorIds.at(vid).GetLocalY());
+            vertexColors.push_back(triMesh->GetVertexColor(vid));
+        }
+        std::vector<int> faceVertexIds;
+        int vertexIds[3] = {-1};
+        for (int fid = 0; fid < faceCount; fid++)
+        {
+            if (faceVisitFlag.at(fid)) continue;
+            triMesh->GetTriangleVertexIds(fid, vertexIds);
+            bool isValid = true;
+            for (int fvid = 0; fvid < 3; fvid++)
+            {
+                if (imageColorIds.at(vertexIds[fvid]).GetImageIndex() != iid)
+                {
+                    isValid = false;
+                    break;
+                }
+            }
+            if (isValid)
+            {
+                faceVertexIds.push_back(vertex2ImageMap.at(vertexIds[0]));
+                faceVertexIds.push_back(vertex2ImageMap.at(vertexIds[1]));
+                faceVertexIds.push_back(vertex2ImageMap.at(vertexIds[2]));
+                faceVisitFlag.at(fid) = 1;
+            }
+        }
+        if (faceVertexIds.empty()) continue;
+        cv::Mat image = cv::imread(textureImageFiles.at(iid));
+        if (image.data == NULL) return;
+        int imageWidth = image.cols;
+        int imageHeight = image.rows;
+        std::vector< GPP::Color4 > imageData(imageWidth * imageHeight);
+        for (int y = 0; y < imageHeight; ++y)
+        {
+            for (int x = 0; x < imageWidth; ++x)
+            {
+                const unsigned char* pixel = image.ptr(imageHeight - 1 - y, x);
+                imageData.at(x + y * imageWidth) = GPP::Color4(pixel[2], pixel[1], pixel[0]);
+            }
+        }
+        GPP::ErrorCode res = GPP::IntrinsicColor::TuneImageByTriangleColor(vertexCoords, vertexColors, vertexFlags, faceVertexIds, imageWidth, imageHeight, imageData); 
+        if (res != GPP_NO_ERROR) return;
+        for (int y = 0; y < imageHeight; ++y)
+        {
+            for (int x = 0; x < imageWidth; ++x)
+            {
+                GPP::Color4 curColor = imageData.at(x + y * imageWidth);
+                unsigned char* pixel = image.ptr(imageHeight - y - 1, x);
+                pixel[0] = curColor[2];
+                pixel[1] = curColor[1];
+                pixel[2] = curColor[0];
+            }
+        }
+        std::string tuneImageName = textureImageFiles.at(iid) + "_tune_triangle.jpg";
+        cv::imwrite(tuneImageName, image);
+        textureImageFiles.at(iid) = tuneImageName;
+    }
+</pre>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode TuneTextureImageByVertexColor(const std::vector< Real >& textureCoords, const std::vector< Vector3 >& vertexColors, Int imageWidth, Int imageHeight, const std::vector< PixelType > pixelTypes, std::vector< Color4 >& textureColors);
+</pre>
+                <p>应用网格顶点颜色作为约束，驱动纹理贴图颜色融合。</p>
+                <p>textureCoords: 网格顶点的纹理坐标，排列顺序为texCoord0_X, texCoord0_Y, texCoord1_X, texCoord1_Y......</p>
+                <p>vertexColors: 网格顶点的颜色</p>
+                <p>imageWidth: 纹理贴图宽度</p>
+                <p>imageHeight: 纹理贴图高度</p>
+                <p>pixelTypes: 纹理贴图像素类型</p>
+                <p>textureColors: 纹理贴图颜色数据，按行排列</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+
+<pre class="prettyprint">
+    // 应用网格顶点颜色融合纹理贴图颜色示例
+    GPP::Int faceCount = triMesh->GetTriangleCount();
+    std::vector< GPP::Real > textureCoords(faceCount * 3 * 2);
+    std::vector< GPP::Vector3 > vertexColors(faceCount * 3);
+    GPP::Int vertexIds[3] = {-1};
+    for (GPP::Int fid = 0; fid < faceCount; fid++)
+    {
+        triMesh->GetTriangleVertexIds(fid, vertexIds);
+        for (int fvid = 0; fvid < 3; fvid++)
+        {
+            GPP::Vector3 texCoord = triMesh->GetTriangleTexcoord(fid, fvid);
+            textureCoords.push_back(texCoord[0]);
+            textureCoords.push_back(texCoord[1]);
+            vertexColors.push_back(triMesh->GetVertexColor(vertexIds[fvid]));
+        }
+    }
+
+    cv::Mat texImage = cv::imread(mTextureImageName);
+    if (texImage.data == NULL) return;
+    int imgWidth = texImage.cols;
+    int imgHeight = texImage.rows;
+    if (imgWidth * imgHeight != mTextureImageMasks.size()) return;
+    std::vector< GPP::Color4 > textureColors(imgWidth * imgHeight);
+    for (int y = 0; y < imgHeight; ++y)
+    {
+        for (int x = 0; x < imgWidth; ++x)
+        {
+            const unsigned char* pixel = texImage.ptr(imgHeight - 1 - y, x);
+            textureColors.at(x + y * imgWidth) = GPP::Color4(pixel[2], pixel[1], pixel[0]);
+        }
+    }
+    // mTextureImageMasks is from CreateTextureImageByRefImages
+    std::vector< GPP::PixelType > pixelTypes;
+    pixelTypes.reserve(mTextureImageMasks.size());
+    for (std::vector< GPP::Int >::iterator itr = mTextureImageMasks.begin(); itr != mTextureImageMasks.end(); ++itr)
+    {
+        if ((*itr) > 3)
+        {
+            pixelTypes.push_back(GPP::PIXEL_TYPE_IMAGE_COLOR);
+        }
+        else
+        {
+            pixelTypes.push_back(GPP::PixelType(*itr));
+        }
+    }
+    GPP::ErrorCode res = GPP::IntrinsicColor::TuneTextureImageByVertexColor(textureCoords, vertexColors, imgWidth, imgHeight, pixelTypes, textureColors);
+    if (res != GPP_NO_ERROR)return;
+    for (int y = 0; y < imgHeight; ++y)
+    {
+        for (int x = 0; x < imgWidth; ++x)
+        {
+            unsigned char* pixel = texImage.ptr(imgHeight - 1 - y, x);
+            GPP::Color4 color = textureColors.at(x + y * imgWidth);
+            pixel[0] = color[2];
+            pixel[1] = color[1];
+            pixel[2] = color[0];
+        }
+    }
+    cv::imwrite(textureImageName, texImage);
+</pre>
+                <hr class="featurette-divider">
+
+                <a name="meshgeodesics"><h5>网格测地线</h5></a>
+<pre class="prettyprint">
+ErrorCode ComputeApproximateGeodesics(const ITriMesh* triMesh, const std::vector< Int >& sectionVertexIds, bool isSectionClose, std::vector< Int >& pathVertexIds, Real& distance, IMeshDistance* meshDistance);
+</pre>
+                <p>网格测地线的近似求解，测地线经过网格顶点，求解速度很快</p>
+                <p>triMesh: 网格数据</p>
+                <p>sectionVertexIds: 需要测量的线段顶点ID</p>
+                <p>isSectionClose: 线段是否封闭</p>
+                <p>pathVertexIds: 返回测地线路径顶点ID</p>
+                <p>distance: 返回测地线距离</p>
+                <p>meshDistance: 这一参数可以改变度量两个点距离的函数，默认参数为NULL，即为欧式距离EuclidDistance，其它类型的度量需要单独实现IMeshDistance接口</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode ComputeExactGeodesics(const ITriMesh* triMesh, const std::vector< Int >& sectionVertexIds, bool isSectionClose, std::vector<Vector3>& pathPointPositions, Real& distance, std::vector< PointOnEdge > *pathPointInfos);
+</pre>
+                <p>网格测地线的精确求解，测地线经过网格边，求解速度较慢</p>
+                <p>triMesh: 网格数据</p>
+                <p>sectionVertexIds: 需要测量的线段顶点ID</p>
+                <p>isSectionClose: 线段是否封闭</p>
+                <p>pathVertexPositions: 返回测地线路径点坐标，这些点经过网格的边</p>
+                <p>distance: 返回测地线距离</p>
+                <p>pathPointInfos: 返回测地线路径点的信息，参考PointOnEdge的定义</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ ErrorCode FastComputeExactGeodesics(const ITriMesh* triMesh, const std::vector< Int >& sectionVertexIds, bool isSectionClose, std::vector< Vector3 >& pathPointPositions, Real& distance, std::vector< PointOnEdge > *pathPointInfos, Real accuracy = 0.5);
+</pre>
+                <p>网格测地线的快速求解，测地线经过网格边，求解速度很快</p>
+                <p>triMesh: 网格数据</p>
+                <p>sectionVertexIds: 需要测量的线段顶点ID</p>
+                <p>isSectionClose: 线段是否封闭</p>
+                <p>pathVertexPositions: 返回测地线路径点坐标，这些点经过网格的边</p>
+                <p>distance: 返回测地线距离</p>
+                <p>pathPointInfos: 返回测地线路径点的信息，参考PointOnEdge的定义以及<a href="#poepof">面点边点</a>的说明</p>
+                <p>accuracy: 参数范围[0, 1], 值越大，精度越高，计算速度也越慢，一般情况取默认值0.5就可以了</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+
+<pre class="prettyprint">
+ ErrorCode FastComputeExactGeodesics(const ITriMesh* triMesh, const std::vector< PointOnFace >& sectionPofs, bool isSectionClose, std::vector< Vector3 >& pathPointPositions, Real& distance, std::vector< PointOnFace > *pathPointInfos, Real accuracy = 0.5);
+</pre>
+                <p>网格测地线的快速求解（面点版本），测地线经过输入的面点以及网格的边点，求解速度很快</p>
+                <p>triMesh: 网格数据</p>
+                <p>sectionVertexPofs: 需要测量的面点，参见PointOnFace的定义</p>
+                <p>isSectionClose: 线段是否封闭</p>
+                <p>pathVertexPositions: 返回测地线路径点坐标，这些点经过网格的边</p>
+                <p>distance: 返回测地线距离</p>
+                <p>pathPointInfos: 返回测地线路径点的信息，参考PointOnFace的定义以及<a href="#poepof">面点边点</a>的说明</p>
+                <p>accuracy: 参数范围[0, 1], 值越大，精度越高，计算速度也越慢，一般情况取默认值0.5就可以了</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+
+                <hr class="featurette-divider">
+                <a name="planecuttingline"><h5>平面截线</h5></a>
+<pre class="prettyprint">
+ ErrorCode ConnectVertexByCuttingPlane(const ITriMesh* triMesh, Int startId, Int endId, const Plane3& cuttingPlane, std::vector< PointOnEdge >& pathPointInfos);
+ ErrorCode ConnectFacePointByCuttingPlane(const ITriMesh* triMesh, const PointOnFace& startPof, const PointOnFace& endPof, const Plane3& cuttingPlane, std::vector< PointOnFace >& pathPointInfos);
+</pre>
+                <p>生成连接两个网格顶点/网格面点的截面线。最终生成的曲线是经过给定的两个点并在给定平面上的网格曲线。</p>
+                <p>triMesh: 网格数据</p>
+                <p>startId, endId: 网格的顶点，表示最终曲线需要经过的起点和终点</p>
+                <p>startPof, endPof: 网格的面点，表示最终曲线需要经过的起点和终点</p>
+                <p>cuttingPlane: 截面</p>
+                <p>pathPointInfos: 输出的曲线。顶点输入版本的输出为边点队列；面点输入版本的输出为面点队列。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <p>注意：截面需要经过曲线的起点和终点。</p>
+                <p>截面的选取对于最终的结果非常重要，不合理的平面有可能生成较差的结果，甚至无法生成网格曲线。请检查是否该截面与网格真正能交出一条在曲面上的曲线。</p>
+                <p>截面与网格相交形成的曲线实际有可能有多条，比如对于球面上的两个点，使用截面线连接这两个点就有优弧和劣弧两条曲线，目前API输出较短的曲线。</p>
+<pre class="prettyprint">
+    // 截面线生成示例
+	
+    // 1. 生成截面
+    // 截面有很多生成方法，这里采用用两点的位置加上法线的平均来确定截面
+    GPP::Vector3 startCoord = triMesh->GetVertexCoord(startId);
+    GPP::Vector3 endCoord = triMesh->GetVertexCoord(endId);
+    GPP::Real normalDistance = (startCoord - endCoord).Length();
+    GPP::Vector3 thirdCoord = (startCoord + triMesh->GetVertexNormal(startId) * normalDistance 
+                            + endCoord + triMesh->GetVertexNormal(endId) * normalDistance) * 0.5;
+    GPP::Plane3 cuttingPlane(startCoord, endCoord, thirdCoord);
+    // 2. 生成截面线
+    GPP::ErrorCode res = GPP::OptimiseCurve::ConnectVertexByCuttingPlane(triMesh, startId, endId, cuttingPlane, pathPointInfos);
+</pre>
+                <hr class="featurette-divider">
+                <a name="smoothmeshcurve"><h5>网格曲线光滑</h5></a>
+                <p>目前支持PointOnVertex, PointOnEdge类型的网格曲线光滑，不支持PointOnFace的曲线光滑</p>
+<pre class="prettyprint">
+ErrorCode SmoothCurveOnMesh(ITriMesh* triMesh, const std::vector< Int >& curve, Real sharpAngle, Real smoothWeight, Int iterationCount, bool optimizeTopology = false, std::vector< Int >* optimizedCurve = NULL);
+</pre>
+                <p>光滑网格顶点上的曲线：通过改变曲线所在顶点的位置，来达到smooth的效果</p>
+                <p>triMesh: 网格数据</p>
+                <p>curve: 曲线顶点索引</p>
+                <p>sharpAngle: 特征边角。二面角角度大于sharpAngle的边为特征边，特征边上的曲线段不会smooth</p>
+                <p>smoothWeight: 曲线光滑强度，范围(0, 1)</p>
+                <p>iterationCount: 光滑次数</p>
+                <p>optimizeTopology: 是否优化曲线，去掉ear vertex</p>
+                <p>optimizedCurve: 如果optimizeTopology==true，则输入的curve有可能会删除一些ear vertex，optimizedCurve用于存储优化后的曲线顶点索引。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+
+                <hr class="line-divider">
+                <pre class="prettyprint">
+ErrorCode SmoothCurveCrossMesh(const ITriMesh* triMesh, const std::vector< PointOnEdge >& curve, Real smoothWeight, Int iterationCount, std::vector< PointOnEdge >& smoothCurve);
+</pre>
+                <p>光滑PointOnEdge类型的曲线：通过移动curve在网格上的位置，来达到smooth的效果，输入网格几何不变。</p>
+                <p>triMesh: 网格数据</p>
+                <p>curve: PointOnEdge类型的曲线</p>
+                <p>smoothWeight: 曲线光滑强度，范围(0, 1)</p>
+                <p>iterationCount: 光滑次数</p>
+                <p>smoothCurve: 光滑后的曲线。注意，smoothCurve和curve没有一一对应的关系。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+
+
+                <hr class="featurette-divider">
+                <a name="meshareavolume"><h5>网格面积和体积</h5></a>
+<pre class="prettyprint">
+ErrorCode ComputeArea(const ITriMesh* triMesh, Real& area);
+</pre>
+                <p>triMesh: 网格数据</p>
+                <p>area: 网格面积</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode ComputeVolume(const ITriMesh* triMesh, Real& volume);
+</pre>
+                <p>triMesh: 网格数据. 网格需要是闭合的，没有自交. 如果不满足，计算的体积会有误差</p>
+                <p>volume: 网格体积</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">  
+
+                <a name="meshcurvature"><h5>网格曲率</h5></a>
+<pre class="prettyprint">
+ErrorCode ComputeMeanCurvature(const ITriMesh* triMesh, std::vector< Real >& curvature);
+</pre>
+                <p>网格平均曲率测量</p>
+                <p>triMesh: 网格数据</p>
+                <p>curvature: 网格平均曲率</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode ComputeGaussCurvature(const ITriMesh* triMesh, std::vector< Real >& curvature);
+</pre>
+                <p>网格高斯曲率测量</p>
+                <p>triMesh: 网格数据</p>
+                <p>curvature: 网格高斯曲率</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode ComputePrincipalCurvature(const ITriMesh* triMesh, std::vector< Real >& minCurvature, std::vector< Real >& maxCurvature, std::vector< Vector3 >& minDirs, std::vector< Vector3 >& maxDirs);
+</pre>
+                <p>网格主曲率测量</p>
+                <p>triMesh: 网格数据</p>
+                <p>minCurvature：最小主曲率值</p>
+                <p>maxCurvature：最大主曲率值</p>
+                <p>minDirs：最小主曲率方向</p>
+                <p>maxDirs：最大主曲率方向</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+
+                <hr class="featurette-divider">  
+
+                <a name="pointtomeshdistance"><h5>点到网格距离</h5></a>
+<pre class="prettyprint">
+class MeshQueryTool;
+</pre>
+                <p>背景：当需要频繁查询点到某固定网格的距离时，可以预先创建该特殊的数据结构来加速这一查询过程。</p>
+                <p>用法：实例化出一个MeshQueryTool类的实例，用初始化函数Init传入网格指针来建立好数据结构，然后调用QueryNearestTriangle来进行单个点的查询或使用QueryNearestTriangles来对多个点进行查询。</p>
+                <hr class="line-divider">
+<pre class="prettyprint">
+ErrorCode Init(const ITriMesh* refITriMesh);
+</pre>
+                <p>refITriMesh： 需要查询的参考网格。</p>
+                <p>返回值：如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+<pre class="prettyprint">
+ErrorCode QueryNearestTriangle(const Vector3& queryCoord, PointOnFace* projectPoint, Real* distance = NULL, Vector3* projectCoord = NULL) const;
+</pre>
+                <p>queryCoord: 需要查询的点的位置。</p>
+                <p>projectPoint: 查询后返回的最近点的信息，参考PointOnFace的定义。</p>
+                <p>distance, projectCoord: 点到网格的最近距离以及该最近点的位置。</p>
+                <p>返回值：如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+<pre class="prettyprint">
+ErrorCode QueryNearestTriangles(const std::vector< Vector3 >& queryCoords, std::vector< PointOnFace >* projectPoints, std::vector< Real >* distances = NULL, std::vector< Vector3 >* projectCoords = NULL) const;
+</pre>
+                <p>queryCoords: 需要查询的（多个）点的位置。</p>
+                <p>projectPoints: 查询后返回的最近点的信息，数组中的元素与输入的点一一对应，元素的内容请参考PointOnFace的定义。</p>
+                <p>distances, projectCoords: 点到网格的最近距离以及最近点的位置，数组中的元素与输入的点一一对应。</p>
+                <p>返回值：如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+                <p>注意：如果网格本身没有变化，初始化后的该查询实例可以在其生命周期内多次调用查询函数来查询点到网格的距离。</p>
+                <p>     如果需要对多个点进行查询，建议先收集好需要查询最近距离的点，然后调用多点查询版本进行查询。多点查询版本与多次直接调用的单点查询版本稍快。</p>
+<pre class="prettyprint">
+    // 点到网格距离示例
+    GPP::MeshQueryTool queryTool;
+    GPP::ErrorCode res = queryTool.Init(triMesh);
+    if (res != GPP_NO_ERROR) return res;
+    std::vector< GPP::Vector3 > queryCoords;
+    // 收集需要查询的点
+    //CollectToQueryPoints(queryPoints);
+    std::vector< GPP::Real > nearestDistances;
+    std::vector< GPP::Vector3 > nearestCoords;
+    res = queryTool.QueryNearestTriangles(queryCoords, NULL, &nearestDistances, &nearestCoords);
+    if (res != GPP_NO_ERROR) return res;
+    // queryTool没有销毁前且triMesh本身没有发生变化时，可以继续对该网格进行新的查询
+    GPP::Vector3 queryOneCoord(1.0, 0.2, 0);
+    GPP::PointOnFace nearestPoint;
+    GPP::Real nearestDistance = 0.0;
+    res = queryTool.QueryNearestTriangle(queryOneCoord, &nearesetPoint, &nearestDistance, NULL);
+    if (res != GPP_NO_ERROR) return res;
+</pre>
+                <hr class="featurette-divider">
+
+                <a name="rayintersectwithmesh"><h5>射线与网格求交点</h5></a>
+<pre class="prettyprint">
+class MeshQueryTool;
+</pre>
+                <p>背景：当需要频繁进行射线与网格求交运算时，可以预先创建该特殊的数据结构来加速这一求交点过程。</p>
+                <p>用法：实例化出一个MeshQueryTool类的实例，用初始化函数Init传入网格来建立该加速数据结构，然后调用RayIntersections来进行射线与网格求交点运算。即初始化一次，多次调用求交操作。<p>
+                <p>注意：射线与网格的交点可能有多个，可以利用传入的参数来控制最多希望返回的交点个数，且返回的交点会按照交点到射线起点的距离由小到大进行排序。</p>
+                <hr class="line-divider">
+<pre class="prettyprint">
+ErrorCode Init(const ITriMesh* refITriMesh);
+</pre>
+                <p>refITriMesh： 需要查询的参考网格。</p>
+                <p>返回值：如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+<pre class="prettyprint">
+ErrorCode RayIntersections(const Vector3& rayOrigin, const Vector3& rayDirection, Int maxIntersectCount, std::vector< PointOnFace >* intersectPoints, std::vector< Real >* distances = NULL, std::vector< Vector3 >* intersectCoords = NULL) const;
+</pre>
+                <p>rayOrigin, rayDirection: 射线的起点和方向。</p>
+                <p>maxIntersectCount: 希望返回的交点个数。当实际交点个数小于该值时，下面的输出将会返回实际个数的交点。</p>
+                <p>intersectPoints: 射线与网格的交点信息，返回的交点按照离射线起点的距离由小到大进行存储，长度最大为maxIntersectCount。若射线与网格无交点，该数组的长度为0。数组内元素的结构请参考PointOnFace的定义。</p>
+                <p>distances: 交点与射线起点的距离，升序排列，长度最大为maxIntersectCount。</p>
+                <p>intersectCoords: 交点的位置，按照交点到射线起点的距离由小到大进行存储，长度最大为maxIntersectCount。</p>
+                <p>返回值：如果成功则返回GPP_NO_ERROR</p>
+                <p>注意：返回的数组最多有maxIntersectCount个数据，但如果射线与网格交点小于maxIntersectCount，数组将返回所有的交点，即返回数组的长度一定不大于maxIntersectCount。</p>
+                <p>如果网格本身没有变化，初始化后的该查询实例可以在其生命周期内多次调用RayIntersections来进行射线求交操作。</p>
+                <hr class="featurette-divider">
+
+                <a name="wallthickness"><h5>网格厚度</h5></a>
+<pre class="prettyprint">
+ErrorCode ComputeThickness(const ITriMesh* triMesh, std::vector< Real >& thickness, std::vector< bool > *isInfiniteValue = NULL);
+</pre>
+                <p>网格厚度计算。如果是开网格，则有部分点的厚度为无穷，thickness的值记为0，isInfiniteValue记为true</p>
+                <p>triMesh: 网格数据</p>
+                <p>thickness: 网格顶点厚度值</p>
+                <p>isInfiniteValue: 网格顶点的厚度值是否为有限值</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+                <a name="activation"><h5>用户激活</h5></a>
+<pre class="prettyprint">
+bool SetActivationKey(std::string key);
+</pre>
+                <p>把激活码通过SetActivationKey设置，返回true则表示激活。</p>
+                <p>注意，每次使用SDK的时候，都需要激活，因为这个激活并不是在电脑里写入激活信息。</p>
+                <p>使用范例：</p>
+<pre class="prettyprint">
+  if (GPP::SetActivationKey("1234567890") == false)
+  {
+      std::cout << "Activation Failed" << std::endl;
+  }
+</pre>
+                <hr class="featurette-divider">  
+
+                <a name="apiprogress"><h5>API进度查询</h5></a>
+<pre class="prettyprint">
+Real GetApiProgress(void);
+</pre>
+                <p>查询当前API的执行进度.</p>
+                <p>返回值范围：[0, 1]</p>
+                <p>使用范例：</p>
+<pre class="prettyprint">
+  GPP::ResetApiProgress();
+  GPP::ErrorCode res = GPP::PoissonReconstructMesh::Reconstruct(pointCloud, triMesh);
+  //在另外一个线程来获取这个api的执行进度
+  GPP::Real progress = GPP::GetApiProgress();
+</pre>
+                <hr class="featurette-divider">
+
+                <a name="multithreadsetting"><h5>多线程设置</h5></a>
+<pre class="prettyprint">
+void SetThreadCount(Int count);
+</pre>
+                <p>Geometry++有些API使用了多线程。这个API可以设置线程个数(>=0)。默认参数为0-根据CPU核心数自动设置。</p>
+                <hr class="featurette-divider">
+
+                <a name="dump"><h5>调试</h5></a>
+                <div class="question">请先看看<a href="#faq">常见问题</a></a>
+                <div class="question">这里的调试特指某个API的调试。对于一系列API的调用后出现的问题，请先分析定位出是哪个API出了问题，一般是合理的输入没有得到合理的输出。</div>
+                <div class="question">Geometry++ API的调试。首先查看API的返回码和Log文件，如果不能解决，则之后的调试一般分3种情况: </div>
+                <p>1. 可以在Magic3D里重现操作步骤，并且可以重现错误.</p>
+                <p>2. 可以在Magic3D里重现操作步骤，但是重现不了错误：这种情况一般是api的用法有问题，请仔细对比Magic3D的用法。如果用户采用的是自定义的网格和点云类(没有采用PointCloud和TriMesh)，可以在自己程序里先用TriMesh或者PointCloud调用API，如果调用成功，则说明自定义类有问题。请仔细参考PointCloud和TriMesh的函数实现。特别是对一些退化情况的处理。</p>
+                <p>3. 没法在Magic3D里重现操作步骤：采用dump api输入的方式来反馈错误。dump数据的生成步骤是：</p>
+                <li> a) 在需要Dump调试信息的API前使用函数GPP::DumpOnce. 比如需要Dump GlobalRegistrate的调试信息:</li>
+<pre class="prettyprint">
+    GPP::DumpOnce();
+    GPP::ErrorCode res = GPP::RegistratePointCloud::GlobalRegistrate(pointCloudRef, pointCloudFrom, transform);
+</pre>
+                <li> b) 调试信息在调用API时会输出到程序可执行文件的当前目录下</li>
+                <div class="question">问题反馈请发送到邮箱threeparkhelp@qq.com，文件请压缩后发送</div>
+                <div class="question">问题反馈的内容：</div>
+                <li>一次只反馈一个问题，多个问题请分多次反馈。</li>
+                <li>问题的详细描述：请准确，定量的，用专业术语描述问题。</li>
+                <li>数据：Magic3D的操作模型，或者Geometry++的dump文件。</li>
+                <li>Log文件：请保证是操作出错时的Log</li>
+                <li>API返回码</li>
+                <li>结果描述：形式可以是多种多样，如导出结果文件，结果截图，操作视频等。</li>
+                <li>代码片断：可以截取api调用时的代码片断，注意不是整个代码文件</li>
+                <li>其它：任何可以帮助问题重现的资料</li>
+                <div class="question">注意：问题反馈的内容，主要是为了重现问题。反馈的内容越精确，问题越能得到重现。解决问题是建立在问题重现的基础之上的。</div>
+                <div class="question">问题反馈，请用准确，定量的专业术语来描述。定性的，或者不准确的的问题反馈，很难得到及时有效的回复。比如“我的SDK为什么不能用呢？”“某某功能为什么不能用啊？为什么出错啊？”“我的程序崩溃是怎么回事呢？”</div>
+                <p>程序调试的相关介绍也可以参考<a class="code" href="http://threepark.net/notes/debugprogram" target="_blank">程序调试</a>
+                <hr class="featurette-divider">
+
+                <a name="faq"><h5>常见问题</h5></a>
+                <div class="question">请不要在release的环境下debug程序，因为release环境下面的调试信息是不准确的。</div>
+
+                <div class="question">编译有错误</div>
+                <li>请仔细检查头文件，lib库，宏定义是否都配置好了，详细请参考<a href="#usageintroduction">使用简介</a>。如果工程中链接了很多第三方库，可以新建一个简单的工程来链接Geometry++库，来确认Geometry++库是否有问题。</li>
+
+                <div class="question">API调用出现问题</div>
+                <li>检查API的返回码：－6属于没有激活开发包；－8属于函数没有定义，如果你有这个函数的授权，可以前来联系。</li>
+                <li>查看log文件，看能不能得到提示</li>
+                <li>其它情况，可以详细参考<a href="#dump">调试</a>部分的介绍。</li>
+
+                <div class="question">一般性问题还是特例问题</div>
+                <li>某个api调用出现问题时，可以多试试几个例子，看看是对所有例子都有问题，还是个例有问题。如果对所有例子都有问题，一般都是用法有问题。</li>
+
+                <div class="question">程序崩溃了（Crash）怎么办</div>
+                <li>请仔细确认程序的崩溃点！如果有异常发生，请在软件程序里Catch住异常。异常的捕获处理属于软件部分的内容。</li>
+
+                <div class="question">我程序里的结果没有Magic3D的结果好</div>
+                <li>请确认你的开发包和Magic3D的开发包是同一个版本</li>
+                <li>请确认API的调用参数是一样的，Magic3D的调用参数可以参考其源代码</li>
+                <li>请确认API的输入是一样的</li>
+                <li>总之，肯定是某个地方有区别。这个问题就是一个比较差异的问题，需要一些耐心。问题本身是可以解决的。</li>
+                
+                <div class="question">网格为什么需要拓扑修复</div>
+                <li>网格相关的API一般有流形结构的假设前提。软件可以设计成在网格生成或导入时，就进行拓扑修复。特别需要注意的是，拓扑修复可能会改变网格顶点和三角片的个数和顺序，进行拓扑修复后，请及时更新网格相关的各类信息。</li>
+                
+                <div class="question">自定义网格类的注意事项</div>
+                <li>用户如果没有丰富的网格处理经验，建议使用TriMesh类来表达三角网格</li>
+                <li>如果用户没有使用TriMesh类，而是从ITriMesh继承，自定义了三角网格类。请仔细参考TriMesh的函数实现。特别是对一些退化情况的处理，比如UpdateNormal函数的实现。</li>
+                <li>调试自定义类的方法，对比自定义类和TriMesh调用同一个API的结果差别。</li>
+                <li>自定义类的最大问题是，有时候问题很难重现：开发者这边用的TriMesh，用户这边用的自定义网格类。遇到这类问题，用户可以先试试TriMesh的结果。如果TriMesh的结果是正确的，则可以比较自定义类和TriMesh类的实现差别。</li>
+                
+                <div class="question">反馈问题时模型的导出</div>
+                <li>导出模型坐标时，确保导出的坐标精度是没有截断的，如std::ofstream导出时可以调用precision来设置精度。</li>
+                <li>网格导出时，一般使用OBJ格式，不要使用STL，因为STL没有网格拓扑信息。不同软件系统重构STL拓扑的实现可能不一样。具体可以参考<a href="http://threepark.net/notes/stlformat" target="_blank">为什么不建议使用STL格式。</a></li>
+                
+                <div class="question">总之，最重要的环节是问题重现。只有问题能够重现出来，才能得到有效的解决。反馈问题前，请先想想反馈的信息是否能够得到问题重现。</div>
+                <hr class="featurette-divider">
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

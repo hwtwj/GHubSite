@@ -1,0 +1,9 @@
+faceCount * 3
+
+imageIndex_0 pixelCoordX_0 pixelCoordY_0
+
+imageIndex_1 pixelCoordX_1 pixelCoordY_1
+
+......
+
+说明：faceCount为网格的三角片数；imageIndex_n为图片索引号；pixelCoordX_n, pixelCoordY_n为点在图像中对应的坐标。

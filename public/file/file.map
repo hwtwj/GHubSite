@@ -1,0 +1,7 @@
+pixelCoordX_0 pixelCoordY_0
+
+pixelCoordX_1 pixelCoordY_1
+
+... ...
+
+说明：每行为点云在图像中的坐标，行数和点云个数相等，每个点云对应一个图片。

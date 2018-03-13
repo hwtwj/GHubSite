@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计，在线三维数据处理，Geometry++，几何库">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>Geometry++功能列表</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/gppabout.css" rel="stylesheet">
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+  </head>
+
+  <body>
+    
+    <div class="container">
+        <h2>Geometry++功能列表</h2>
+        
+        <hr class="featurette-divider">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>点云处理模块</h4>
+                <table class="table table-bordered">
+                    <thread>
+                        <tr class="active"><th>编号</th><th>名称</th><th>对应API</th></tr>
+                    </thread>
+                    <tbody>
+                        <tr class="danger"><th>0</th><th>网格重建(点云三角化)</th><th>ReconstructMesh::Reconstruct</th></tr>
+                        <tr class="active"><th>1</th><th>点云采样（均匀，几何，格栅，简化）</th><th>SamplePointCloud::UniformSample; SamplePointCloud::GeometrySample; SamplePointCloud::GridSample; SamplePointCloud::Simplify; SampleGrid::UniformSample; SampleGrid::GeometrySample; SampleGrid::Simplify</th></tr>
+                        <tr class="danger"><th>2</th><th>点云光滑</th><th>ConsolidatePointCloud::SmoothGeometry; ConsolidateGrid::SmoothGridGeometry</th></tr>
+                        <tr class="active"><th>3</th><th>点云法线计算</th><th>ConsolidatePointCloud::CalculatePointCloudNormal; ConsolidatePointCloud::ConsolidateRawScanData; ConsolidatePointCloud::SmoothNormal; ConsolidateGrid::CalculateGridNormal; ConsolidateGrid::SmoothGridNormal</th></tr>
+                        <tr class="danger"><th>4</th><th>点云去飞点，去孤立项</th><th>ConsolidatePointCloud::CalculateIsolation; ConsolidateGrid::CalculateGridIsolation</th></tr>
+                        <tr class="active"><th>52</th><th>点云去重影</th><th>ConsolidatePointCloud::RemoveOverlap</th></tr>
+                        <tr class="danger"><th>58</th><th>有序点云边界检测</th><th>ConsolidateGrid::DetectGridBoundary</th></tr>
+                        <tr class="active"><th>19</th><th>有标记点对齐</th><th>RegistratePointCloud::AlignPointCloudByMark</th></tr>
+                        <tr class="danger"><th>20</th><th>无标记点对齐</th><th>RegistratePointCloud::AlignPointCloud; RegistrateGrid::AlignGrid</th></tr>
+                        <tr class="active"><th>21</th><th>ICP注册（刚性）</th><th>RegistratePointCloud::ICPRegistrate; RegistrateGrid::ICPRegistrate</th></tr>
+                        <tr class="danger"><th>22</th><th>全局注册（刚性）</th><th>RegistratePointCloud::GlobalRegistrate</th></tr>
+                        <tr class="active"><th>24</th><th>多帧去除重叠</th><th>SumPointCloud::UpdateSumFunction; SumPointCloud::ExtractPointCloud</th></tr>
+                        <tr class="danger"><th>53</th><th>非刚性ICP</th><th>DeformPointList::NonRigidICP</th></tr>
+                        <tr class="active"><th>54</th><th>非刚性全局注册</th><th>DeformPointList::GlobalNonRigidRegistrate</th></tr>
+                    </tbody>
+                </table>
+
+                <h4>网格处理模块</h4>
+                <table class="table table-bordered">
+                    <thread>
+                        <tr class="active"><th>编号</th><th>名称</th><th>对应API</th></tr>
+                    </thread>
+                    <tbody>
+                        <tr class="warning"><th>6</th><th>网格补洞</th><th>FillMeshHole::FindHoles; FillMeshHole::FillHoles</th></tr>
+                        <tr class="active"><th>7</th><th>网格桥接</th><th>FillMeshHole::BridgeEdges</th></tr>
+                        <tr class="warning"><th>8</th><th>平面切割网格</th><th>SplitMesh::SplitByPlane</th></tr>
+                        <tr class="active"><th>9</th><th>网格拓扑修整</th><th>ConsolidateMesh::MakeTriMeshManifold</th></tr>
+                        <tr class="warning"><th>10</th><th>网格几何修整</th><th>ConsolidateMesh::ConsolidateGeometry</th></tr>
+                        <tr class="active"><th>11</th><th>网格简化</th><th>SimplifyMesh::QuadricSimplify</th></tr>
+                        <tr class="warning"><th>12</th><th>网格加密</th><th>SubdivideMesh::DensifyMesh</th></tr>
+                        <tr class="active"><th>13</th><th>Loop细分</th><th>SubdivideMesh::LoopSubdivideMesh</th></tr>
+                        <tr class="warning"><th>14</th><th>网格去噪</th><th>ConsolidateMesh::RemoveGeometryNoise</th></tr>
+                        <tr class="active"><th>15</th><th>网格光滑</th><th>FilterMesh::LaplaceSmooth</th></tr>
+                        <tr class="warning"><th>16</th><th>几何细节增强</th><th>FilterMesh::EnhanceDetail</th></tr>
+                        <tr class="active"><th>17</th><th>网格去孤立项</th><th>ConsolidateMesh::CalculateIsolation</th></tr>
+                        <tr class="warning"><th>18</th><th>网格均匀抽壳</th><th>OffsetMesh::UniformApproximate</th></tr>
+                        <tr class="active"><th>44</th><th>重新网格化(Remesh)</th><th>Remesh::UniformRemesh</th></tr>
+                        <tr class="warning"><th>45</th><th>带约束的Delaunay网格优化</th><th>Triangulation::ConstrainedDelaunayOptimization</th></tr>
+                        <tr class="active"><th>46</th><th>重心Voronoi网格优化</th><th>Triangulation::CentroidVoronoiOptimization</th></tr>
+                        <tr class="warning"><th>47</th><th>网格点采样</th><th>SampleMesh::UniformSample</th></tr>
+                    </tbody>
+                </table>
+
+                <h4>其它功能</h4>
+                <table class="table table-bordered">
+                    <thread>
+                        <tr class="active"><th>编号</th><th>名称</th><th>对应API</th></tr>
+                    </thread>
+                    <tbody>
+                        <tr class="success"><th>39</th><th>高度场压缩(浅浮雕应用)</th><th>DigitalRelief::CompressHeightField</th></tr>
+                    </tbody>
+                </table>
+            </div>  
+
+            <div class="col-md-6">
+                <h4>网格测量模块</h4>
+                <table class="table table-bordered">
+                    <thread>
+                        <tr class="active"><th>编号</th><th>名称</th><th>对应API</th></tr>
+                    </thread>
+                    <tbody>
+                        <tr class="warning"><th>25</th><th>网格测地线精确</th><th>MeasureMesh::ComputeExactGeodesics; MeasureMesh::FastComputeExactGeodesics</th></tr>
+                        <tr class="active"><th>26</th><th>网格测地线近似</th><th>MeasureMesh::ComputeApproximateGeodesics</th></tr> 
+                        <tr class="warning"><th>48</th><th>平面截网格线</th><th>OptimiseCurve::ConnectVertexByCuttingPlane; OptimiseCurve::ConnectFacePointByCuttingPlane</th></tr>
+                        <tr class="active"><th>40</th><th>网格线切割网格</th><th>SplitMesh::SplitByLines; SplitMesh::InsertSplitLinesByEdgePoints; SplitMesh::InsertSplitLinesByFacePoints</th></tr>
+                        <tr class="warning"><th>49</th><th>网格线光滑</th><th>OptimiseCurve::SmoothCurveOnMesh; OptimiseCurve::SmoothCurveCrossMesh</th></tr>
+                        <tr class="active"><th>27</th><th>网格表面积, 体积</th><th>MeasureMesh::ComputeArea; MeasureMesh::ComputeVolume</th></tr>
+                        <tr class="warning"><th>28</th><th>网格曲率（平均，高斯，主曲率）</th><th>MeasureMesh::ComputeMeanCurvature; MeasureMesh::ComputeGaussCurvature; MeasureMesh::ComputePrincipalCurvature</th></tr>
+                        <tr class="active"><th>41</th><th>网格厚度测量，射线与网格求交</th><th>MeasureMesh::ComputeThickness; MeshQueryTool::RayIntersections</th></tr>
+                        <tr class="warning"><th>42</th><th>点到网格距离测量</th><th>MeshQueryTool::QueryNearestTriangle</th></tr> 
+                    </tbody>
+                </table>
+
+                <h4>网格UV展开模块</h4>
+                <h5>注: 此模块不包含网格线切割网格，网格线切割网格在网格曲线模块</h5>
+                <table class="table table-bordered">
+                    <thread>
+                        <tr class="active"><th>编号</th><th>名称</th><th>对应API</th></tr>
+                    </thread>
+                    <tbody>
+                        <tr class="warning"><th>29</th><th>单连通圆盘拓扑网格UV展开</th><th>UnfoldMesh::ConformalMap</th></tr>
+                        <tr class="active"><th>30</th><th>单连通圆盘拓扑网格UV等距优化</th><th>UnfoldMesh::OptimizeIsometric</th></tr>
+                        <tr class="warning"><th>31</th><th>任意拓扑网格全自动UV展开</th><th>UnfoldMesh::GenerateUVAtlas</th></tr>
+                        <tr class="active"><th>32</th><th>UV Atlas打包</th><th>UnfoldMesh::PackUVAtlas</th></tr>
+                    </tbody>
+                </table>
+
+                <h4>纹理优化模块</h4>
+                <h5>注: 此模块不包含网格纹理坐标计算，纹理坐标计算在网格UV展开模块</h5>
+                <table class="table table-bordered">
+                    <thread>
+                        <tr class="active"><th>编号</th><th>名称</th><th>对应API</th></tr>
+                    </thread>
+                    <tbody>
+                        <tr class="success"><th>36</th><th>网格纹理贴图制作</th><th>TextureImage::CreateTextureImageByVertexColors; TextureImage::CreateTextureImageByRefImages</th></tr>
+                        <tr class="active"><th>51</th><th>点像对应投影</th><th>OptimiseMapping::ProjectImageColorIdToMesh</th></tr>
+                        <tr class="success"><th>50</th><th>点像对应割缝优化</th><th>OptimiseMapping::FuseImageColorIds</th></tr>
+                        <tr class="active"><th>57</th><th>点像对应插值</th><th>OptimiseMapping::InterpolateFaceImageColorIds</th></tr>
+                        <tr class="success"><th>33</th><th>多角度点云颜色融合</th><th>IntrinsicColor::TuneColorFromMultiFrame; IntrinsicColor::TuneMeshColorFromMultiPatch</th></tr>
+                        <tr class="active"><th>34</th><th>单光源点云颜色修正</th><th>IntrinsicColor::TuneColorFromSingleLight</th></tr>
+                        <tr class="success"><th>56</th><th>纹理贴图颜色修正</th><th>IntrinsicColor::TuneTextureImageColor</th></tr>
+                    </tbody>
+                </table>
+
+                <h4>三维变形模块</h4>
+                <table class="table table-bordered">
+                    <thread>
+                        <tr class="active"><th>编号</th><th>名称</th><th>对应API</th></tr>
+                    </thread>
+                    <tbody>
+                        <tr class="warning"><th>55</th><th>三维点云变形</th><th>DeformPointList::Deform</th></tr>
+                        <tr class="active"><th>38</th><th>三维网格变形</th><th>class DeformMesh</th></tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+      <!-- /END THE FEATURETTES -->
+    </div><!-- /.container -->
+
+    <!-- <hr> -->
+    <!-- <% include homepagefooter %> -->
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

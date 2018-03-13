@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理，Geometry++">
+    <link rel="icon" href="/images/favicon.ico">
+
+    <title>文件格式</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>文件格式 <small></small></h2>
+
+        <h4>map</h4>
+        <p>文件名.map (map格式－每行为点云在图像中的坐标，行数和点云个数相等，每个点云对应一个图片)</p>
+        <p>pixelCoordX_0 pixelCoordY_0</p>
+        <p>pixelCoordX_1 pixelCoordY_1</p>
+        <p>... ...</p>
+        <hr class="line-divider">
+
+        <h4>mmap</h4>
+        <p>文件名.mmap (mmap格式－每行为点云在图像中的坐标，imageId为图像的id号，图像id号从0开始，与导入的图像顺序一样。每个点云对应多个图片)</p>
+        <p>pointCount（点云的点数）</p>
+        <p>imageId_0 pixelCoordX_0 pixelCoordY_0</p>
+        <p>imageId_1 pixelCoordX_1 pixelCoordY_1</p>
+        <p>... ...</p>
+        <hr class="line-divider">
+
+        <h4>vii</h4>
+        <p>文件名.vii</p>
+        <p>vertexCount</p>
+        <p>imageIndex_0 pixelCoordX_0 pixelCoordY_0</p>
+        <p>imageIndex_1 pixelCoordX_1 pixelCoordY_1</p>
+        <p>......</p>
+        <p>说明：vertexCount为网格或者点云点数；imageIndex_n为图片索引号；pixelCoordX_n, pixelCoordY_n为点在图像中对应的坐标。这部分数据是点在图像中的对应信息，用于纹理贴图制作。</p>
+        <hr class="line-divider">
+
+        <h4>fii</h4>
+        <p>文件名.fii</p>
+        <p>faceCount * 3</p>
+        <p>imageIndex_0 pixelCoordX_0 pixelCoordY_0</p>
+        <p>imageIndex_1 pixelCoordX_1 pixelCoordY_1</p>
+        <p>......</p>
+        <p>说明：faceCount为网格的三角片数；imageIndex_n为图片索引号；pixelCoordX_n, pixelCoordY_n为点在图像中对应的坐标。</p>
+        <hr class="line-divider">
+
+        <h4>viis</h4>
+        <p>文件名.viis</p>
+        <p>vertexCount</p>
+        <p>vertex_0_idCount</p>       
+        <p>imageIndex_0_0 pixelCoordX_0_0 pixelCoordY_0_0</p>     
+        <p>imageIndex_0_1 pixelCoordX_0_1 pixelCoordY_0_1</p>     
+        <p>......</p>     
+        <p>vertex_1_idCount</p>       
+        <p>imageIndex_1_0 pixelCoordX_1_0 pixelCoordY_1_0</p>     
+        <p>imageIndex_1_1 pixelCoordX_1_1 pixelCoordY_1_1</p>     
+        <p>......</p>     
+        <p>说明：vertexCount为网格顶点数目。vertex_i_idCount为顶点i的点像对应个数。imageIndex_i_n为图片索引号；pixelCoordX_i_n, pixelCoordY_i_n为点在图像中对应的坐标。</p>     
+        <hr class="line-divider"> 
+
+        <h4>点像对应的坐标系</h4>
+        <img class="featurette-image img-responsive center-block" src="/images/image_coordinate.jpg" alt="image_coordinate">
+        
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

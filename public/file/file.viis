@@ -1,0 +1,19 @@
+vertexCount
+
+vertex_0_idCount
+
+imageIndex_0_0 pixelCoordX_0_0 pixelCoordY_0_0
+
+imageIndex_0_1 pixelCoordX_0_1 pixelCoordY_0_1
+
+......
+
+vertex_1_idCount
+
+imageIndex_1_0 pixelCoordX_1_0 pixelCoordY_1_0
+
+imageIndex_1_1 pixelCoordX_1_1 pixelCoordY_1_1
+
+......
+
+vertexCount为网格顶点数目。vertex_i_idCount为顶点i的点像对应个数。imageIndex_i_n为图片索引号；pixelCoordX_i_n, pixelCoordY_i_n为点在图像中对应的坐标。

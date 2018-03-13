@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计，在线三维数据处理，Geometry++，几何库, Magic3D">
+    <meta name="keywords" content="Magic3D, 三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>Magic3D</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/magic3d.css" rel="stylesheet">
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+
+  </head>
+
+  <body>
+    <% include homepagetoolbar %>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <div class="sidecaption"><a href="#magic3d">Magic3D</a></div>
+                <div class="sidecaption"><a href="#download">软件下载</a></div>
+                <div class="sidecaption"><a href="#overview">功能简介</a></div>
+                <div class="sidecaption"><a href="#pointshop">点云编辑模块</a></div>
+                <ul class="sideul">
+                    <li class="sideli"><a href="#pointcloud_import">点云导入</a></li>
+                    <li class="sideli"><a href="#pointcloud_sample">采样，简化</a></li>
+                    <li class="sideli"><a href="#pointcloud_normal">法线</a></li>
+                    <li class="sideli"><a href="#pointcloud_repair">修复</a></li>
+                    <li class="sideli"><a href="#pointcloud_select">选择</a></li>
+                    <li class="sideli"><a href="#pointcloud_reconstruction">三角化</a></li>
+                    <li class="sideli"><a href="#pointcloud_color">颜色</a></li>
+                    <li class="sideli"><a href="#pointcloud_texture">纹理图</a></li>
+                </ul>
+                <div class="sidecaption"><a href="#meshshop">网格编辑模块</a></div>
+                <ul class="sideul">
+                    <li class="sideli"><a href="#mesh_import">网格导入</a></li>
+                    <li class="sideli"><a href="#mesh_repair">修复</a></li>
+                    <li class="sideli"><a href="#mesh_filter">滤镜</a></li>
+                    <li class="sideli"><a href="#mesh_changevertex">增减顶点</a></li>
+                    <li class="sideli"><a href="#mesh_remesh">Remesh</a></li>
+                    <li class="sideli"><a href="#mesh_fill">补洞</a></li>
+                    <li class="sideli"><a href="#mesh_shell">抽壳</a></li>
+                    <li class="sideli"><a href="#mesh_select">选择</a></li>
+                    <li class="sideli"><a href="#mesh_cut">平面切割</a></li>
+                    <li class="sideli"><a href="#mesh_sample">采样</a></li>
+                </ul>
+                <div class="sidecaption"><a href="#registration">点云注册模块</a></div>
+                <ul class="sideul">
+                    <li class="sideli"><a href="#registration_align_free">无标记注册</a></li>
+                    <li class="sideli"><a href="#registration_icp">ICP注册</a></li>
+                    <li class="sideli"><a href="#registration_nonrigid_icp">非刚性ICP</a></li>
+                    <li class="sideli"><a href="#registration_global">全局注册</a></li>
+                    <li class="sideli"><a href="#registration_nonrigid_global">非刚性全局注册</a></li>
+                    <li class="sideli"><a href="#registration_sumpointcloud">点云去除重叠</a></li>
+                    <li class="sideli"><a href="#registration_texture_mesh">一键纹理贴图</a></li>
+                    <li class="sideli"><a href="#registration_tune_color">单光源颜色修正</a></li>
+                    <li class="sideli"><a href="#registration_sequential_reg">顺序注册点云</a></li>
+                </ul>
+                <div class="sidecaption"><a href="#measure">三维测量模块</a></div>
+                <ul class="sideul">
+                    <li class="sideli"><a href="#measure_meshcurve">网格曲线</a></li>
+                    <li class="sideli"><a href="#measure_cut">切割</a></li>
+                    <li class="sideli"><a href="#measure_measure">网格测量</a></li>
+                    <li class="sideli"><a href="#measure_meshdistance">网格距离测量</a></li>
+                </ul>
+                <div class="sidecaption"><a href="#deformation">三维变形模块</a></div>
+                <ul class="sideul">
+                    <li class="sideli"><a href="#deform_pointcloud">三维点云变形</a></li>
+                    <li class="sideli"><a href="#deform_mesh">三维网格变形</a></li>
+                </ul>
+                <div class="sidecaption"><a href="#uvunfold">UV展开模块</a></div>
+                <ul class="sideul">
+                    <li class="sideli"><a href="#unfold_split">割线</a></li>
+                    <li class="sideli"><a href="#unfold_single">单片展开</a></li>
+                    <li class="sideli"><a href="#unfold_cycle">展开到圆盘</a></li>
+                    <li class="sideli"><a href="#unfold_atlas">Atlas</a></li>
+                    <li class="sideli"><a href="#unfold_check">重叠检测</a></li>
+                </ul>
+                <div class="sidecaption"><a href="#texture">纹理贴图模块</a></div>
+                <ul class="sideul">
+                    <li class="sideli"><a href="#texture_color">颜色</a></li>
+                    <li class="sideli"><a href="#texture_map">点像对应</a></li>
+                    <li class="sideli"><a href="#texture_image">纹理图</a></li>
+                    <li class="sideli"><a href="#texture_simplify">简化</a></li>
+                </ul>
+                <div class="sidecaption"><a href="#relief">浮雕扫描模块</a></div>
+                <ul class="sideul">
+                    <li class="sideli"><a href="#relief_relief">网格浅浮雕</a></li>
+                    <li class="sideli"><a href="#relief_scan">虚拟扫描仪</a></li>
+                    <li class="sideli"><a href="#relief_color">网格顶点上色</a></li>
+                </ul>
+            </div>
+
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2" main>
+                <a name="magic3d"><h2>Magic3D</h2></a>
+
+                <h3>Magic3D提供了三维点云和网格数据处理的基本功能。所有功能的几何算法采用了<a href="/geometryplusplus" target="_blank">Geometry++</a>几何库，主要用于Geometry++的功能测试. 下图是软件界面的一个截图</h3>
+                <img class="featurette-image img-responsive center-block" src="/images/Magic3DInterface_half.jpg" alt="Magic3DInterface">
+                <h5>Magic3D软件界面</h5>
+
+                <hr class="featurette-divider">
+                <h3><a href="/file/Magic3D-master-20180211.rar" target="_blank" name="download">软件下载</a>：软件每次可以使用30分钟，重启软件后使用时间会重置。</h3>
+
+                <hr class="featurette-divider">
+                <a name="overview"><h2>功能简介</h2></a>
+                <h3>打开软件，进入首页，可以导入点云和网格数据进行浏览。左侧有一些列按钮，包含了常用的数据处理功能。每一个按钮就是一个模块，数据可以自由的在不同的模块间进行切换。如需导出，可以回到首页点击保存功能。</h3>
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5><img class="featurette-image img-responsive center-block" src="/images/open_icon.jpg" alt="Icon">导入模型</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5><img class="featurette-image img-responsive center-block" src="/images/save_icon.jpg" alt="Icon">导出模型</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5><img class="featurette-image img-responsive center-block" src="/images/PointCloudShop_icon.jpg" alt="Icon"><a href="#pointshop">点云编辑模块</a></h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5><img class="featurette-image img-responsive center-block" src="/images/MeshShop_icon.jpg" alt="Icon"><a href="#meshshop">网格编辑模块</a></h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5><img class="featurette-image img-responsive center-block" src="/images/align_icon.jpg" alt="Icon"><a href="#registration">点云注册模块</a></h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5><img class="featurette-image img-responsive center-block" src="/images/Measure_icon.jpg" alt="Icon"><a href="#measure">三维测量模块</a></h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5><img class="featurette-image img-responsive center-block" src="/images/deform_icon.jpg" alt="Icon"><a href="#deformation">三维变形模块</a></h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5><img class="featurette-image img-responsive center-block" src="/images/uvunfold_icon.jpg" alt="Icon"><a href="#uvunfold">UV展开模块</a></h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5><img class="featurette-image img-responsive center-block" src="/images/Texture_icon.jpg" alt="Icon"><a href="#texture">纹理贴图模块</a></h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5><img class="featurette-image img-responsive center-block" src="/images/relief_icon.jpg" alt="Icon"><a href="#relief">浮雕扫描模块</a></h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5><img class="featurette-image img-responsive center-block" src="/images/Help_icon.jpg" alt="Icon">在线帮助文档</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5><img class="featurette-image img-responsive center-block" src="/images/Home_icon.jpg" alt="Icon">返回首页</h5>
+                    </div>
+                </div>
+
+
+                <hr class="featurette-divider">
+                <h2>功能详细介绍</h2>
+                <a name="pointshop"><h5><img class="featurette-image img-responsive center-block" src="/images/PointCloudShop_icon.jpg" alt="PointCloudShop">点云编辑模块: 三维点云处理工具，包括采样，简化，法线计算，修复，重建三角网格，点云颜色融合等.</h5></a>
+                
+                <hr class="line-divider">
+                <a name="pointcloud_import"><h4>点云导入格式: obj, asc，ply(文本格式)，gpc，xyz，gbg, gtg(有序点云格式)</h4></a>
+                <h4>有序点云格式gbg(二进制格式，导入导出速度快)，gtg(文本格式)，具体的导入导出格式，可以参考<a class="code" href="/file/Parser.cpp" target="_blank">Parser</a>，这里提供一个有序点云的<a class="code" href="http://threepark.net/file/DepthFrame_Points_1382250661660.rar" target="_blank">例子</a>(Kinect2数据)作为参考</h4>
+                
+                <hr class="line-divider"> 
+                <a name="pointcloud_sample"><h4>采样：点云点索引采样，与简化不同的是，采样不会改变点云坐标。</h4></a>
+                <li class="contentli">均匀(支持有序点云)：均匀采样点云，可以设置目标点数。注意，采的是点云点索引，不会改变点云坐标。 </li>
+                <li class="contentli">几何(支持有序点云)：根据点云几何进行采样，曲率越大的地方采样点数越多</li>
+                <li class="contentli">格栅(支持有序点云)：根据点间距把空间分为一个一个的格子，每个格子采样一个点，并且使得采样的点云尽量均匀。参数为点间距。和均匀采样相比，它的速度更快，但是均匀性稍低。</li>
+                <h4>简化(支持有序点云)：与点云采样不同的是，点云简化会改变点云的坐标。它不是采样索引，是把距离近的点合并成一个点。参数意义为空间分辨率，范围[1, 10000]，简化后点云内部点距=(点云包围盒 / 分辨率)，距离很近的点会融合为一个点。</h4>
+                <img class="featurette-image img-responsive center-block" src="/images/pointcloudsampling.png" alt="pointcloudsampling">
+                
+                <hr class="line-divider">
+                <a name="pointcloud_normal"><h4>法线</h4></a>
+                <li class="contentli">Front(支持有序点云)：计算深度点云（扫描仪初始采集到的点云，相机坐标系下）的法线，法线定向为Z轴正方向。扫描的深度点云的法线可以完美定向，因为法线是朝相机方向的。</li>
+                <li class="contentli">计算(支持有序点云)：如果点云不是深度点云，或者点云进行了刚体变换，法线不再统一的朝向相机。则它的法线定向可以通过算法计算得到。需要说明的是，目前还没有一种可以完美定向法线的计算方法，因为有些数据有歧义性。一般的情况下，Geometry++的法线定向是很准的。</li>
+                <li class="contentli">反向：反转点云法向量方向</li>
+                <li class="contentli">修复：鼠标右键单击需要反转法线方向的局部点片</li>
+                <li class="contentli">光滑(支持有序点云)：光滑点云法向量</li>
+                <li class="contentli">更新：重新计算法线，但是法线定向与原始定向一致。这个功能一般用于多帧点云融合成一个点云后，需要重新计算法线，但是同时要保持原有的法线定向。</li>
+                <li class="contentli">定向：重新定向点云法线，如果有选择，则定向选择部分的点云。</li>
+                <li class="contentli">显示：切换点云显示是否应用法线</li>
+                
+                <hr class="line-divider">
+                <a name="pointcloud_repair"><h4>修复</h4></a>
+                <li class="contentli">孤立项(支持有序点云)：去除点云离群孤立项. 需要先计算好法线。参数意义为孤立值阈值，小于这个值的点会被去掉。这个值的几何意义为，点云被分割为不同的块，每个块内点的孤立值为块内点数占总点数的比例。最后可以用“选择-删除”按钮删除选中的点。</li>
+                <li class="contentli">飞点(支持有序点云)：去除点云飞点。需要先计算好法线。参数意义为孤立值阈值，小于这个值的点会被去掉。这个值的几何意义为，点云被分割为不同的块，每个块内点的孤立值为块内点数占总点数的比例。最后可以用“选择-删除”按钮删除选中的点。</li>
+                <li class="contentli">提示：飞点与孤立项的区别-飞点是贴近曲面的噪点，孤立项是远离曲面的一小片点云。可以关掉法线显示(法线-眼睛图标)，更容易看到检测出的红色点云部分。</li>
+                <li class="contentli">重叠检测：检测点云中重叠部分，需要先计算好法线。参数意义为最大重叠距离（当前点云密度的倍数），超出这个距离的则不会判定为重叠。如图所示，左边的蓝色点云局部放大后，有重影：红色是检测出的重影部分。用户可以删掉它们。右边两个模型是点云三角化的结果，左边的网格是原始点云的重建结果，右边网格是去除重影后的重建结果。对比红线框部分的网格，明显看出去除重影后的重接结果质量要好很多。</li>
+                <img class="featurette-image img-responsive center-block" src="/images/overlap_compare.png" alt="overlap_compare">
+                <li class="contentli">光滑(支持有序点云)：光滑点云. 参数为光滑的迭代次数，迭代次数越多，光滑得越厉害</li>
+                <li class="contentli">平面：检测点云中的平面，并把平面部分的点修复到平面上。点云需要法线信息。参数意义分别为(1)平面距离误差，参数值为点云密度的倍数；(2)平面角度误差</li>
+                
+                <hr class="line-divider">
+                <a name="pointcloud_select"><h4>选择：从左至右按钮依次是：右键方框选择，右键方框取消选择，删除选择，是否忽略背面，返回右键平移</h4></a>
+                <li class="contentli">方向夹角：点云法线与指定方向Dir的夹角大于angle的点会被选中。后面四个参数为Dir.x, Dir.y, Dir.z, angle</li>
+                
+                <hr class="line-divider">
+                <a name="pointcloud_reconstruction"><h4>三角化：点云重建三角网格，参数为重建质量，范围[0, 6]，数字越大精度越高，速度也越慢. 点云如果有颜色，三角化的网格也会继承点云的颜色。开网格选项会保持点云原有形状，闭网格会把点云中的小洞补上。如果选择闭网格，则可以通过补洞参数来控制需要修补的洞大小：洞面积与网格面积的比值小于这个参数的洞，才会被填上。</h4></a>  
+                <img class="featurette-image img-responsive center-block" src="/images/face_reconstruction.jpg" alt="face_reconstruction">
+                
+                <hr class="line-divider">
+                <a name="pointcloud_color"><h4>颜色</h4></a>
+                <li class="contentli">颜色融合：多帧点云注册融合后，不同帧之间的颜色往往有些差别，颜色融合去掉不同帧颜色的色差。如下图所示，图1，2两帧彩色点云，分别看质量还可以，但是注册到一块时，如图3所示，会有明显的色差。应用多角度点云颜色融合的功能，图4就是色彩融合后的效果。<a class="code" href="http://threepark.net/file/face_color_merge.rar" target="_blank">颜色融合数据下载</a></li>
+                <img class="featurette-image img-responsive center-block" src="/images/point_color_merge.jpg" alt="point_color_merge">
+                <li class="contentli">输入：彩色点云，点云每个点需要一个colorId信息（Int值）。相同colorId的点可以认为是颜色协调的，不同colorId的点颜色需要融合到一块，得到整体颜色协调的彩色点云。在点云注册模块里经过全局注册融合后的点云有这个信息。详细信息可以参考<a href="http://threepark.net/notes/colormesh" target="_blank">多角度点云颜色融合。</a> 前三个参数为颜色分量最大色差融合阈值，范围是[0, 1]，如果colorId边界处的色差大于这个阈值的地方，则不做颜色融合。三个分量的意义分别为色度，饱和度，亮度。比如想尽量保持住色度，则可以调小其阈值。第四个参数为点云邻域个数，建议参数为12。如果点云非常不均匀，比如线激光数据，请使用纹理应用的颜色融合功能。</li>
+                <li class="contentli">ColorId：导入ColorId信息</li>
+                <li class="contentli">保存：保存ColorId信息</li>
+                <li class="contentli">显示：显示ColorId。相同颜色代表同一个ColorId</li>
+                
+                <hr class="line-divider">
+                <a name="pointcloud_texture"><h4>纹理图</h4></a>
+                <li class="contentli">纹理融合：应用点云颜色驱动对应图片的颜色融合。三个参数为颜色分量最大色差融合阈值，范围是[0, 1]，如果像素色差大于这个阈值的地方，则不做颜色融合。三个分量的意义分别为色度，饱和度，亮度。比如想尽量保持住色度，则可以调小其阈值。</li>
+                <li class="contentli">点像对应：导入点像对应文件和图像。<a href="geometryplusplus/texturemodule" target="_blank">点像对应信息</a>用于颜色融合和纹理贴图制作，图像用于纹理贴图制作。如果没有图像可以选择取消。</li>
+                <li class="contentli">保存：保存当前的点像对应文件</li>
+                <li class="contentli">显示：显示点像对应信息。同一个颜色代表对应同一个图片</li>
+
+                <hr class="featurette-divider">    
+                <a name="meshshop"><h5><img class="featurette-image img-responsive center-block" src="/images/MeshShop_icon.jpg" alt="MeshShop">网格编辑模块: 三维网格处理工具, 包括修复, 滤镜, 细分, 加密, 简化，Remesh，补洞，抽壳，采样等。</h5></a>
+                
+                <hr class="line-divider">
+                <a name="mesh_import"><h4>网格导入格式: obj, stl, off, ply(文本格式)</h4></a>
+                
+                <hr class="line-divider">
+                <a name="mesh_repair"><h4>修复</h4></a>
+                <li class="contentli">修复：修复网格拓扑或者几何缺陷，如非流形结构，法向量反向，退化的三角面片等</li>
+                <li class="contentli">流形检测：检测网格是否是流形结构</li>
+                <li class="contentli">拓扑：修复网格拓扑缺陷，移除孤立顶点, 非流形结构</li>
+                <li class="contentli">几何：修复网格几何缺陷，优化退化三角形, 折叠三角形</li>
+                <li class="contentli">孤立项：移除网格孤立项</li>
+                <li class="contentli">反向：翻转网格法向量方向</li>
+                
+                <hr class="line-divider">
+                <a name="mesh_filter"><h4>滤镜：过滤网格的几何，比如去噪，光滑网格，增强网格细节. 参数意义为顶点位置固定的权重，权重越大，去噪光滑程度越小，参数范围是(0, infinity), 默认为1.0</h4></a>
+                <li class="contentli">去噪：去除网格噪音, 并保持特征边不被光滑. 如果有面片选择，则局部去噪</li>
+                <li class="contentli">光滑：光滑网格。如果有面片选择，则局部光滑</li>
+                <li class="contentli">增强：增强网格细节，网格细节增强强度，强度越大，增强越多，参数范围是(1.0, infinity), 默认为2.0. 此操作不改变网格的拓扑结构. 如果有面片选择，则局部增强</li>
+                
+                <hr class="line-divider">
+                <a name="mesh_changevertex"><h4>增减顶点</h4></a>
+                <li class="contentli">简化：简化网格顶点个数。简化结果尽量保持原始模型的几何特征。</li>
+                <li class="contentli">细分：细分网格，采样Loop细分方法。</li>
+                <li class="contentli">加密：增加网格顶点个数，增加的点在原始网格的三角面片上，此操作不改变网格的几何。左边的参数为目标顶点数。</li>
+                <li class="contentli">加密边长：此操作与加密的效果一样。区别是参数在右边，加密后的网格最长边长小于这个参数。</li>
+                
+                <hr class="line-divider">
+                <a name="mesh_remesh"><h4>Remesh</h4></a>
+                <li class="contentli">Remesh：重新均匀网格化。第一个参数为Remesh后的顶点个数，第二个参数为sharpAngle，网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。重新网格化的时候，会保持住sharp边的几何。参数范围是(0, 180)。</li>
+                <img class="featurette-image img-responsive center-block" src="/images/remesh_fandisk.jpg" alt="remesh_fandisk">
+                <li class="contentli">CDT：Delaunay网格优化。优化网格连接关系，减少狭长三角形，保持网格顶点数目不变。参数为sharpAngle，网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。重新优化的时候，会保持住sharp边的几何。参数范围是(0, 180)。</li>
+                <li class="contentli">CVT：重心Voronoi网格优化。优化网格连接关系和顶点位置，减少狭长三角形，保持网格顶点数目不变。参数为sharpAngle，网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。重新优化的时候，会保持住sharp边的几何。参数范围是(0, 180)。</li>
+                
+                <hr class="line-divider">
+                <a name="mesh_fill"><h4>补洞</h4></a>
+                <li class="contentli">补洞：目前有三角化，平面，光滑和曲率四种类型的补洞方法。如果有选择洞，则选择的洞不会修补，如果没有选择，则全部补洞。</li>
+                <li class="contentli">搭桥：选择需要搭桥的一对边，自动桥接。</li>
+                
+                <hr class="line-divider">
+                <a name="mesh_shell"><h4>抽壳：使网格沿法线方向移动距离D，如果是开网格，则在边界处于原网格连接变成一个闭网格. 参数意义则为移动距离D。注意，三维模型在导入的时候做了均匀缩放到包围盒[-1, 1]，所以这里的移动距离D是在缩放后的尺度空间里的。模型缩放到[-1, 1]是为了方便测试。</h4></a>
+                
+                <hr class="line-divider">
+                <a name="mesh_select"><h4>选择：从左至右按钮依次是：右键方框选择，右键方框取消选择，删除选择，简化掉选择的点， 是否忽略背面，返回右键平移</h4></a>
+                
+                <hr class="line-divider">
+                <a name="mesh_cut"><h4>切割</h4></a>
+                <li class="contentli">切割：用平面切割网格。参数为平面距离原点的距离。</li>
+                <li class="contentli">切割-XY：切割平面的法线为Z轴。</li>
+                <li class="contentli">切割-YZ：切割平面的法线为X轴。</li>
+                <li class="contentli">切割-ZX：切割平面的法线为Y轴。</li>
+                <li class="contentli">切割-随机：切割平面的法线为随机方向。</li>
+                
+                <hr class="line-divider">
+                <a name="mesh_sample"><h4>采样：在网格上均匀采点，把网格转为点云，并进入点云处理模块</h4></a>
+
+                <hr class="featurette-divider"> 
+                <a name="registration"><h5><img class="featurette-image img-responsive center-block" src="/images/align_icon.jpg" alt="MeshShop"><a href="http://threepark.net/notes/registration" target="_blank">点云注册模块</a></h5></a>
+                <h4>这里采用了注册到整体的方式进行点云注册。注册应用里，有三个地方可以导入点云，分别对应于三个变量PointCloud_Ref, PointCloud_From, PointCloud_Vector（全局那里的批量导入）。全局注册是对PointCloud_Vector里的点云进行注册，全局融合也是对PointCloud_Vector里的点云进行融合。两两注册的时候，是把PointCloud_From做刚体变换与PointCloud_Ref对齐，两两融合是把这两个点云融合在一起，并把结果赋于PointCloud_Ref，同时这两个对齐点云会放入PointCloud_Vector，用于做最后的全局注册和融合。</h4>
+                <h4>逐次导入的一般操作流程是 (<a href="http://threepark.net/demo/registration" target="_blank">视频演示</a>)：</h4>
+                <ol class="myul">
+                    <li class="myli">导入需要注册对齐的两帧点云 (红色为固定点云，赋予PointCloud_Ref；绿色为浮动点云，赋予PointCloud_From)。</li>
+                    <li class="myli">对齐-标记: 如果扫描点云有标记点，可以导入标记点“特征点-导入” (标记点文件格式为每行: markCoordX markCoordY markCoordZ). 没有标记点也可以手动在点云上标记点 (鼠标右键点击点云拾取标记点).</li>
+                    <li class="myli">对齐-非标记：如果点云没有标记点，也可以进行无标记拼接。点云需要计算法线，并注意两个点云的法线定向要一致。</li>
+                    <li class="myli">对齐-ICP: 点云初始对齐（标记或者无标记）后，用ICP做精细对齐。</li>
+                    <li class="myli">对齐-融合：使得两个点云融合成一个红色点云，去除点云重叠部分的点。PointCloud_Ref和PointCloud_From融合成一个点云，并把这个点云赋予PointCloud_Ref，另外，对齐的PointCloud_Ref和PointCloud_From会push进PointCloud_Vector，用于做最后的全局注册。</li>
+                    <li class="myli">从第二个导入按钮导入下一帧点云，重复上面的步骤: 初始对齐，ICP对齐，融合</li>
+                    <li class="myli">注册融合完所有的点云后，则得到了注册好的点云序列PointCloud_Vector。点击“全局-注册”对PointCloud_Vector进行点云注册全局优化，再点击“注册-融合”把PointCloud_Vector融合成一个点云。</li>
+                </ol>
+
+                <hr class="line-divider">
+                <a name="registration_preprocess"><h4>预处理</h4></a>
+                <li class="contentli">法线(支持有序点云)：这里的法线计算功能和点云工具箱的法线计算功能是一样的。</li>
+                <li class="contentli">特征点：主要用于带标记的扫描注册. 点云标记点格式为：Mark0_X Mark0_Y Mark0_Z ... ... ...</li>
+                
+                <hr class="line-divider">
+                <a name="registration_pair_reg"><h4>两两注册融合</h4></a>
+                <li class="contentli">对齐-标记：用于带标记点的初始对齐，点云需要有法线信息。标记点可以通过鼠标右键在点云上拾取。两个点云的标记点拾取顺序不需要一一对应，个数也不需要一样。</li>
+                <li class="contentli"><a name="registration_align_free">对齐-非标记(支持有序点云)</a>：用于无标记点的初始对齐，点云需要有法线信息，参数意义为注册精度，范围是[0,1]。参数越大，对齐的可能性越大，速度也越慢。对于重叠部分较少，或者有些对称的点云，可以提高参数精度来提高对齐的稳定性。fast如果勾上，注册速度更快，但是成功率也会降低，适合特征和重叠较多的情况下使用。<a class="code" href="http://threepark.net/file/grid_icp_test.rar" target="_blank">有序点云测试数据下载</a></li>
+                <li class="contentli"><a name="registration_icp">对齐-ICP(支持有序点云)</a>：ICP注册用于有初始对齐的点云，它能提升对齐精度. 目前支持无法线ICP. 建议使用带法线ICP：精度更高，速度更快。注意，有序点云ICP需要先计算法线。<a class="code" href="http://threepark.net/file/grid_icp_test.rar" target="_blank">有序点云ICP测试数据下载</a></li>
+                <li class="contentli"><a name="registration_nonrigid_icp">对齐-非刚体</a>：背景：ICP注册主要用于已经粗注册好的点云，提升注册精度。传统ICP注册是刚体变换。在数据有误差或者微小形变的时候，刚体变换无法完全对齐点云。为了提升注册精度，引入非刚性变换。参数意义为非刚体变换的数量，每个刚体变换作用于点云的一个子片区。数量越多，非刚性越强。数量为1时，即为刚体变换。<a class="code" href="http://threepark.net/file/bust.rar" target="_blank">有形变点云数据下载</a></li>
+                <li class="contentli">对齐-融合：两个点云融合成一个红色点云，去除点云重叠部分的点。这个融合不改变点云坐标。</li>
+                
+                <hr class="line-divider">
+                <a name="registration_global_reg"><h4>全局注册融合</h4></a>
+                <li class="contentli">全局-导入：导入多帧点云到PointCloud_Vector变量。</li>
+                <li class="contentli"><a name="registration_global">全局-注册</a>：点云全局注册。参数为注册的最大迭代次数，默认参数为10。数据精度越高，初始对齐越好，需要的迭代次数越少，如果数据不好，可以提高迭代次数。点云文件如果包含点云法线信息，注册的结果质量会更高</li>
+                <img class="featurette-image img-responsive center-block" src="/images/globalregistration.jpg" alt="globalregistration">
+                <li class="contentli"><a name="registration_nonrigid_global">全局-非刚体</a>：非刚体全局注册。左边参数为注册的最大迭代次数，默认参数为10。下面参数为非刚体变换的数量，每个刚体变换作用于点云的一个子片区。数量越多，非刚性越强。数量为1时，即为刚体变换。<a class="code" href="http://threepark.net/file/bust.rar" target="_blank">有形变点云数据下载</a></li>
+                <img class="featurette-image img-responsive center-block" src="/images/global_nonrigid_car.png" alt="global_nonrigid_car">
+                <li class="contentli"><a name="registration_sumpointcloud">全局-融合</a>：把注册后的点云融合成一个点云，去掉重叠部分的点。参数为点云去重叠的缝隙密度，数字代表点云密度的倍数。参数越大，缝隙越大，默认为1，既为点云密度。</li>
+                <li class="contentli">全局-点像对应：导入点像对应文件和图片。点像对应的格式为：<a class="code" href="/geometryplusplus/fileformat" target="_blank">map|mmap</a>。几何意义为点云的点到图像中的坐标。导入点像对应文件和图像后，点云会去对应的像素点拾取颜色。可以根据点云的颜色来检验点像对应文件是否正确。</li>
+                <li class="contentli"><a name="registration_texture_mesh">全局-纹理图</a>：把注册好的，并且带有点像对应和图像信息的点云，一键生成带有纹理的网格。输入要求：深度点云+点像对应+对应图片。测试方法：在点云注册应用里，“全局-导入”注册好的点云，然后“全局-点像对应”导入点像对应文件和图片，最后“全局-纹理图”一键创建带纹理的网格。注意：导入点像对应文件和图像后，点云会去对应的像素点拾取颜色。可以根据点云的颜色来检验点像对应文件是否正确。<a class="code" href="http://threepark.net/file/body.rar" target="_blank">测试数据下载</a></li>
+                <img class="featurette-image img-responsive center-block" src="/images/GenerateTextureMesh.jpg" alt="GenerateTextureMesh">
+                <li class="contentli"><a name="registration_tune_color">颜色融合</a>：单光源点云颜色修正。背景：当摄像机固定，物体自身旋转，比如在转台上，然后单光源固定于模型前面。这种方式采集的图像，有个共同的缺点，就是单帧物体的边缘颜色会比较暗。测试方法：可以导入多帧对齐好的点云，然后用这个功能去除掉黑边色差。相关细节可以参考<a href="http://threepark.net/notes/colormesh" target="_blank">彩色网格</a>。参数意义为点云密度的倍数，用于判断不同帧点云是否有重叠，默认为1倍。如果点云比较密，或者对齐效果不是很理想，可以适当提升点云密度倍数。</li>
+                <img class="featurette-image img-responsive center-block" src="/images/color_tune_single_light.jpg" alt="color_tune_single_light">
+                <li class="contentli"><a name="registration_sequential_reg">全局-有序(支持有序点云)</a>：一键顺序注册点云，按照点云文件名的顺序依次注册：2->1, 3->2, 4->3......如果点云没有法线，则会自动计算法线(注意，点云的法线定向是面向相机方向。如果点云不是深度点云，或者做了变换，请先计算法线再做此功能测试)。参数意义：NoMark-是否需要无标记注册；ICP-是否需要ICP。<a class="code" href="http://threepark.net/file/girl.rar" target="_blank">有序无标记测试数据下载</a>，<a class="code" href="http://threepark.net/file/SeqICP.rar" target="_blank">有序ICP测试数据下载</a></li>
+
+                <hr class="featurette-divider">
+                <a name="measure"><h5><img class="featurette-image img-responsive center-block" src="/images/Measure_icon.jpg" alt="MeasureApp"><a href="http://threepark.net/notes/measuremesh" target="_blank">三维测量模块</a></h5></a>
+                
+                <hr class="line-divider">
+                <a name="measure_meshcurve"><h4>网格曲线</h4></a>
+                <li class="contentli">测地线 (<a href="http://threepark.net/demo/measure" target="_blank">视频演示</a>): 标记网格上的点 (鼠标右键点击网格拾取顶点)，计算点之间的测地线. 测地线是曲面上的直线, 两点之间的测地线具有局部最短的性质.</li>
+                <li class="contentli">测地线-删除：删除最近一次选择的点。</li>
+                <li class="contentli">测地线-近似: 网格上的近似测地线，线过顶点。</li>
+                <li class="contentli">测地线-快速: 网格上的近似测地线，线过边。参数范围为[0, 1], 参数越大，精确度越高，速度也越慢。默认值为0.5。</li>
+                <li class="contentli">测地线-精确: 网格上精确测地线，线过边。</li>
+                <li class="contentli">测地线-曲率: 网格上近似测地线，线过顶点，并且会吸附到极小主曲率方向。需要先计算主曲率。</li>
+                <li class="contentli">测地线-光滑: 目前只支持PointOnVertex, PointOnEdge类型Curve光滑，比如顶点选择模式下的测地线和截面线。注意是顶点选择模式，面点选择模式下，则引入了PointOnFace。目前不支持PointOnFace类型曲线的光滑。</li>
+                <li class="contentli">截面线: 经过两点的平面截面线。这个平面由这两点，加上两点的法线平均来确定这个截平面。另外，还有一种确定截平面的方式，比如屏幕视角的方向加上这两点。这种方式目前还没有在magic3d里实现。</li>
+                <li class="contentli">面曲线: 连接两点的网格曲线。此曲线没有在Geometry++里没有对应的api开放出来。</li>
+                
+                <hr class="line-divider">
+                <a name="measure_cut"><h4>切割：应用网格曲线切割网格。</h4></a>
+
+                <hr class="line-divider">
+                <a name="measure_measure"><h4>网格测量</h4></a>
+                <li class="contentli">测量-面积: 测量网格表面积.</li>
+                <li class="contentli">测量-体积: 测量网格体积. 被测网格需要是闭合的，且没有自交情况，否则测量结果有误差</li>
+                <li class="contentli">测量-平均曲率: 测量网格的平均曲率信息，颜色代表了曲率大小。</li>
+                <li class="contentli">测量-高斯曲率: 测量网格的高斯曲率信息，颜色代表了曲率大小。</li>
+                <li class="contentli">测量-主曲率: 测量网格的主曲率，颜色代表曲率值，线段代表主曲率方向。再次点击可以切换极大主曲率和极小主曲率的显示</li>
+                <li class="contentli">测量-厚度: 测量网格厚度。</li>
+                
+                <hr class="line-divider">
+                <a name="measure_meshdistance"><h4>网格距离测量: 导入一个新的网格，测量网格顶点到另一个网格的距离。</h4></a>
+
+                <hr class="featurette-divider">
+                <a name="deformation"><h5><img class="featurette-image img-responsive center-block" src="/images/deform_icon.jpg" alt="ReliefApp">三维变形模块(<a href="http://threepark.net/demo/deformation" target="_blank">视频演示</a>)</h5></a>
+                <h4>背景：点云网格变形中，模型顶点可以分为三类：自由顶点，固定顶点和约束顶点。这里的约束条件为顶点位置约束，所以，约束顶点也可以看作是固定顶点，也就是变形后的顶点位置是确定的。而自由顶点就是需要变形的部分，在变形过程中尽可能的保持模型的原始形状。</h4>
+                
+                <hr class="line-divider">
+                <a name="deform_pointcloud"><h4>三维点云变形：基于控制点的变形，原理是分片刚性变形。在点云中采样N个控制点，每个控制点附着一个刚性变换。控制点越多，变形的非刚性越强。控制点数为1的时候，即为刚性变形。一般的操作步骤：</h4></a>
+                <img class="featurette-image img-responsive center-block" src="/images/deformpointlist.png" alt="deformpointlist">
+                <ol class="myul">
+                    <li class="myli">在三维变形应用里，导入需要变形的点云。注：也可以导入网格，因为网格也可以看作是一个点云（抛掉网格连接关系）</li>
+                    <li class="myli">初始化控制点：设置控制点数目，默认值为300. 点数越多，变形越精确，但是速度也会越慢。如图a所示。</li>
+                    <li class="myli">控制点选择：控制点分为两种类型，一种是固定的(红色)，一种是可以动的(蓝色). 把需要变形区域的控制点选择为蓝色. 选择方式是通过鼠标右键框选添加或者去掉控制点。如图b所示</li>
+                    <li class="myli">变形操作：通过移动蓝色控制点来变形。右键拖动控点到目标位置，控制点变为绿色，目标位置为灰色。如图c所示。</li>
+                    <li class="myli">最后变形，如图d所示</li>
+                </ol>
+                
+                <hr class="line-divider">
+                <a name="deform_mesh"><h4>三维网格变形：基于网格顶点的变形：输入三维网格。通过网格顶点的位置约束来驱动变形。与点云变形不同的是，网格变形应用了网格的连接关系，变形过程中，更加注重网格局部刚性的保持。一般的操作步骤：</h4></a>
+                <img class="featurette-image img-responsive center-block" src="/images/deformmesh.png" alt="deformmesh">
+                <ol class="myul">
+                    <li class="myli">导入需要变形的网格。如图a所示。</li>
+                    <li class="myli">顶点选择：选择变形区域(蓝色)。选择方式是通过鼠标右键框选添加或者去掉控制点。如图b所示。</li>
+                    <li class="myli">控制点选择：通过移动蓝色控制点来变形。右键拖动控点到目标位置，控制点变为绿色，目标位置为灰色。如图c所示。 </li>
+                    <li class="myli">变形：然后初始化变形，最后变形。在控制点索引不变的情况下，变形初始化只需要一次。如图d所示。可以用橡皮擦掉控制点的显示。</li>
+                </ol>
+                <h4>注：鼠标右键有三种编辑模式，框选添加蓝色点，框选去除控制点，移动控制点</h4>
+
+                <hr class="featurette-divider">
+                <a name="uvunfold"><h5><img class="featurette-image img-responsive center-block" src="/images/uvunfold_icon.jpg" alt="TextureApp"><a href="http://threepark.net/notes/uvunfold" target="_blank">UV展开模块</a>：计算网格的纹理坐标</h5></a>
+                <h4>概述：UV展开模块提供了两类UV展开的方法：手动割网格的UV展开，以及全自动的UV展开。手动割网格，需要把网格分割成一块一块的圆盘结构。全自动的UV展开一般用于纹理贴图里纹理坐标计算。参考demo<a href="http://threepark.net/demo/unfold" target="_blank">三维网格UV展开</a>。</h4>
+                <h4>一般的操作流程是 (<a href="http://threepark.net/demo/unfold" target="_blank">视频演示</a>)：</h4>
+                <ol class="myul">
+                    <li class="myli">导入需要展开的网格</li>
+                    <li class="myli">割线: 如果需要手动割线，可以在这步添加</li>
+                    <li class="myli">单片展开: 如果网格已经是单片圆盘结构了，则可以使用此功能展开，并用优化功能优化展开结果</li>
+                    <li class="myli">任意结构网格的展开：使用Atlas功能展开，自动生成割线，单片展开过程中有较大扭曲的时候，会自动分割成小片展开，减少扭曲，最后把纹理坐标打包到一个方形区域. 如果想减少展开片数，可以把初始分割数目减少.</li>
+                </ol>
+                
+                <hr class="line-divider">
+                <a name="unfold_split"><h4>割线：用于把网格割开。鼠标右键在网格上选择网格顶点（如果网格顶点稀疏，可以在线框显示模式下进行顶点选择），程序自动连接两点间的割线段，每画完一条割线，需要点击一次确认，然后绿线就会变红。绿色是当前正在编辑的割线，红色是已经确认的割线。删除按钮可以删除当前的割线。</h4></a>
+                <li class="contentli">前端吸附：使得当前割线(绿色)的前端吸附到红色割线上</li>
+                <li class="contentli">后端吸附：使得当前割线(绿色)的后端吸附到红色割线上</li>
+                <li class="contentli">闭合：闭合当前曲线</li>
+                <li class="contentli">确认：确认当前割线，使其颜色由绿变红</li>
+                <li class="contentli">删除：删除当前绿色割线</li>
+                <li class="contentli">显示割线：切换显示或者隐藏割线</li>
+                <li class="contentli">近似：可以和精确类型进行切换。割线是网格上的近似曲率测地线（经过网格边，并且会吸附到曲率大的特征边），光滑按钮可以光滑割线。精确的测地线经过网格的边。</li>
+                <li class="contentli">精确：可以和近似类型进行切换。割线是网格上精确的测地线（经过网格的面）。</li>
+                <li class="contentli">自动：自动割线把网格割成多片圆盘拓扑结构，参数意义为割线产生前网格分割个数。</li>
+                
+                <hr class="line-divider">
+                <a name="unfold_single"><h4>单片展开：此按钮主要用于单片圆盘拓扑网格的展开。用户需要先把网格分割一块一块的单连通区域，然后一次性分片展开。如果某个单连通区域是非圆盘结构，则此功能会自动添加割线，把它割成圆盘结构再展开。此功能的测试要点在于割线的交互生成，需要一些耐心。</h4></a>
+                <img class="featurette-image img-responsive center-block" src="/images/single_patch_unfold.jpg" alt="single_patch_unfold">
+                
+                <hr class="line-divider">
+                <a name="unfold_cycle"><h4>展开到圆盘：这个展开功能用于展开单连通圆盘拓扑结构网格，边界映射到圆盘上。与“单片展开”不同的是，它需要严格的单连通圆盘结构。如下图所示，左图是自由边界的展开结果，右图是固定边界的展开结果，可以看到自由边界的展开结果扭曲程度要小很多。固定边界的展开一般应用于特定需求。</h4></a>
+                <img class="featurette-image img-responsive center-block" src="/images/free_fix_boundary.jpg" alt="free_fix_boundary">
+                
+                <hr class="line-divider">
+                <a name="unfold_atlas"><h4>Atlas：网格全自动UV展开，自动生成割线展开UV，参数分别为初始的分割数目；是否自动产生割线；patch展开后如果有重叠，是否把patch劈成两半再展开。如果网格是高亏格或者展开扭曲大，网格会自动进行再分割展开。此功能一般用于全自动的纹理坐标计算。如图所示，图2的参数为(1, 0, 0)，图3的参数为(5, 0, 1)。<a class="code" href="http://threepark.net/file/face_female.rar" target="_blank">网格数据下载</a></h4></a>
+                <img class="featurette-image img-responsive center-block" src="/images/uvatlas_option.jpg" alt="uvatlas">
+                
+                <hr class="line-divider">
+                <a name="unfold_check"><h4>重叠检测：检测纹理坐标是否有重叠。如果有重叠，重叠区域会标记会红色。</h4></a>
+
+                <hr class="featurette-divider">
+                <a name="texture"><h5><img class="featurette-image img-responsive center-block" src="/images/Texture_icon.jpg" alt="TextureApp"><a href="http://threepark.net/notes/colormesh" target="_blank">纹理贴图模块</a></h5></a>
+                
+                <hr class="line-divider">
+                <a name="texture_color"><h4>颜色</h4></a>
+                <li class="contentli">颜色融合：网格顶点的颜色融合。输入要求是，网格每个顶点需要一个colorId信息。三个参数为颜色分量最大色差融合阈值，范围是[0, 1]，如果colorId边界处的色差大于这个阈值的地方，则不做颜色融合。三个分量的意义分别为色度，饱和度，亮度。比如想尽量保持住色度，则可以调小其阈值。详细信息可以参考<a href="http://threepark.net/notes/colormesh" target="_blank">多角度点云颜色融合。</a> 它是点云应用里颜色融合的网格版本，主要用于处理非均匀点云，比如线激光数据。</li>
+                <li class="contentli">ColorId：导入ColorId信息</li>
+                <li class="contentli">保存：保存ColorId信息</li>
+                <li class="contentli">显示：显示ColorId。相同颜色代表同一个ColorId</li>
+                
+                <hr class="line-divider">
+                <a name="texture_map"><h4>点像对应</h4></a>
+                <li class="contentli">点像对应割缝优化背景：有些网格顶点带有多个点像对应信息，也就是在网格某些区域有多副图重叠。优化的目的是，给每个三角片计算一个唯一的点像对应，并且具有不同图之间的割缝色差最小的性质。如下图所示，不同的颜色代表不同的图片。左边贴图有明显的图像缝隙痕迹。右边贴图是优化后的结果，图像缝隙色差减小很多。</li>
+                <li class="contentli">点像对应割缝优化测试方法：在纹理贴图应用里导入带纹理坐标的网格，如果网格没有纹理坐标，可以在UV展开模块计算。然后在“点像对应-导入”导入点像对应文件（viis文件会自动计算为fii格式的点像对应）。最后“纹理图-用图像制作纹理贴图”。<a class="code" href="http://threepark.net/file/body_texture_test.rar" target="_blank">测试数据下载</a></li>
+                <img class="featurette-image img-responsive center-block" src="/images/fuseimagecolorids_face.jpg" alt="fuseimagecolorids_face">
+                <li class="contentli">导入：导入点像对应文件和图像。<a href="geometryplusplus/texturemodule" target="_blank">点像对应信息</a>和图像用于纹理贴图制作。如果没有图像可以选择取消。viis格式的点像对应，会自动为其计算fii格式的点像对应。</li>
+                <li class="contentli">保存：保存当前的点像对应文件(vii, fii, viis)</li>
+                <li class="contentli">显示：显示点像对应信息。颜色代表图像的id号，黑色为没有图像对应的区域。</li>
+                <li class="contentli">插值：如果网格中有区域没有点像对应，此功能用于插值计算这些区域点像对应信息。</li>
+                <li class="contentli">点云：通过深度点云来计算对应网格区域的点像对应信息(viis格式的点像对应)。输入为点云（需要和网格位置对齐，并且是深度点云），图片和点像对应文件。点像对应文件格式为map或mmap。几何意义为点云的点到图像中的坐标。其具体含义可以参考<a class="code" href="/geometryplusplus/fileformat" target="_blank">点像对应信息说明</a>。map文件模拟的是点云和图像一对一的情景，mmap模拟的是点云和图像一对多的情景。</li>
+                
+                <hr class="line-divider">
+                <a name="texture_image"><h4>纹理图</h4></a>
+                <li class="contentli">纹理融合：纹理贴图一般是多幅图片贴到一个网格上。由于光照原因，不同图片在图片接缝处会有一些色差，而同一个图片的颜色认为是相容的。所以需要融合不同图片在图片接缝处的颜色，使其色差痕迹尽量的小。如图所示，图一的颜色代表了贴图的图片索引号，图二是纹理贴图效果。可以看出，图片接缝处有明显的色差痕迹。图三是颜色融合后的效果。测试说明：三个参数为颜色分量最大色差融合阈值，范围是[0, 1]，如果像素色差大于这个阈值的地方，则不做颜色融合。三个分量的意义分别为色度，饱和度，亮度。比如想尽量保持住色度，则可以调小其阈值。<a class="code" href="http://threepark.net/file/body_texture_test.rar" target="_blank">测试数据下载</a></li>
+                <img class="featurette-image img-responsive center-block" src="/images/TuneTextureImageColor_body.jpg" alt="TuneTextureImageColor_body">
+                <li class="contentli">顶点颜色：用网格顶点颜色制作纹理贴图。详细信息可以参考<a href="http://threepark.net/notes/colormesh" target="_blank">色彩信息的存储</a></li>
+                <li class="contentli">图像颜色：用图像制作纹理贴图，网格顶点需要点像对应信息和对应图片。详细信息可以参考<a href="http://threepark.net/notes/colormesh" target="_blank">色彩信息的存储</a>。Bilinear：纹理图默认为Nearest类型差值，Bilinear为双线性插值。</li>
+                
+                <hr class="line-divider">
+                <a name="texture_simplify"><h4>简化：带纹理坐标的网格简化。参数为网格目标顶点数。</h4></a>
+
+                <hr class="featurette-divider">
+                <a name="relief"><h5><img class="featurette-image img-responsive center-block" src="/images/relief_icon.jpg" alt="ReliefApp">浮雕扫描模块</h5></a>
+                
+                <hr class="line-divider">
+                <a name="relief_relief"><h4>网格浅浮雕生成: 导入一个3D模型， 调整好需要角度，然后点击浅浮雕生成按钮。浮雕参数：上面的参数为浮雕网格的分辨率。下面为压缩率，范围为(0, 1)，参数越小，浮雕高度压缩的越厉害。</h4></a>
+                
+                <hr class="line-divider">
+                <a name="relief_scan"><h4>虚拟扫描仪：摆好3D模型的角度，可以扫描得到当前角度的一帧点云。前面的参数为点云分辨率，后面的参数为图像分辨率。第三个参数为噪音级别，整数范围[0, 10]，0为没有噪音，参数越大，噪音越大。第四个参数N为扫描次数，点云每隔360/N度扫描一次。扫描点云自动保存在exe目录下，有文件：***.gbg（有序点云）, ***.jpg（图像）, ***.map（点像对应）。</h4></a>
+
+                <hr class="line-divider">
+                <a name="relief_color"><h4>颜色：给网格顶点上色，或者去掉顶点颜色</h4></a>
+
+                <hr class="featurette-divider">
+                <h3>如果您有任何疑问和建议，欢迎发email:</h3>
+                <img class="featurette-image img-responsive center-block" src="/images/contact.jpg" alt="contact">
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <% include homepagefooter %>
+  
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

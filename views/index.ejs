@@ -23,6 +23,7 @@
     <script src="javascripts/Dependence/jquery-2.1.3.js"></script>
     <script src="javascripts/Dependence/bootstrap.min.js"></script>
     <script type="text/javascript" src="javascripts/Dependence/jquery-scrolltofixed.js"></script>
+    <script type="text/javascript" src="javascripts/Dependence/wow.js"></script>
   </head>
 <!-- NAVBAR
 ================================================== -->
@@ -31,12 +32,12 @@
 
     <header class="header" id="header">
       <div class="container">
-        <figure class="animated fadeInDown delay-07s">
-          <video class="video_teaser" src="/videos/slam_0.mp4" controls="controls" autoplay="autoplay" loop="loop">你的浏览器不支持Video标签, 请换一个浏览器，比如Google浏览器</video>
-        </figure>
         <ul class="we-create animated fadeInUp delay-1s">
           <li>我的三维几何空间</li>
         </ul>
+        <figure class="animated fadeInDown delay-07s">
+          <video class="video_teaser" src="/videos/slam_0.mp4" controls="controls" autoplay="autoplay" loop="loop">你的浏览器不支持Video标签, 请换一个浏览器，比如Google浏览器</video>
+        </figure>
       </div>
     </header>
   
@@ -44,22 +45,46 @@
     ================================================== -->
     <!-- Wrap the rest of the page in another container to center all the content. -->
 
-    <div class="container marketing">
-      <hr class="featurette-divider">
+    <div class="container marketing" id="slam">
 
-      <div class="row featurette">
-        <div class="col-md-7">
-          <h2>在线三维建模设计</h2>
+      <div class="row featurette ">
+        <div class="col-md-7 wow animated fadeInDown delay-03s">
+          <h2>重建三维几何空间</h2>
           <ul>
-            <li><h3>在浏览器中进行三维建模</h3></li>
-            <li><h3>导出<a href="http://staff.ustc.edu.cn/~lgliu/Courses/SigAsia_2014_course_3Dprinting/index.html" target="_blank">3D打印</a>的三维模型(STL, OBJ格式)</h3></li>
+            <li><h3>CPU实时计算</h3></li>
+            <li><h3>回路检测，全局融合</h3></li>
           </ul>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-5 wow animated fadeInDown delay-07s">
           <img class="img-circle featurette-image img-responsive center-block" src="images/feature-modelshow.gif" alt="feature-modeling">
         </div>
       </div>
+      <hr class="featurette-divider">
 
+      <div class="row featurette">
+        <div class="col-md-6 col-md-push-6 wow animated fadeInDown delay-03s">
+          <h2>Magic3D</h2>
+          <ul>
+            <li><h3>三维数据处理</h3></li>
+          </ul>
+        </div>
+        <div class="col-md-6 col-md-pull-6 wow animated fadeInDown delay-07s">
+          <img class="featurette-image img-responsive center-block" src="images/Magic3DInterface_half.jpg" alt="feature-gpp">
+        </div>
+      </div>
+      <hr class="featurette-divider">
+
+      <div class="row featurette ">
+        <div class="col-md-7 wow animated fadeInDown delay-03s">
+          <h2>Geometry++</h2>
+          <ul>
+            <li><h3>三维几何算法库</h3></li>
+          </ul>
+        </div>
+        <div class="col-md-5 wow animated fadeInDown delay-07s">
+          <img class="img-circle featurette-image img-responsive center-block" src="images/meshsimplification.gif" alt="feature-modeling">
+        </div>
+      </div>
       <hr class="featurette-divider">
 
       <!-- /END THE FEATURETTES -->
@@ -79,6 +104,14 @@
       });
 
     });
+  </script>
+
+  <script>
+    wow = new WOW({
+      animateClass: 'animated',
+      offset: 100
+    });
+    wow.init();
   </script>
 
     <!-- Bootstrap core JavaScript

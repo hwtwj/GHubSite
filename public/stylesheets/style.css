@@ -106,10 +106,10 @@ p{
 .header{
 	text-align:center;
 /*	background:url(../img/pw_maze_black_2X.png) left top repeat;*/
-	padding:100px 0px;
+	padding:100px 0 100px 0;
 }
 .video_teaser{
-	width: 70%;
+	width: 80%;
 	margin:0 auto 5px;
 }
 .logo{

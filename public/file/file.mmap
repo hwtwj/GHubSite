@@ -1,0 +1,9 @@
+pointCount（点云的点数）
+
+imageId_0 pixelCoordX_0 pixelCoordY_0
+
+imageId_1 pixelCoordX_1 pixelCoordY_1
+
+... ...
+
+说明：每行为点云在图像中的坐标，imageId为图像的id号，图像id号从0开始，与导入的图像顺序一样。每个点云对应多个图片。
