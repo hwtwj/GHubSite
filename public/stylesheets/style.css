@@ -111,6 +111,12 @@ p{
 .video_teaser{
 	width: 80%;
 	margin:0 auto 5px;
+	display: block;
+}
+.video_side{
+	width: 80%;
+	margin:0 auto 5px;
+	display: block;
 }
 .logo{
 	width:130px;
@@ -803,3 +809,4 @@ img {
 	animation-delay: 1.2s;
 	-webkit-animation-delay: 1.2s;
 }
+
