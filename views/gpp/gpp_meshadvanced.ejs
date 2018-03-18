@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理，Geometry++">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>网格处理高级模块</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>网格处理高级模块 <small>相关知识可以参考<a href="/notes/delaunaytriangulation" target="_blank">从Delaunay三角化到网格质量</a></small></h2>
+
+        <h4>重新网格化（Remesh）</h4>
+        <p>测试方法：在网格应用里导入网格，点击Remesh。第一个参数是Remesh后的目标顶点数，第二个参数sharpAngle，网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。重新网格化的时候，会保持住sharp边的几何。参数范围是(0, 180)。</p>
+        <p>如果网格自带颜色，则Remesh的网格可以继承其颜色。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/remesh_fandisk.jpg" alt="remesh_fandisk">
+        <hr class="line-divider">
+
+        <h4>Delaunay网格优化</h4>
+        <p>测试方法：在网格应用里导入网格，点击“Remesh-CDT”。参数为sharpAngle，网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。网格优化的时候，会保持住sharp边的拓扑结构。参数范围是(0, 180)。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/tupologyquality.jpg" alt="tupologyquality">
+        <hr class="line-divider">
+
+        <h4>重心Voronoi网格优化</h4>
+        <p>测试方法：在网格应用里导入网格，点击“Remesh-CVT”。参数为sharpAngle，网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。网格优化的时候，会保持住sharp边的拓扑结构。参数范围是(0, 180)。</p>
+        <p>CVT与CDT的区别在于，CVT不仅优化网格的连接关系，还要优化网格顶点的几何位置。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/face_cvt.jpg" alt="face_cvt">
+        <hr class="line-divider">
+
+        <h4>网格点采样</h4>
+        <p>测试方法：在网格应用里导入网格，点击“采样”。参数为采样点数。此功能在网格上均匀采点，把网格转为点云，并进入点云处理模块。</p>
+
+        <hr class="line-divider">
+        <h3>如果您有任何疑问和建议，欢迎发email</h3>
+        <img class="featurette-image img-responsive center-block" src="/images/contact.jpg" alt="contact">
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

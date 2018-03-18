@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理，Geometry++">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>三维变形模块</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>三维变形模块</h2>
+
+        <h4>简介</h4>
+        <p>这个模块包含了三维变形功能，比如三维点云变形，三维网格变形等功能。这些功能可以在Magic3D的<a href="/magic3d#deformation" target="_blank">三维变形应用</a>里进行测试。<a href="/demo/deformation" target="_blank">三维变形demo</a></p>
+        <hr class="line-divider">
+
+        <h4>三维点云变形</h4>
+        <p>基于控制点的变形：原理是分片刚性变形。在点云中采样N个控制点，每个控制点附着一个刚性变换。控制点越多，变形的非刚性越强。控制点数为1的时候，即为刚性变形。</p>
+        <p>测试方法：</p>
+        <ol class="myul">
+            <li class="myli">在三维变形应用里，导入需要变形的点云。注：也可以导入网格，因为网格也可以看作是一个点云（抛掉网格连接关系）</li>
+            <li class="myli">初始化控制点：设置控制点数目，默认值为300. 点数越多，变形越精确，但是速度也会越慢。如图a所示。</li>
+            <li class="myli">控制点选择：控制点分为两种类型，一种是固定的(红色)，一种是可以动的(蓝色). 把需要变形区域的控制点选择为蓝色. 选择方式是通过鼠标右键框选添加或者去掉控制点。如图b所示 </li>
+            <li class="myli">变形操作：通过移动蓝色控制点来变形。右键拖动控点到目标位置，控制点变为绿色，目标位置为灰色。如图c所示。</li>
+            <li class="myli">最后变形，如图d所示。</li>
+        </ol>
+        <img class="featurette-image img-responsive center-block" src="/images/deformpointlist.png" alt="deformpointlist">
+        <hr class="line-divider">
+
+        <h4>三维网格变形</h4>
+        <p>基于顶点的变形：输入三维网格。通过网格顶点的位置约束来驱动变形。与点云变形不同的是，网格变形应用了网格的连接关系，变形过程中，更加注重网格局部刚性的保持。</p>
+        <p>测试方法：</p>
+        <ol class="myul">
+            <li class="myli">导入需要变形的网格。如图a所示。</li>
+            <li class="myli">顶点选择：选择变形区域(蓝色)。选择方式是通过鼠标右键框选添加或者去掉控制点。如图b所示。</li>
+            <li class="myli">控制点选择：通过移动蓝色控制点来变形。右键拖动控点到目标位置，控制点变为绿色，目标位置为灰色。如图c所示。 </li>
+            <li class="myli">变形：然后初始化变形，最后变形。在控制点索引不变的情况下，变形初始化只需要一次。如图d所示。可以用橡皮擦掉控制点的显示。</li>
+        </ol>
+        <h4>注：鼠标右键有三种编辑模式，框选添加蓝色点，框选去除控制点，移动控制点</h4>
+        <img class="featurette-image img-responsive center-block" src="/images/deformmesh.png" alt="deformmesh">
+
+        <hr class="line-divider">
+        <h3>如果您有任何疑问和建议，欢迎发email</h3>
+        <img class="featurette-image img-responsive center-block" src="/images/contact.jpg" alt="contact">
+
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

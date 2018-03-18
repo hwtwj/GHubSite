@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理，Geometry++">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>网格UV展开模块</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>网格UV展开模块 <small></small></h2>
+
+        <h4>手动割线展开</h4>
+        <p>简介：一般用于把网格分割成一块一块的单连通区域，然后分片展开。Geometry++的UV展开特点是展开的扭曲非常的小，可以通过棋盘格贴图来直观感受。这里有个<a href="/demo/unfold" target="_blank">demo</a>可以参考。</p>
+        <p>测试方法：参考Magic3D的文档，导入一个需要展开的网格，手动把网格分割成一片一片的单连通区域，然后一键“单片展开”。测试要点在于割线的交互生成，需要一些耐心。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/single_patch_unfold.jpg" alt="single_patch_unfold">
+        <p>UV展开API可以加入一些边界约束条件，比如“展开到圆盘”功能，可以把UV展开后的网格边界约束到圆盘上。如下图所示，左图是自由边界的展开结果，右图是固定边界的展开结果，可以看到自由边界的展开结果扭曲程度要小很多。固定边界的展开一般应用于特定需求。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/free_fix_boundary.jpg" alt="free_fix_boundary">        
+        <hr class="line-divider">
+
+        <h4>纹理坐标计算</h4>
+        <p>简介：纹理贴图应用里，需要全自动的计算网格的纹理坐标，用于纹理贴图的制作。</p>
+        <p>测试方法：导入网格，直接Atlas全自动展开。第一个参数为初始的分割数目；第二参数为是否产生自动割线；第三个参数意义是每个patch展开后如果重叠，是否把patch劈成两半再展开。下图2的参数为(1, 0, 0)，图3的参数为(5, 0, 1)</p>
+        <img class="featurette-image img-responsive center-block" src="/images/uvatlas_option.jpg" alt="uvatlas"> 
+        
+        <hr class="line-divider">
+        <h3>如果您有任何疑问和建议，欢迎发email</h3>
+        <img class="featurette-image img-responsive center-block" src="/images/contact.jpg" alt="contact">
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

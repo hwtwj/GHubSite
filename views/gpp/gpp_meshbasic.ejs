@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理，Geometry++">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>网格处理基础模块</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>网格处理基础模块</h2>
+
+        <h4>测试方法</h4>
+        <p>这个模块的功能比较直观，可以直接参考<a href="/magic3d#meshshop" target="_blank">Magic3D</a>的使用说明进行功能测试。</p>
+
+        <hr class="line-divider">
+        <h4>功能展示</h4>
+
+        <div class="row featurette">
+          <div class="col-md-6">
+            <div class="modulecaption">网格补洞</div>
+            <ul class="moduleul">
+            <li><div class="modulecontent">有四种补洞选项：三角化，平面，切向，曲率</div></li>
+            <li><div class="modulecontent">可以处理凹边界的大洞</div></li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <img class="featurette-image img-responsive center-block" src="/images/meshfillhole.jpg" alt="feature-modeling">
+          </div>
+        </div>
+
+        <hr class="line-divider">
+        <div class="row featurette">
+          <div class="col-md-7">
+            <img class="marginleft featurette-image img-responsive center-block" src="/images/meshsimplification_small.jpg" alt="feature-modeling">
+          </div>
+          <div class="col-md-5">
+            <div class="modulecaption_right">网格简化</div>
+            <ul class="moduleul_right">
+            <li><div class="modulecontent">速度非常快</div></li>
+            <li><div class="modulecontent">保持模型特征</div></li>
+            </ul>
+          </div>
+        </div>
+
+        <hr class="line-divider">
+        <div class="row featurette">
+          <div class="col-md-6">
+            <div class="modulecaption">网格几何细节增强</div>
+            <ul class="moduleul">
+            <li><div class="modulecontent">增强网格的几何细节</div></li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <img class="featurette-image img-responsive center-block" src="/images/MeshDetailEnhancement_small.jpg" alt="feature-modeling">
+          </div>
+        </div>
+
+        <hr class="line-divider">
+        <div class="row featurette">
+          <div class="col-md-4">
+            <img class="marginleft featurette-image img-responsive center-block" src="/images/meshdenoise.png" alt="feature-modeling">
+          </div>
+          <div class="col-md-8">
+            <div class="modulecaption_right">网格去噪</div>
+            <ul class="moduleul_right">
+            <li><div class="modulecontent">扫描的网格数据常常带有一些系统噪音，可以通过曲率查看 (如图第二排所示)</div></li>
+            <li><div class="modulecontent">网格去噪不同于网格光顺，前者只去除掉噪音，而后者会光滑掉网格的几何细节</div></li>
+            </ul>
+          </div>
+        </div>
+
+        <hr class="line-divider">
+        <h3>如果您有任何疑问和建议，欢迎发email</h3>
+        <img class="featurette-image img-responsive center-block" src="/images/contact.jpg" alt="contact">
+
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

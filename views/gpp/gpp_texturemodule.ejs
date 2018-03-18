@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理，Geometry++">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>纹理模块</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>纹理模块 <small>包含纹理贴图模块和颜色处理模块</small></h2>
+
+        <h4>扫描点云纹理贴图制作 <small>（由于纹理贴图的输入数据类型比较多，用户如有不清楚的地方，欢迎来咨询测试）</small></h4>
+        <p>输入：深度点云+点像对应+对应图片</p>
+        <hr class="line-divider">
+        <p>点像对应：每个深度点云有对应的图像，点像对应是点到图像像素的对应。点像对应的格式为：<a class="code" href="/geometryplusplus/fileformat" target="_blank">map|mmap</a>。</p>
+        <hr class="line-divider">
+        <p>测试方法：在点云注册应用里，“全局-导入”注册好的点云，然后“全局-点像对应”导入点像对应文件和图片，最后“全局-纹理图”一键创建带纹理的网格。注意：导入点像对应文件和图像后，点云会去对应的像素点拾取颜色。可以根据点云的颜色来检验点像对应文件是否正确。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/GenerateTextureMesh.jpg" alt="GenerateTextureMesh">
+        <p><a href="http://threepark.net/file/body.rar" target="_blank">测试数据下载</a><p>
+        <hr class="line-divider">
+
+        <h4>网格纹理贴图制作</h4>
+        <p>输入：带纹理坐标的网格+点像对应+对应图片</p>
+        <hr class="line-divider">
+        <p>带纹理坐标的网格：网格的纹理坐标可以通过<a href="/geometryplusplus/uvunfold" target="_blank">UV展开</a>计算得到。</p>
+        <hr class="line-divider">
+        <p>点像对应：文件具体格式为：<a class="code" href="/geometryplusplus/fileformat" target="_blank">vii|fii|viis</a>。注意：vii和fii的区别在于，vii是每个顶点有一个点像对应；fii是每个三角片的顶点有一个点像对应。viis是一个网格顶点可能有多个图片的像素对应。纹理贴图的时候，所有格式的点像对应最终都会转化为fii格式的信息。</p>
+        <hr class="line-divider">
+        <p>测试方法；在纹理贴图应用里导入带纹理坐标的网格，如果网格没有纹理坐标，可以在UV展开模块计算。然后在“点像对应-导入”导入点像对应文件（viis文件会自动计算为fii格式的点像对应）。最后“纹理图-用图像制作纹理贴图”。</p>
+        <p>网格的点像对应信息也可以通过深度点云（带有点像对应）投影到网格上。测试方法：在纹理贴图应用里导入网格，然后在"点像对应-点云"导入“深度点云+点像对应+图片”。程序自动为网格计算点像对应。 </p>
+        <hr class="line-divider">
+        <p><a href="#fuseimagecolorids">viis格式的点像对应割缝优化（viis格式自动计算为fii格式的点像对应）</a></p>
+        <a name="fuseimagecolorids"><p>有些网格顶点带有多个点像对应信息，也就是在网格某些区域有多副图重叠。优化的目的是，给每个三角片计算一个唯一的点像对应，并且具有不同图之间的割缝色差最小的性质。如下图所示，不同的颜色代表不同的图片。左边贴图有明显的图像缝隙痕迹。右边贴图是优化后的结果，图像缝隙色差减小很多。</p></a>
+        <img class="featurette-image img-responsive center-block" src="/images/fuseimagecolorids_face.jpg" alt="fuseimagecolorids_face">
+        <hr class="line-divider">
+        <h4>扫描点云和网格一键贴图</h4>
+        <div class="thumbnail">
+            <video src="http://threepark.net/videos/texture_mesh_oneshot_w.mp4" controls="controls" width="800" height="600">你的浏览器不支持Video标签, 请换一个浏览器，比如Google浏览器</video>
+        </div>
+        <hr class="line-divider">
+        
+        <h4>点云扫描黑边修复</h4>
+        <p>背景：当摄像机固定，物体自身旋转，比如在转台上，然后单光源固定于模型前面。这种方式采集的图像，有个共同的缺点，就是单帧物体的边缘颜色会比较暗。</p>
+        <p>输入数据：全局注册好的彩色点云。</p>
+        <p>测试方法：在注册应用里，“全局-导入”所有彩色点云，然后“颜色融合－精确”。参数为点云密度的倍数，用于判断不同帧点云是否有重叠，默认为1倍。如果点云比较密，或者对齐效果不是很理想，可以适当提升点云密度倍数。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/color_tune_single_light.jpg" alt="color_tune_single_light">
+        <hr class="line-divider">
+
+        <h4>多角度点云颜色融合</h4>
+        <p>背景：有时候，虽然单帧图像色彩质量是好的，但是不同帧之间的光照有差异，比如多个拍照位置的情况。</p>
+        <p>如下图所示，图1，2两帧彩色点云，分别看质量还可以，但是注册到一块时，如图3所示，会有明显的色差。应用多角度点云颜色融合的功能，图4就是色彩融合后的效果。</p>
+        <p>输入：彩色点云，点云每个点需要一个colorId信息（Int值）。相同colorId的点可以认为是颜色协调的，不同colorId的点颜色需要融合到一块，得到整体颜色协调的彩色点云。</p>
+        <p>colorId：点云在注册模块里，经过全局注册融合后的点云，每个点有个cloudId信息（点所在点云的Id），这个信息可以作为colorId。</p>
+        <p>colorId也可以通过用户输入点像对应文件(.cid)来得到。</p>
+        <p>ColorId文件具体格式为：</p>
+        <hr class="line-divider">
+        <p>文件名.cid</p>
+        <p>colorIdCount</p>
+        <p>colorId_0</p>
+        <p>colorId_1</p>
+        <p>......</p>
+        <hr class="line-divider">
+        <p>colorIdCount为colorId的个数，一般等于对应点云或者网格的顶点数，colorId_n为第n个点的colorId的信息。</p>
+        <p>测试方法：点云应用->颜色-颜色融合：导入ColorId信息。然后，前三个参数为颜色分量最大色差融合阈值，范围是[0, 1]，如果colorId边界处的色差大于这个阈值的地方，则不做颜色融合。三个分量的意义分别为色度，饱和度，亮度。比如想尽量保持住色度，则可以调小其阈值。第四个参数为点云邻域个数，建议参数为12。</p>
+        <p>网格的颜色融合功能：如果点云非常不均匀，比如线激光数据。点的邻域不是圆盘结构，则可以使用 网格的颜色融合功能：纹理应用-颜色融合。输入要求是，网格每个顶点也需要一个colorId信息。用户可以导入点像对应文件(.cid)来得到。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/point_color_merge.jpg" alt="point_color_merge">
+
+        <hr class="line-divider">
+        <h3>如果您有任何疑问和建议，欢迎发email</h3>
+        <img class="featurette-image img-responsive center-block" src="/images/contact.jpg" alt="contact">
+
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

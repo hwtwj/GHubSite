@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理，Geometry++">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>点云注册模块</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>点云注册模块</h2>
+
+        <h4>简介</h4>
+        <p>这个模块包含了点云注册（刚性和非刚性）和融合去重叠的功能。这些功能可以在<a href="/magic3d#registration" target="_blank">Magic3D</a>的点云注册应用里进行测试。这里有个<a href="/demo/registration" target="_blank">demo</a>可以参考。<a href="/geometryplusplus/scandata" target="_blank">三维扫描点云下载</a>页面提供了一些有扫描误差和微小形变的扫描点云，可以用于非刚性注册的测试。</p>
+        <hr class="line-divider">
+
+        <h4>点云有标记点注册</h4>
+        <p>点云有标记注册属于两帧点云的粗注册。主要用于特征少或者对称性很强的物体扫描。因为这类物体的无标记点注册成功率不高。如下图所示，这是一个瓦缸的扫描点云注册，这个物体主身是一个圆柱体，特征少且旋转对称。需要进行有标记点注册。前两个是两个角度的带标记点的点云，第三个图是注册的结果。此功能的特点是不需要标记点数量相同，也不需要标记点有对应。</p>
+        <p>测试方法：参考Magic3D注册文档，分别导入两帧需要注册的点云。先计算点云的法线（如点云有法线可以忽略此步），然后点击“对齐-标记”按钮。点云法线的计算方法，可以参考Magic3D的文档。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/mark_registration.jpg" alt="mark_registration">
+        <hr class="line-divider">
+
+        <h4>点云无标记点注册</h4>
+        <p>点云无标记注册属于两帧点云的粗注册。主要用于注册两个位置相差很大的点云，比如两帧位于相机坐标系的点云。它属于初始拼接，特点是不需要标记点。如下图所示，前两个是两个角度的人脸，第三个图是无标记点注册的结果。此功能的特点是速度特别快，成功率特别高。</p>
+        <p>测试方法：参考Magic3D注册文档，分别导入两帧需要注册的点云。先计算点云的法线（如点云有法线可以忽略此步），然后点击“对齐-非标记”按钮。点云法线的计算方法，可以参考Magic3D的文档。</p></p>
+        <img class="featurette-image img-responsive center-block" src="/images/init_registration.jpg" alt="init_registration">
+        <hr class="line-divider">
+
+        <h4>ICP注册（刚性）</h4>
+        <p>ICP注册属于两帧点云的精细注册。主要用于已经粗注册好的点云，需要提升注册精度的情况。</p>
+        <p>测试方法：参考Magic3D注册文档，分别导入两帧需要ICP注册的点云。先对点云进行粗对齐（如果有粗对齐可以忽略此步），然后直接点击“对齐-ICP”按钮。如下图所示，ICP注册提高了点云的注册质量。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/icp_registration.jpg" alt="icp_registration">
+        <hr class="line-divider">
+
+        <h4>全局注册（刚性）</h4>
+        <p>场景一：逐帧注册的点云数据，往往有累积误差. 全局注册可以把累积误差分散到每一帧中去，从而减少整体的注册误差。如下图所示，第一列截取了三对ICP注册后的点云，局部来看注册得很好。然后逐对点云两两ICP注册，如中图所示，点云注册的效果并不好，累计误差很严重。第三列是点云经过全局注册后效果，注册误差被分散到每一帧中去了，从而减少整体的注册误差。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/kinect_global_registrate.jpg" alt="inect_global_registrate">
+        <p>场景二：扫描的点云有初始拼接，比如转台上的物体扫描。全局注册可以一次性地把这些点云精细的拼接起来。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/globalregistration.jpg" alt="face_registration">
+        <p>测试方法：</p>
+        <li class="contentli">点云有初始拼接：在“全局-导入”按钮导入所有点云，然后点击“全局-注册”按钮进行全局注册。注册参数为最大迭代次数。</li>
+        <li class="contentli">点云没有初始拼接：按照Magic3D里的注册流程（注册到整体或者全局-有序），把所有点云拼接到一起。最后再进行全局注册。</li>
+        <hr class="line-divider">
+
+        <h4>点云去重叠</h4>
+        <p>注册好的点云，需要去除掉重叠部分的点。由于数据的系统误差，点云注册后一般不能完美的重叠在一起，总有一些误差。如下图2所示，简单的去除重叠，在重叠部分会有一些杂点。Geometry++的去除重叠，可以把重叠部分的点融合在一块，消除掉这些误差痕迹，如下图3所示</p>
+        <p>测试方法：</p>
+        <li class="contentli">点云有初始拼接：在“全局-导入”按钮导入所有点云，然后进行全局注册（如果注册好了则可忽略此步)。最后点击“全局-融合”进行点云去除重叠，得到一个整体点云，应用跳转到点云处理应用里。参数为点云去重叠的缝隙密度，数字代表点云密度的倍数。参数越大，缝隙越大，默认为1，既为点云密度。</li>
+        <li class="contentli">点云没有初始拼接：按照Magic3D里的注册流程（注册到整体），把所有点云拼接到一起。最后再进行去除重叠。注意，“对齐-融合”属于简单的去除重叠，“全局-融合”的去除重叠包含了重叠部分的融合功能。用户可以体会结果的差别。</li>
+        <img class="featurette-image img-responsive center-block" src="/images/head_sumpointcloud.jpg" alt="head_sumpointcloud">
+        <hr class="line-divider">
+
+        <h4>常见的注册方式</h4>
+        <p>不同特点的数据有不同的注册方式，没有统一的流程，只有适合自己的：</p>
+        <li class="contentli">注册到整体：每帧新点云都与整体点云进行注册融合，最后对所有点云进行全局注册，减少整体误差，再去除重叠融合成一个整体点云。Magic3D采用这种流程来注册点云。优点是，相邻两帧点云不需要有重叠，只要点云与前面的整体点云有重叠即可。缺点是，如果整体点云是对称的，则注册可能会出现错误。</li>
+        <li class="contentli">两两注册：相邻两帧点云进行两两注册，最后再进行全局注册和融合。这种方式一般用于相邻两帧有重叠的情况。两两注册可以解决注册到整体的对称性问题：它减少了两帧点云非重叠部分的区域，也就减小了歧义性。</li>
+        <li class="contentli">有粗对齐的点云：用户通过外部参数计算把点云粗对齐到一块，然后直接应用全局注册提升注册精度。</li>
+        <hr class="line-divider">
+
+        <h4>非刚性ICP</h4>
+        <p>背景：ICP注册主要用于已经粗注册好的点云，提升注册精度。传统ICP注册是刚体变换。在数据有误差或者微小形变的时候，刚体变换无法完全对齐点云。如图所示，a)是输入的两个点云。这两个点云 有微小的形变；b)是无标记对齐的结果；c)是ICP精细对齐的结果，可以看到点云有些部位的对齐还是有误差的。e是c的注册结果去除重叠，再更新法线的结果。可以看到有些局部法线出现了毛刺的效果，这是对齐误差的体现。</p>
+        <p>为了提升注册精度，引入非刚性变换。如图所示，d是非刚体的ICP对齐的结果，对齐误差明显降低了。f是d的注册结果去除重叠，再更新法线的结果。可以看出对齐误差明显小了很多。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/nonrigid_compare.png" alt="nonrigid_compare">
+        <p>测试方法：参考Magic3D注册文档，分别导入两帧需要非刚性ICP注册的点云。先对点云进行粗对齐（如果有粗对齐可以忽略此步），然后ICP注册。最后点击“对齐-非刚体”按钮进行非刚性ICP注册。</p>
+        <hr class="line-divider">
+
+        <h4>非刚性全局注册</h4>
+        <p>背景：对于多帧的点云数据，如果点云误差比较大，或者有形变。刚性变换是无法完全对齐所有点云的。如图所示，这个车子模型由多片点云注册对齐而成。左图是全局的刚性注册，明显看出对齐精度是很低的。</p>
+        <p>为了提升注册精度，引入非刚性变换。右图是非刚性全局注册的结果。明显的，非刚体注册大幅的提升了注册精度。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/global_nonrigid_car.png" alt="global_nonrigid_car">
+        <p>测试方法：在“全局-导入”按钮导入所有点云，这些点云需要有初始对齐，非刚性注册之前，可以先进行刚性的全局注册。然后点击“全局-非刚体”按钮进行非刚性全局注册。左边参数为注册的最大迭代次数，默认参数为10。下面参数为非刚体变换的数量，每个刚体变换作用于点云的一个子片区。数量越多，非刚性越强。数量为1时，即为刚体变换。</p>
+        <hr class="line-divider">
+
+        <h4>有序点云及其处理</h4>
+        <p>有序点云的处理速度比一般点云的处理快很多。目前支持有序点云的功能有刚性ICP，刚性无标记注册。在CPU上，有序点云的ICP可以达到实时，有序点云的无标记注册可以达到1s左右。<a href="/magic3d#registration_sequential_reg" target="_blank">有序点云注册测试</a>。</p>
+        <p>有序点云的表示可以参考<a href="/geometryplusplus/document#pcgridpointcloud" target="_blank">有序点云</a>。目前支持gbg(二进制格式，导入导出速度快), gtg(文本格式)的有序点云。具体格式可以参考<a class="code" href="/file/Parser.cpp" target="_blank">Parser</a>。另外，也可以在Magic3D的<a href="/magic3d#relief_scan" target="_blank">虚拟扫描仪</a>里生成有序点云。</p>
+
+        <hr class="line-divider">
+        <h3>如果您有任何疑问和建议，欢迎发email</h3>
+        <img class="featurette-image img-responsive center-block" src="/images/contact.jpg" alt="contact">
+
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

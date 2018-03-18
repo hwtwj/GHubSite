@@ -1,0 +1,145 @@
+body {
+  padding-top: 80px;
+  padding-bottom: 40px;
+  background-color: rgb(255, 255, 255);
+}
+
+h2 {
+  font-size: 35px;
+  text-align: center;
+  margin-bottom: 30px;
+  color: rgb(0, 0, 0);
+}
+
+h3 {
+  padding-left: 2%;
+  font-size: 23px;
+  text-align: left;
+  margin-top: 20px;
+  color: rgb(0, 0, 0);
+}
+
+h4 {
+  padding-left: 1%;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 10px;
+  color: rgb(0, 0, 0);
+}
+
+h5 {
+  padding-left: 1%;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  color: rgb(0, 0, 0);
+}
+
+p {
+  font-size: 18px;
+  text-align: left;
+  padding-left: 2%;
+  padding-right: 2%;
+  margin-top: 10px;
+  color: rgb(0, 0, 0);
+}
+
+.contentli {
+  font-size: 18px;
+  text-align: left;
+  padding-left: 2%;
+  padding-right: 2%;
+  color: rgb(0, 0, 0);
+}
+
+a {
+  color: rgb(0, 153, 153);
+}
+
+a:hover {
+  color: rgb(50, 200, 200);
+  text-decoration: none;
+}
+
+.featurette-divider {
+  margin: 30px 0;
+  height: 3px;
+  background-color: rgb(128, 128, 128);
+}
+
+.featurette-image {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.line-divider {
+  margin: 20px 0;
+  height: 1px;
+  background-color: rgb(230, 230, 230);
+}
+
+.modulecaption {
+  font-size: 30px;
+  font-weight: bold;
+  text-align: left;
+  margin-left: 5%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: rgb(0, 0, 0);
+}
+
+.modulecontent {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: left;
+  /*margin-left: 10%;*/
+  margin-top: 8px;
+  color: rgb(0, 0, 0);
+}
+
+.moduleul {
+  margin-left: 5%;
+  padding-left: 5%;
+}
+
+.modulecaption_right {
+  font-size: 30px;
+  font-weight: bold;
+  text-align: left;
+  margin-left: 25%;
+  margin-right: 5%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: rgb(0, 0, 0);
+}
+
+.moduleul_right {
+  margin-left: 25%;
+  margin-right: 5%;
+  padding-left: 5%;
+}
+
+.marginleft {
+    margin-left: 5%;
+}
+
+.thumbnail {
+  text-align: center;
+  background-color: rgb(255, 255, 255);
+  border-color: rgb(255, 255, 255);
+}
+
+.myul {
+  padding-left: 8%;
+}
+
+.myli {
+  font-size: 19px;
+  line-height: 25px;
+  text-align: left;
+  margin-top: 10px;
+  color: rgb(0, 0, 0);
+  /*font-weight: bold;*/
+}

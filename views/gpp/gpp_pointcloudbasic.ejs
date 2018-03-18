@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理，Geometry++">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>点云处理基础模块</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>点云处理基础模块 <small></small></h2>
+
+        <h4>简介</h4>
+        <p>这个模块包含了一些常见的三维点云处理功能，比如点云法线计算，点云采样，点云去除孤立项，点云光滑，点云三角化，有序点云表示及其处理。这些功能可以在<a href="/magic3d#pointshop" target="_blank">Magic3D</a>的点云应用里进行测试。</p>
+        <hr class="line-divider">
+
+        <h4>点云法线计算</h4>
+        <p><a href="/notes/pointcloudnormal" target="_blank">点云法线</a>广泛应用于三维数据处理的各个地方，如点云三角化，点云渲染等。它包含两个方面：法线的计算和法线的定向。</p>
+        <p>法线-Front：计算深度点云（扫描仪初始采集到的点云，相机坐标系下）的法线，法线定向为Z轴正方向。扫描的深度点云的法线可以完美定向，因为法线是朝相机方向的。</p>
+        <p>法线-计算：如果点云不是深度点云，或者点云进行了刚体变换，法线不再统一的朝向相机。则它的法线定向可以通过算法计算得到。需要说明的是，目前还没有一种可以完美定向法线的计算方法，因为有些数据有歧义性。一般的情况下，Geometry++的法线定向是很准的。</p>
+        <p>法线-反向：反转点云法向量方向</p>
+        <p>法线-光滑：光滑点云法向量</p>
+        <p>法线-更新：重新计算法线，但是法线定向与原始定向一致。这个功能一般用于多帧点云融合成一个点云后，需要重新计算法线，但是同时要保持原有的法线定向。</p>
+        <p>另外，Geometry++还有一个API-ConsolidateRawScanData，用于计算<a href="/notes/pointcloudrepresentation" target="_blank">有序点云</a>的法线，并且可以移除非扫描点。它的特点是速度非常快，因为有序点云包含了一些额外的空间位置信息。</p>
+        <hr class="line-divider">
+
+        <h4>点云采样</h4>
+        <p>点云采样广泛应用于三维数据处理的各个方面，它可以降低数据数据，也可以用于点云特征的计算。</p>
+        <p>采样-均匀：均匀采样点云，可以设置目标点数。注意，采的是点云点索引，不会改变点云坐标。</p>
+        <p>采样-几何：和均匀采样的区别是，特征的地方点数会更多一些，如下图所示。</p>
+        <p>采样-格栅：根据点间距把空间分为一个一个的格子，每个格子采样一个点，并且使得采样的点云尽量均匀。参数为点间距。和均匀采样相比，它的速度更快，但是均匀性稍低。</p>
+        <p>点云简化：与点云采样不同的是，点云简化会改变点云的坐标。它不是采样索引，是把距离近的点合并成一个点。参数意义为空间分辨率，范围[1, 10000]，简化后点云内部点距=(点云包围盒 / 分辨率)，距离很近的点会融合为一个点。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/pointcloudsampling.png" alt="pointcloudsampling">
+        <hr class="line-divider">
+
+        <h4>点云光滑</h4>
+        <p>修复-光滑：光滑点云. 参数为光滑的迭代次数，迭代次数越多，光滑得越厉害</p>
+        <img class="featurette-image img-responsive center-block" src="/images/pointcloudsmoothing.jpg" alt="pointcloudsmoothing">
+        <hr class="line-divider">
+
+        <h4>去飞点，去孤立项</h4>
+        <p>修复-孤立项：去除点云离群孤立项. 需要先计算好法线。参数意义为孤立值阈值，小于这个值的点会被去掉。这个值的几何意义为，点云被分割为不同的块，每个块内点的孤立值为块内点数占总点数的比例。</p>
+        <p>修复-飞点：去除点云飞点. 需要先计算好法线。参数意义为孤立值阈值，小于这个值的点会被去掉。这个值的几何意义为，点云被分割为不同的块，每个块内点的孤立值为块内点数占总点数的比例。</p>
+        <p>飞点与孤立项的区别：飞点是贴近曲面的噪点，孤立项是远离曲面的一小片点云。</p>
+        <p>提示：可以关掉法线显示(法线-眼睛图标)，更容易看到检测出的红色点云部分。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/pointcloudoutlier.jpg" alt="pointcloudoutlier">
+        <hr class="line-divider">
+
+        <h4>去重影</h4>
+        <p>如果点云有重影，可以先检测出点云的重影部分，再删除掉这些局部点云。如图所示，左边的蓝色点云局部放大后，有重影：红色是检测出的重影部分。用户可以删掉它们。右边两个模型是点云三角化的结果，左边的网格是原始点云的重建结果，右边网格是去除重影后的重建结果。对比红线框部分的网格，明显看出去除重影后的重接结果质量要好很多。</p>
+        <p>修复-重叠检测：检测点云重影。需要先计算好法线。检测点云中重叠部分。参数意义为最大重叠距离（当前点云密度的倍数），超出这个距离的则不会判定为重叠。</p>
+        <p>提示：可以关掉法线显示(法线-眼睛图标)，更容易看到检测出的红色点云部分。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/overlap_compare.png" alt="overlap_compare">
+        <hr class="line-divider">
+
+        <h4>点云三角化</h4>
+        <p>输入：带法线的点云，点云可以带颜色</p>
+        <p>quality：重建结果的质量，参数范围[0, 6]：值越大，重建的网格点数越多，精度越高。参数6的重建精度为点云包围盒大小的1/1000。参数每降低1个单位，精度降低1/2。</p>
+        <p>开网格/闭网格：闭网格会自动补上网格中的小洞。这里的补洞比网格单独补洞效果更好，因为它应用了点云全局的几何信息。</p>
+        <p>补洞参数：如果选择闭网格，则可以通过这个参数来控制需要修补的洞大小：洞面积与网格面积的比值小于这个参数的洞，才会被填上。如下图人脸重建所示，脸上的洞都被补上了。</p>
+        <p>如果点云自带颜色，则重建的网格可以继承点云颜色。</p>
+        <div class="row featurette">
+          <div class="col-md-6">
+            <img class="featurette-image img-responsive center-block" src="/images/BuddhaReconstruction_small.jpg" alt="Buddha Reconstruction">
+          </div>
+          <div class="col-md-6">
+            <img class="featurette-image img-responsive center-block" src="/images/face_reconstruction.jpg" alt="face_reconstruction">
+          </div>
+        </div>        
+
+        <h4>有序点云及其处理</h4>
+        <p>有序点云的处理速度比一般点云的处理快很多。目前支持有序点云的功能点云采样，点云光滑，点云法线计算，去飞点，去孤立项，点云边界检测。</p>
+        <p>有序点云的表示可以参考<a href="/geometryplusplus/document#pcgridpointcloud" target="_blank">有序点云</a>。目前支持gbg(二进制格式，导入导出速度快), gtg(文本格式)的有序点云。具体格式可以参考<a class="code" href="/file/Parser.cpp" target="_blank">Parser</a>。另外，也可以在Magic3D的<a href="/magic3d#relief_scan" target="_blank">虚拟扫描仪</a>里生成有序点云。</p>
+
+        <hr class="line-divider">
+        <h3>如果您有任何疑问和建议，欢迎发email</h3>
+        <img class="featurette-image img-responsive center-block" src="/images/contact.jpg" alt="contact">
+
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

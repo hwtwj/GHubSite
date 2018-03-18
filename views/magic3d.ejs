@@ -280,7 +280,7 @@
                 <hr class="featurette-divider"> 
                 <a name="registration"><h5><img class="featurette-image img-responsive center-block" src="/images/align_icon.jpg" alt="MeshShop"><a href="http://threepark.net/notes/registration" target="_blank">点云注册模块</a></h5></a>
                 <h4>这里采用了注册到整体的方式进行点云注册。注册应用里，有三个地方可以导入点云，分别对应于三个变量PointCloud_Ref, PointCloud_From, PointCloud_Vector（全局那里的批量导入）。全局注册是对PointCloud_Vector里的点云进行注册，全局融合也是对PointCloud_Vector里的点云进行融合。两两注册的时候，是把PointCloud_From做刚体变换与PointCloud_Ref对齐，两两融合是把这两个点云融合在一起，并把结果赋于PointCloud_Ref，同时这两个对齐点云会放入PointCloud_Vector，用于做最后的全局注册和融合。</h4>
-                <h4>逐次导入的一般操作流程是 (<a href="http://threepark.net/demo/registration" target="_blank">视频演示</a>)：</h4>
+                <h4>逐次导入的一般操作流程是 (<a href="/demo/registration" target="_blank">视频演示</a>)：</h4>
                 <ol class="myul">
                     <li class="myli">导入需要注册对齐的两帧点云 (红色为固定点云，赋予PointCloud_Ref；绿色为浮动点云，赋予PointCloud_From)。</li>
                     <li class="myli">对齐-标记: 如果扫描点云有标记点，可以导入标记点“特征点-导入” (标记点文件格式为每行: markCoordX markCoordY markCoordZ). 没有标记点也可以手动在点云上标记点 (鼠标右键点击点云拾取标记点).</li>
@@ -324,7 +324,7 @@
                 
                 <hr class="line-divider">
                 <a name="measure_meshcurve"><h4>网格曲线</h4></a>
-                <li class="contentli">测地线 (<a href="http://threepark.net/demo/measure" target="_blank">视频演示</a>): 标记网格上的点 (鼠标右键点击网格拾取顶点)，计算点之间的测地线. 测地线是曲面上的直线, 两点之间的测地线具有局部最短的性质.</li>
+                <li class="contentli">测地线 (<a href="/demo/measure" target="_blank">视频演示</a>): 标记网格上的点 (鼠标右键点击网格拾取顶点)，计算点之间的测地线. 测地线是曲面上的直线, 两点之间的测地线具有局部最短的性质.</li>
                 <li class="contentli">测地线-删除：删除最近一次选择的点。</li>
                 <li class="contentli">测地线-近似: 网格上的近似测地线，线过顶点。</li>
                 <li class="contentli">测地线-快速: 网格上的近似测地线，线过边。参数范围为[0, 1], 参数越大，精确度越高，速度也越慢。默认值为0.5。</li>
@@ -350,7 +350,7 @@
                 <a name="measure_meshdistance"><h4>网格距离测量: 导入一个新的网格，测量网格顶点到另一个网格的距离。</h4></a>
 
                 <hr class="featurette-divider">
-                <a name="deformation"><h5><img class="featurette-image img-responsive center-block" src="/images/deform_icon.jpg" alt="ReliefApp">三维变形模块(<a href="http://threepark.net/demo/deformation" target="_blank">视频演示</a>)</h5></a>
+                <a name="deformation"><h5><img class="featurette-image img-responsive center-block" src="/images/deform_icon.jpg" alt="ReliefApp">三维变形模块(<a href="/demo/deformation" target="_blank">视频演示</a>)</h5></a>
                 <h4>背景：点云网格变形中，模型顶点可以分为三类：自由顶点，固定顶点和约束顶点。这里的约束条件为顶点位置约束，所以，约束顶点也可以看作是固定顶点，也就是变形后的顶点位置是确定的。而自由顶点就是需要变形的部分，在变形过程中尽可能的保持模型的原始形状。</h4>
                 
                 <hr class="line-divider">
@@ -377,8 +377,8 @@
 
                 <hr class="featurette-divider">
                 <a name="uvunfold"><h5><img class="featurette-image img-responsive center-block" src="/images/uvunfold_icon.jpg" alt="TextureApp"><a href="http://threepark.net/notes/uvunfold" target="_blank">UV展开模块</a>：计算网格的纹理坐标</h5></a>
-                <h4>概述：UV展开模块提供了两类UV展开的方法：手动割网格的UV展开，以及全自动的UV展开。手动割网格，需要把网格分割成一块一块的圆盘结构。全自动的UV展开一般用于纹理贴图里纹理坐标计算。参考demo<a href="http://threepark.net/demo/unfold" target="_blank">三维网格UV展开</a>。</h4>
-                <h4>一般的操作流程是 (<a href="http://threepark.net/demo/unfold" target="_blank">视频演示</a>)：</h4>
+                <h4>概述：UV展开模块提供了两类UV展开的方法：手动割网格的UV展开，以及全自动的UV展开。手动割网格，需要把网格分割成一块一块的圆盘结构。全自动的UV展开一般用于纹理贴图里纹理坐标计算。参考demo<a href="/demo/unfold" target="_blank">三维网格UV展开</a>。</h4>
+                <h4>一般的操作流程是 (<a href="/demo/unfold" target="_blank">视频演示</a>)：</h4>
                 <ol class="myul">
                     <li class="myli">导入需要展开的网格</li>
                     <li class="myli">割线: 如果需要手动割线，可以在这步添加</li>
