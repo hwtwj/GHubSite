@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="重建三维几何空间，室内重建，slam，geometryhub, magic3d, geometry++, stl, obj, 3d模型，三维设计">
+    <meta name="keywords" content="重建三维几何空间，室内重建，slam，geometryhub, magic3d, geometry++, stl, obj, 3d模型，三维设计">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>BGL文档</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/gppdocument.css" rel="stylesheet">
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+  </head>
+
+  <body>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <h3>BGL文档</h3>
+                <h4><a href="/geometryplusplus">返回</a></h4>
+                <h4><a href="#overview">使用简介</a></h4>
+                <h4><a href="#pcinterface">点云</a></h4>
+                <ul class="sideul">
+                    <li class="sideli"><a href="#pcinterface">点云表示</a></li>
+                    <li class="sideli"><a href="#pcparser">导入导出</a></li>
+                    <li class="sideli"><a href="#pcgridpointcloud">有序点云</a></li>
+                </ul>
+                <h4><a href="#meshinterface">网格</a></h4>
+                <ul class="sideul">
+                    <li class="sideli"><a href="#meshinterface">三角网格表示</a></li>
+                    <li class="sideli"><a href="#poepof">边点和面点</a></li>
+                    <li class="sideli"><a href="#meshparser">导入导出</a></li>
+                </ul>
+                <h4><a href="#toolkit">数学工具</a></h4>
+                <h4><a href="#faq">常见问题</a></h4>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2" main>
+                <a name="overview"><h5>简介</h5></a>
+                <p>BGL (Basic Geometry Library) 是一个关于三维数据(点云，网格)处理的基础几何库. 它包含了三维数据处理最基础的数据结构。</p>
+                <hr class="featurette-divider">
+
+                <a name="usageintroduction"><h5>使用简介</h5></a>
+                <p>1. 头文件: 所有的头文件都在include文件夹里, 设置好头文件包含路径, 在使用api的源文件里包含BGL.h</p>
+                <p>2. 库: 设置好对应版本动态链接库的路径. 如果是Windows平台，需要在预处理里定义宏GPP_DLL_EXPORT，WIN32</p>
+                <hr class="featurette-divider">
+
+                <a name="pcinterface"><h5>点云表示</h5></a>
+<pre class="prettyprint">
+class IPointCloud;
+</pre>
+                <p>点云数据结构接口. Geometry++点云算法都是基于IPointCloud接口来调用的.</p>
+                <p>用法：继承这个接口类，实现其成员函数.</p>
+                <p>优点：可以很方便的在已有的程序中使用Geometry++提供的点云算法，只需要实现这个接口类，就可以调用所有点云相关的算法</p>
+                <p>用法说明:</p>
+                <p>1. 假设用户表示点云数据的类为MyPointCloudData, 则可以定义一个类MyPointCloud</p>
+                <!-- <?prettify lang=scm?> -->
+<pre class="prettyprint">
+    class MyPointCloud : public IPointCloud
+    {
+        MyPointCloudData* mData;
+        MyPointCloud(MyPointCloudData* data) : mData(data) 
+        {}
+        virtual Int GetPointCount() const
+        { 
+            mData->GetPointCloud(); 
+        }
+        virtual Vector3 GetPointCoord() const 
+        { 
+            mData->GetPointCoord(); 
+        }
+        virtual void SetPointCoord(Int pid, const Vector& coord) 
+        { 
+            mData->SetPointCoord(pid, coord[0], coord[1], coord[2]); 
+        }
+        // 其它成员函数类似
+    };
+
+    MyPointCloud pointCloud(myPointCloudData); // 用自己的点云数据初始化MyPointCloud
+    ErrorCode res = ConsolidatePointCloud::LaplaceSmooth(pointCloud, 0.2, 5); // 调用点云算法API来修改自己的点云数据
+    res = ConsolidatePointCloud::CalculatePointCloudNormal(pointCloud);
+    // 其它点云算法API的具体用法可以参考相应模块的介绍
+</pre>
+
+                <p>2. 点云顶点的存储格式一般是线性的，获取方便，但是删除会存在一些效率问题. IPointCloud提供了SwapPoint函数把需要删除的元素交换到尾部，然后再通过PopbackPoints删除尾部元素.</p>
+                <p>3. Clear函数负责清除Point Coordinate, Point Normal. 回到构造类初始化时的状态.</p>
+                <p>4. HasNormal函数主要用意: 有时候点云创建后没有法线信息，IPointCloud提供这个函数查询点云是否有可靠法线信息. SetHasNormal函数可以设置点云是否有法线信息</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+class PointCloud;
+</pre>
+                <p>IPointCloud接口类和IGridPointCloud接口类的一个实现，用户可以直接使用它来表示点云数据</p>
+                <p>这是PointCloud的一个<a class="code" href="/file/PointCloud.cpp" target="_blank">实现示例</a>，用户自己实现IPointCloud的时候可以参考一下</p>
+                <p>UnifyCoords的典型使用场景：在多帧点云注册过程中，如果对第一帧点云应用了前一个UnifyCoords，为了保持之后帧的点云做同样的平移缩放变换，可以用前一个UnifyCoords的返回值来设置这个UnifyCoords，使得每一帧的点云做同样的变换</p>
+                <hr class="featurette-divider">
+
+                <a name="pcparser"><h5>点云导入导出</h5></a>
+<pre class="prettyprint">
+PointCloud* Parser::ImportPointCloud(std::string fileName);
+</pre>
+                <p>目前支持的文件格式：obj, asc. 用户也可以导入其它格式的点云数据, 只需要自己写一个Parser, 然后用导入的数据创建点云类(例如PointCloud)即可使用了</p>
+                <p>fileName: 格式为path/xxx.obj, path/xxx.asc, path可以是绝对路径，也可以相对路径</p>
+                <p>返回值: 如果导入失败则返回NULL</p>
+                <hr class="line-divider">
+<pre class="prettyprint">
+void Parser::ExportPointCloud(std::string fileName, const IPointCloud* pointCloud);
+</pre>
+                <p>目前支持的文件格式：obj, asc, ply.</p>
+                <p>fileName: 格式为path/xxx.obj, path/xxx.asc, path可以是绝对路径，也可以相对路径</p>
+                <hr class="featurette-divider">
+
+                <a name="pcgridpointcloud"><h5>有序点云</h5></a>
+                <pre class="prettyprint">
+class IGridPointCloud;
+</pre>
+                <p>有序点云的数据结构接口。</p>
+                <p>有序点云是一个方阵，如图所示。点云按照方阵一行一行的，从左上角到右下角排列。</p>
+                <img class="featurette-image img-responsive center-block" src="/images/grid_coordinate.jpg" alt="Grid Point Cloud">
+                <p>优点：相比IPointCloud，IGridPointCloud多了点云的位置连接关系信息。相关的计算可以更加快速。</p>
+                <p>用法说明：</p>
+                <li>InitGrid：初始化有序点云，设置长宽。初始化的点云格点默认为invalid</li>
+                <li>RemoveOuterBlankGrids：移出掉四周无效的点，并重新设置点云的长宽。如下图所示，原始点云变为了红色框内缩小长宽的有序点云。</li>
+                <img class="featurette-image img-responsive center-block" src="/images/RemoveOuterBlankGrids.jpg" alt="RemoveOuterBlankGrids">
+                <li>SetHasGridNormal：设置点云是否带有法线。如果有，需要为法线分配内存空间</li>
+                <li>SetGridCoord：为valid的格点设置空间坐标</li>
+                <li>SetGridNormal：为valid的格点设置法线信息</li>
+                <li>ValidGrid：有效格点的信息（坐标，法线等）也可以像IPointCloud里Point一样按某种顺序排列起来，根据索引顺序访问。</li>
+                <li>GetValidGridCount：获取有效格点的个数。类似IPointCloud::GetPointCount。</li>
+                <li>GetValidGridCoord：根据有效格点的索引，获取其坐标。类似IPointCloud::GetPointCoord。</li>
+                <li>GetValidGridNormal：根据有效格点的索引，获取其法线。类似IPointCloud::GetPointNormal。</li>
+                <li>GetGridPointId：获取格点对应的有效格点的索引。若格点无效，则返回-1</li>
+                <li>GetPointGridId：获取有效格点对应的格点坐标</li>
+                <li>导入导出：Geometry++里可以使用gbg和gtg格式的文件存储有序点云。具体的导入导出格式，可以参考<a class="code" href="/file/Parser.cpp" target="_blank">Parser</a></li>
+                <li>注：PointCloud是IGridPointCloud接口类的一个实现。</li>
+                <hr class="line-divider">
+
+                
+
+                <a name="meshinterface"><h5>三角网格表示</h5></a>
+<pre class="prettyprint">
+class ITriMesh;
+</pre>
+                <p>网格数据结构接口. Geometry++网格算法都是基于ITriMesh接口来调用的.</p>
+                <p>用法：继承这个接口类，实现其成员函数.</p>
+                <p>优点：可以很方便的在已有的程序中使用Geometry++提供的网格算法，只需要实现这个接口类，就可以调用所有网格相关的算法</p>
+                <p>用法说明：</p>
+                <p>1. 假设用户表示三角网格数据的类为MyTriMeshData, 则可以定义一个类MyTriMesh:</p>
+<pre class="prettyprint">
+    class MyTriMesh : public ITriMesh
+    {
+        MyTriMeshData* mData;
+        MyTriMesh(MyTriMeshData* data) : mData(data) 
+        {}
+        virtual Int GetVertecCount() const 
+        { 
+            return mData->GetVertecCount(); 
+        }
+        virtual Vector3 GetVertexCoord(Int vid) const 
+        { 
+            return mData->GetVertexCoord(); 
+        }
+        virtual void SetVertexCoord(Int vid, const Vector3& coord) 
+        { 
+            mData->SetVertexCoord(vid, coord[0], coord[1], coord[2]); 
+        }
+        virtual Int InsertVertex(const Vector3& coord) 
+        { 
+            mData->InsertVertex(coord); 
+            return insertVertexId; 
+        }
+        // 其它成员函数类似
+    };
+
+    MyTriMesh triMesh(myTriMeshData); // 用自己的三角网格数据初始化MyTriMesh
+    ErrorCode res = ConsolidateMesh::LaplaceSmooth(triMesh, 0.2, 5, true); // 调用网格算法API来修改自己的网格数据
+    res = ConsolidateMesh::MakeTriMeshManifold(triMesh);
+    // 其它网格算法API的具体用法可以参考相应模块的介绍
+</pre>
+                <p>2. 构建网格示例:</p>
+<pre class="prettyprint">
+    for (GPP::Int vid = 0; vid < vertexCount; vid++)
+    {
+        triMesh->InsertVertex(vertexCoord[vid]);
+    }
+    for (GPP::Int fid = 0; fid < faceCount; fid++)
+    {
+        triMesh->InsertTriangle(triangleIndex[fid][0], triangleIndex[fid][1], triangleIndex[fid][2]);
+    }
+    triMesh->UpdateNormal();
+</pre>       
+                <hr class="line-divider">
+                <p>3. 三角网格顶点和面的存储格式是线性的，获取方便，但是删除会存在一些效率问题. ITriMesh提供了SwapVertex(SwapTriangles) 函数把需要删除的元素交换到尾部，然后再通过PopbackVertices(PopbackTriangles)删除尾部元素.</p>
+                <p>4. Clear函数负责清除Vertex Coordinate, Vertex Normal, Triangle Index, Triangle Normal. 回到构造类初始化时的状态.</p>
+                <p>5. UpdateNormal负责重新计算网格的顶点和三角面的法线信息.</p>
+                <hr class="featurette-divider">
+                
+<pre class="prettyprint">
+class TriMesh;
+</pre>
+                <p>ITriMesh接口类的一个实现，用户可以直接使用它来表示网格数据</p>
+                <p>这是ITriMesh的一个<a class="code" href="/file/TriMesh.cpp" target="_blank">实现示例</a>，用户自己实现ITriMesh的时候可以参考一下</p>
+                <p>用法说明：</p>
+                <p>1. FuseVertex用于建立STL格式网格的连接关系. 顶点位置相同的点会被处理为一个顶点. STL格式不能表示带缝的网格，因为它没有拓扑信息, 属于Triangle Soup. 建议使用OBJ格式的网格</p>
+                <p>2. UnifyCoords使得TriMesh的顶点坐标会被平移和均匀缩放到范围(-bboxSize, bboxSize)以内</p>
+                <hr class="featurette-divider">
+                
+                <a name="halfedgemesh"><h5>网格半边结构</h5></a>
+<pre class="prettyprint">
+class HalfMesh;
+</pre>
+                <p>HalfMesh类是网格半边结构的一个实现，用户可以直接使用它来表示网格数据. 半边结构的介绍可以参考这个<a class="code" href="http://www.flipcode.com/archives/The_Half-Edge_Data_Structure.shtml" target="_blank">网页</a></p>
+                <img class="featurette-image img-responsive center-block" src="/images/halfedgestructure.jpg" alt="Half Edge Structure">
+                <div class="imgtext">图示：半边数据结构示例. 左边红点为内点，右边红点为边界点</div>
+                <p>用法说明：</p>
+                <p>1. 构建网格示例:</p>
+<pre class="prettyprint">
+    for (GPP::Int vid = 0; vid < vertexCount; vid++)
+    {
+        halfMesh->InsertVertex(vertexCoord[vid]);
+    }
+    std::vector< Vertex3D* > vertexList;
+    for (GPP::Int fid = 0; fid < faceCount; fid++)
+    {
+        vertexList.clear();
+        vertexList.push_back(halfMesh->GetVertex(triangleIndex[fid][0]));
+        vertexList.push_back(halfMesh->GetVertex(triangleIndex[fid][1]));
+        vertexList.push_back(halfMesh->GetVertex(triangleIndex[fid][2]));
+        halfMesh->InsertFace(vertexList);
+    }
+    halfMesh->SetBoundaryVertexEdge();
+    halfMesh->UpdateNormal();
+</pre>
+                <hr class="line-divider">
+                <p>2. 如果知道Vertex, Edge, Face的数量，在做Insert前，可以调用ReverseVertex, ReserveEdge, ReserveFace来提升Insert的效率，原理类似std::vector::reserve</p>
+                <p>3. 访问顶点邻域示例:</p>
+<pre class="prettyprint">
+    Edge3D* startEdge = vertex->GetEdge();
+    Edge3D* curEdge = startEdge;
+    do {
+        if (curEdge->GetPair()->GetFace() == NULL)
+            break;
+        curEdge = curEdge->GetPair()->GetNext();
+    } while (curEdge != startEdge);
+</pre>
+                <hr class="line-divider">   
+                <p>4. 对于边界点，函数SetBoundaryVertexEdge使得其出边(GetEdge)位于边界边(如上图右红边所示)</p>
+                <p>5. ValidateTopology做了3件事情: a. 移出没有Face的Edge; b. SetBoundaryVertexEdge; c. 移出孤立Vertex. 一般对HalfMesh做了拓扑改变后用</p>
+                <p>6. 边界点判断：vertex->GetEdge()->GetFace() == NULL; 边界边判断: edge->GetFace() == NULL || edge->GetPair()->GetFace() == NULL</p>
+                <p>7. Edge3D的Pair Edge(GetPair)一定不是NULL. 如果Edge3D的Face(GetFace)不是NULL, 则Pre Edge(GetPre)和Next Edge(GetNext)一定不是NULL</p>
+                <p></p>
+                <hr class="featurette-divider">
+
+                <a name="poepof"><h5>边点和面点</h5></a>
+<pre class="prettyprint">
+struct PointOnEdge;
+</pre>
+
+                <p>边点：位于网格边上的点。含有三个数据成员。mVertexIdStart, mVertexIdEnd为该网格点所在的边；mWeight为插值坐标，取值范围为[0, 1]，mWeight越大，边点越接近mVertexIdStart顶点。</p>
+                <p>注意：在某些API中，mVertexIdEnd有可能为-1，此时表示该边点完全和顶点mVertexIdStart重合，此时mWeight应为1.0。</p>
+
+<pre class="prettyprint">
+struct PointOnFace;
+</pre>
+                <p>面点：位于网格三角形内（或边界上）的点。含有2个数据成员。mFaceId为面点位于的三角形Id，mCoords为面点关于该三角形的重心坐标。</p>
+                <p>注意：</p><p>1. 重心坐标的顺序(mCoords[0], mCoords[1], mCoords[2])和从网格接口GetTriangleVertexIds(mFaceId, vertexIds)中的vertexIds[3]的顺序对应。</p>
+                <p>2. 当面点刚好位于三角的边上或者顶点上时，面点的表示不唯一。</p>
+                <p>3. 在某些API中，mCoords[i]有可能为-1.0，此时表示面点刚好位于三角形的边界（仅有一个mCoords[i]为-1.0，其它两个mCoords[i]相加为1.0）或顶点（有两个mCoords[i]为-1.0，且第三个重心坐标为1.0）上。</p>
+
+<pre class="prettyprint">
+    // 计算边点和面点的位置
+    GPP::Vector3 poeCoord(0, 0, 0);
+    if (poe.mVertexEnd == -1)
+        poeCoord = triMesh->GetVertexCoord(poe.mVertexStartId);
+    else
+        poeCoord = triMesh->GetVertexCoord(poe.mVertexStartId) * poe.mWeight + triMesh->GetVertexCoord(poe.mVertexEndId) * (1.0 - poe.mWeight);
+    // poeCoord 即为边点的位置
+    
+    GPP::Vector3 pofCoord(0, 0, 0);
+    GPP::Int vertexIds[3] = {-1, -1, -1};
+    triMesh->GetTriangleVertexIds(pof.mFaceId, vertexIds);
+    for (int fvid = 0; fvid < 3; ++fvid)
+    {
+        if (pof.mCoords[fvid] < 0.0)
+            continue;
+        else
+            pofCoord += triMesh->GetVertexCoord(vertexIds[fvid]) * pof.mCoords[fvid];
+    }
+    // pofCoord 即为面点的位置
+
+    // 给定网格顶点处的一组数值（如颜色，纹理等），插值出面点或边点的对应值
+    // vertexColors: 定义在顶点上的颜色
+    GPP::Vector3 pofColor(0, 0, 0);
+    for (int fvid = 0; fvid < 3; ++fvid)
+    {
+        if (pof.mCoords[fvid] < 0.0)
+            continue;
+        else
+            pofColor += vertexColors[vertexIds[fvid]] * pof.mCoords[fvid];
+    }
+    // pofColor 即为面点的插值颜色
+</pre>
+
+                <hr class="featurette-divider">
+
+                <a name="meshparser"><h5>网格导入导出</h5></a>
+<pre class="prettyprint">
+TriMesh* Parser::ImportTriMesh(std::string fileName);
+</pre>
+                <p>目前支持的文件格式: obj, stl, off, ply. 用户也可以导入其它格式的网格数据, 只需要自己写一个Parser, 然后用导入的数据创建网格类(例如TriMesh)即可使用了</p>
+                <p>fileName: 格式为path/xxx.obj, path/xxx.stl, path可以是绝对路径，也可以相对路径</p>
+                <p>返回值: 如果导入失败则返回NULL</p>
+                <hr class="featurette-divider">
+<pre class="prettyprint">
+void Parser::ExportTriMesh(std::string fileName, const ITriMesh* triMesh);
+</pre>
+                <p>目前支持的文件格式: obj, stl, ply</p>
+                <p>fileName: 格式为path/xxx.obj, path/xxx.stl, path可以是绝对路径，也可以相对路径</p>
+                <hr class="featurette-divider">
+
+
+                <a name="multithreadsetting"><h5>多线程设置</h5></a>
+<pre class="prettyprint">
+void SetThreadCount(Int count);
+</pre>
+                <p>Geometry++有些API使用了多线程。这个API可以设置线程个数(>=0)。默认参数为0-根据CPU核心数自动设置。</p>
+                <hr class="featurette-divider">
+
+                
+                <a name="faq"><h5>常见问题</h5></a>
+                <div class="question">请不要在release的环境下debug程序，因为release环境下面的调试信息是不准确的。</div>
+
+                <div class="question">编译有错误</div>
+                <li>请仔细检查头文件，lib库，宏定义是否都配置好了，详细请参考<a href="#usageintroduction">使用简介</a>。如果工程中链接了很多第三方库，可以新建一个简单的工程来链接BGL库，来确认BGL库是否有问题。</li>
+
+                <div class="question">API调用出现问题</div>
+                <li>检查API的返回码：－6属于没有激活开发包；－8属于函数没有定义，如果你有这个函数的授权，可以前来联系。</li>
+                <li>查看log文件，看能不能得到提示</li>
+                <li>其它情况，可以详细参考<a href="#dump">调试</a>部分的介绍。</li>
+
+                <div class="question">一般性问题还是特例问题</div>
+                <li>某个api调用出现问题时，可以多试试几个例子，看看是对所有例子都有问题，还是个例有问题。如果对所有例子都有问题，一般都是用法有问题。</li>
+
+                <div class="question">程序崩溃了（Crash）怎么办</div>
+                <li>请仔细确认程序的崩溃点！如果有异常发生，请在软件程序里Catch住异常。异常的捕获处理属于软件部分的内容。</li>
+
+                
+                <div class="question">反馈问题时模型的导出</div>
+                <li>导出模型坐标时，确保导出的坐标精度是没有截断的，如std::ofstream导出时可以调用precision来设置精度。</li>
+                <li>网格导出时，一般使用OBJ格式，不要使用STL，因为STL没有网格拓扑信息。不同软件系统重构STL拓扑的实现可能不一样。具体可以参考<a href="http://threepark.net/notes/stlformat" target="_blank">为什么不建议使用STL格式。</a></li>
+                
+                <div class="question">总之，最重要的环节是问题重现。只有问题能够重现出来，才能得到有效的解决。反馈问题前，请先想想反馈的信息是否能够得到问题重现。</div>
+                <hr class="featurette-divider">
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

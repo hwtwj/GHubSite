@@ -17,6 +17,11 @@ router.get("/magic3d", function (req, res) {
     res.render('magic3d.ejs');
 });
 
+router.get("/bgl/document", function (req, res) {
+    "use strict";
+    res.render('bgldocument.ejs');
+});
+
 router.get("/geometryplusplus", function (req, res) {
     "use strict";
     res.render('gppabout.ejs');
