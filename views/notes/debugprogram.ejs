@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>程序调试</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>程序调试</h2>
+
+        <h4>程序出问题了怎么办</h4>
+        <p>程序出问题，一般有三种：一种是纯粹的软件问题，比如程序奔溃；第二种是性能问题，比如速度慢，内存消耗大等；第三种是质量问题，就是功能达不到想要的效果。</p>
+        <p>解决问题一般三个步骤：首先问题要能够重现；然后再定位问题；知道哪里出了问题以后，解决问题就是自然而然的事情了。</p>
+        <hr class="line-divider">
+
+        <h4>如何重现问题</h4>
+        <p>问题重现分为两类：自己能重现问题和让别人能重现问题。</p>
+        <li class="contentli">自己能重现问题：这里的自己，一般指软件开发者。问题重现需要有稳定的输入和稳定的操作。简单来讲，就是要在出现问题之前，保存好数据。重现问题时，导入这些数据，并做同样的操作来重现之前的问题。有些问题在特定的条件下才能触发，数据或者操作稍有不同，就可能导致问题重现不了。这里没有简单统一的方法，主要思想就是尽可能恢复问题产生时的状态，状态包括输入数据，操作参数，运行环境等。另外，软件开发者也需要设计一套机制，重现软件用户的问题。比如在软件log里记录用户的操作步骤和参数，用户的运行环境等。出现问题时，信息掌握得越多，越有可能重现这个问题。</li>
+        <li class="contentli">让别人重现问题：软件开发者有时候需要调用第三方SDK。如果定位出是SDK的问题，则需要进行问题反馈。问题反馈的核心有两点：一个是问题描述，一个是数据反馈让对方进行问题重现。问题描述，一定是定量的，用专业术语描述的。比如“我的SDK为什么不能用呢？”“某某功能为什么不能用啊？”“我的程序崩溃是怎么回事呢？”这类问题，其实没有提供任何有用的信息。问题反馈的话，可以参考Geometry++<a href="/geometryplusplus/document#dump" target="_blank">调试</a>这一块的介绍。</li>
+        <hr class="line-divider">
+
+        <h4>如何定位问题</h4>
+        <p>图形程序的问题定位，一定要可视化每一步的输入和输出。特别是流水线很长的操作，更要可视化每一步中间结果。定位问题是一个实践性很强的能力，需要多思考，多试验。下面聊聊几种常见问题的定位：</p>
+        <li class="contentli">API调用出现问题。首先确认API的返回码是否正确，如果错误，可以再查看Geometry++的log文件，看出错提示。</li>
+        <li class="contentli">API调用后，模型没有变化。首先确认API调用是否成功。API执行后，模型数据是否有变化，比如网格顶点数据，面片数目等。如果觉得API调用成功，但是最后显示还是没有变化。则需要确认模型的显示是否更新了。可以从显示部分的代码入手，确认显示部分的数据是否正确。然后再往API调用部分倒推来定位问题。</li>
+        <li class="contentli">在VS里单步调试的时候，请确认是在debug模式下。release模式下，是没有调试信息的，或者调试信息是错误的。</li>
+        <hr class="line-divider">
+
+        <h4>图形界面调试</h4>
+        <p>图形程序的一个特点是可以可视化功能结果。有些功能的步骤比较长，程序员一口气写完功能，然后运行失败。如果没有图形化显示中间步骤的结果，那是很难调试的。即使功能最终调试成功，如果遇见结果不理想，那也是无法分析原因的。</p>
+        <hr class="line-divider">
+
+        <h4>调试所用的数据</h4>
+        <p>数据太大的时候，调试模式下程序运行会很慢。可以尝试用小数据来调试程序。Magic3D的浮雕应用里提供了虚拟扫描仪，可以得到任意分辨率的扫描数据，包括点云，图像和点像对应文件。ThreePark网站也提供了各种三维模型的<a href="/geometryplusplus/models" target="_blank">下载</a>，以及细分模型的<a href="/cagemodeling" target="_blank">创建工具</a>和<a href="/modelsearching" target="_blank">下载</a>。这些工具都可以提供很好的调试数据。</p>
+        <hr class="line-divider">
+
+        <h4>图形应用程序的性能分析</h4>
+        <p>大概分两部分，先找出程序的瓶颈(bottleneck)，然后再做出优化决策。</p>
+        <p>瓶颈位置应该从时间和空间上进行分析。时间方面，找出程序运行慢的时间块；空间方面，找出是CPU还是GPU的瓶颈。思路上有了宏观的把握，下面就是工具的应用了。这里的工具其实很简单，主要是程序运行过程中的各种关键变量的计数器(performance counter)。我们所要做的就是根据这些计数器的数据来分析出瓶颈所在的位置，当然这包括时间和空间上的位置。从计数器上入手分析的前提是你对当前GPU和CPU的性能十分了解和熟悉，比如我的应用程序中每帧有4000个多边形，那么这个数量级的多边形到底是多还是少呢，而且性能与多边形大小，位置等等都有关系，光从这些计数器的数据分析是很难准确定位出性能瓶颈的位置的。常用的分析方法是改变程序的一些参数或者数据大小，再看看程序性能的改变，从而推测出瓶颈的位置，比如增大渲染窗口的大小，如果程序性能急剧下降，那么很有可能是GPU中Pixel Shader和Pixel Engine的瓶颈。这里面有一些常用的方法技巧来定位瓶颈的位置，具体的内容在以后慢慢分析，毕竟从宏观上泛泛而谈才是合适的，微观上具体的技巧需要实验来支持。</p>
+        <p>定位出瓶颈位置后，下一步就是优化决策：要么改善瓶颈处的性能，要么提升非瓶颈处的消耗，使其在同等性能的情况下拥有更好的质量。具体的做法属于细节部分了。</p>
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()"> 
+  </body>
+</html>

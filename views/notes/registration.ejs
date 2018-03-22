@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>点云拼接注册</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+    <script src="/javascripts/Dependence/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>点云拼接注册 <small></small></h2>
+
+        <h4>点云拼接，配准，注册有什么联系</h4>
+        <p>点云拼接，配准，注册说的是同一个概念，就是把不同位置的点云通过重叠部分的信息，变换到同一个位置。下面我们就用注册这个名词来描述这个过程。注册一般分为三类：粗注册，精细注册和全局注册。</p>
+        <li class="contentli">粗注册：一般用于注册两个位置相差很大的点云，比如两帧位于相机坐标系的点云。粗注册方法大致分为两类：有标记点粗注册和无标记点粗注册。标记点可以是用户手动标记的，也可以是物体扫描时贴的标记点。无标记点注册更加方便一些，但是对于一些比较对称或者重合部分很少的情况，可能会有一些失误的。另外还有一些根据设备的参数来计算粗注册变换的方法。</li>
+        <li class="contentli">精细注册：这里一般指ICP注册方法。主要用于已经粗注册好的点云，需要提升注册精度的情况。ICP可以加入标记点信息。因为众所周知，一些滑动情况会导致ICP注册失败，但是如果数据本身有标记点的话，可以加入标记点信息来提升注册的成功率。</li>
+        <li class="contentli">全局注册：逐帧注册的点云数据，往往有累积误差。全局注册可以把累积误差分散到每一帧中去，从而减少整体的注册误差。另外，有些时候所有点云已经有了粗注册了，可以应用全局注册一次性把所有点云注册好。如下图所示。</li>
+        <img class="featurette-image img-responsive center-block" src="/images/globalregistration.jpg" alt="global registrate">
+        <hr class="line-divider">
+
+        <h4>一边注册一边融合扫描数据</h4>
+        <p>从扫描数据到注册融合成一个完整的点云数据，有各种各样的工作流方式：可以一边注册一边融合，也可以两两注册后再一起融合。用户可以根据自己的数据特点，设计出最适合自己数据的工作流，这里并没有一个统一的方式。</p>
+        <p>下面举一个一边注册一边融合的例子，如下图所示：</p>
+        <li class="contentli">a,b为第一，第二帧数据</li>
+        <li class="contentli">粗注册到一块c</li>
+        <li class="contentli">精细注册到d</li>
+        <li class="contentli">融合成一个整体e</li>
+        <li class="contentli">导入第三帧数据f</li>
+        <li class="contentli">与e粗注册到g</li>
+        <li class="contentli">然后重复之前到步骤，最终再对注册好的所有数据做一个全局注册，把所有数据融合到一个整体点云/li>
+        <img class="featurette-image img-responsive center-block" src="/images/registration_workflow.jpg" alt="regitration workflow">
+        <p>总之，不同特点的数据有不同的注册流程，用户可以多试试不同的流程，找到最适合自己数据的注册方式。</p>
+        <hr class="line-divider">
+
+        <h4>无标记点注册需要多少重合度</h4>
+        <p>无标记点注册需要多少重合度？这是很多用户在做无标记注册时经常问的问题。比如用户在扫描物体的时候，到底帧与帧之间重合多少比较合适。一般来讲，重叠区域的特征越明显，越独特，重叠区域的重合度可以越低。</p>
+        <p>两个三维点云，理论上只需要三个点对（无退化情况）就可以确定一个刚体变换。用户可以穷举出所有可能的刚体变换，然后选择一个“最好的”变换。由于穷举的个数太多，为了提高效率，一般会采样一些刚体变换来选择最优的解。一般的无标记注册方法都采用了这个过程，这里面有些问题需要考虑：</p>
+        <li class="contentli">“最好的”定义：一般是计算两个点云的重叠区域的大小，重叠区域可以根据点云特征来加权计算。需要注意的是，有时候用户期望的变换，并不是“最好的”。</li>
+        <li class="contentli">刚体变换的采样：既要采样个数少，又要尽量包含好的刚体变换</li>
+        <p>重叠区域的大小，会影响算法的结果：</p>
+        <li class="contentli">重叠区域过小的时候，“最好的”刚体变换的分数大于了用户期望的刚体变换分数。一个极端的例子是，两个有部分重叠的半球面，最好的刚体变化会使得两个半球完全重叠，而不是用户期望的部分重叠。所以，尽可能的让你所期望的刚体变换，与算法定义的“最好的”刚体变换是相同的，或者说期望的重叠区域能得到最高的分。</li>
+        <li class="contentli">重叠区域过小，也可能影响采样的稳定性。稳定性的提升可以通过采样个数的提升来获得，但是性能可能会有所下降。</li>
+        <p>无标记注册“失败”的时候，用户可以看看算法结果的合理性是否比你所期望的变换更加“合理”，重叠度是否更高。</p>
+        <p>有标记注册，很大程度上是影响“最好的”刚体变换的定义，并且减小了刚体变换空间的采样范围。</p>
+        <hr class="line-divider">
+
+        <h4>提升无标记点注册的成功率</h4>
+        <p>无标记点注册，一般用于点云的粗对齐。其成功率依赖于点云的重叠区域大小，重叠部分特征的显著性，以及模型本身的对称性等。下面从几个方面聊聊如何提高对齐的成功率：</p>
+        <li class="contentli">重叠区域的特征尽可能的明显</li>
+        <li class="contentli">注册时采用两两注册的方式。这样可以减少两帧点云非重叠部分的区域，也就减小了歧义性。比如对称模型的扫描注册，如果采用一边注册一边融合的方法，对称部分的点云在无标记注册时，有可能对齐到对称部分。而两两注册可以减少这类歧义性的发生</li>
+        <li class="contentli">如果物体本身特征不明显，可以增大重叠区域的面积来提供对齐的稳定性</li>
+        <hr class="line-divider">
+
+        <h4>注册成功的判定</h4>
+        <p>注册成功的判定，最关键的是“成功”的定义。一般是计算两个点云的重叠区域的大小，重叠区域可以根据点云特征来加权计算。当重叠区域面积或者比例大于一定的阈值，就判定为成功。需要注意的是，有时候用户期望的变换，并不是“最好的”。</p>
+        <hr class="line-divider">
+
+        <h4>如何融合已经注册对齐的数据</h4>
+        <p>注册好的点云数据，会有不少重叠部分，重叠部分点云处理，一般有两种做法：平均融合和去除重叠。平局融合就是把重叠部分的点平均起来；去除重叠就是在重叠部分只取其中一帧的数据。我们建议使用去除重叠的方法来融合重叠部分的数据，因为这样可以尽可能的保持原有数据的信息。</p>
+        <li class="contentli">多帧点云，往往由于系统误差原因，重叠部分的点是不能完美重合在一起的。多帧数据平均融合，会损失掉一些数据细节。去除重叠，只取一帧的做法，可以保留住点云的细节。</li>
+        <li class="contentli">点云去除重叠，需要有个重叠判定条件，一般是设置一个点云的影响范围，范围内的点会被过滤掉。就如同一个筛子一样，过滤范围越大，筛子的缝隙越小。一般可以取点云的平均间距作为过滤范围，如果点云误差比较大，可以增大过滤范围。避免出现不同帧的点云在重叠处相互渗透的情况，相互渗透会产生噪音。</li>
+        <li class="contentli">去除重叠的时候，在重叠交界处，会有接缝痕迹。SumPointCloud有个特点是可以去除掉重叠部分的系统误差，使得融合后的点云看不出接缝。如下图所示，左图是一系列注册好的点云重叠在一起；中间结果是简单的去除重叠区域的点云，可以明显看到重叠区域有误差痕迹；右边的结果是SumPointCloud在去除重叠的同时，消除了误差痕迹。</li>
+        <img class="featurette-image img-responsive center-block" src="/images/head_sumpointcloud.jpg" alt="head_sumpointcloud">
+        <hr class="line-divider">
+
+        <h4>如何去掉点云的重影</h4>
+        <p>多帧点云注册去除重叠后，得到一个整体点云后，有时候会出现局部点云有重影的情况。常见的原因是数据本身有误差，有微小形变，刚体变换不可能把多帧点云完全对齐。根据点云处理的工作流程，下面介绍几种去除重影的方法：</p>
+        <li class="contentli">非刚体ICP注册：既然数据有误差，刚体变换无法完全对齐点云，可以引入非刚体注册。对于两帧数据的注册，可以应用非刚体ICP。如图所示，a)是输入的两个点云；b)是无标记对齐的结果；c)是ICP精细对齐的结果，可以看到点云有些部位的对齐还是有误差的；d)是非刚体的ICP对齐的结果，对齐误差明显降低了；e)是c的注册结果去除重叠，再更新法线的结果。可以看到有些局部法线出现了毛刺的效果，这是对齐误差的体现；f)是d的注册结果去除重叠，再更新法线的结果。可以看出对齐误差明显小了很多。</li>
+        <img class="featurette-image img-responsive center-block" src="/images/nonrigid_compare.png" alt="nonrigid_compare">
+        <li class="contentli">非刚体全局注册：对于多帧数据的注册，可以应用非刚体全局注册。如图所示，左图全局注册的结果，右图是非刚体全局注册的结果。明显的，非刚体注册大幅的提升了注册精度。</li>
+        <img class="featurette-image img-responsive center-block" src="/images/global_nonrigid_car.png" alt="global_nonrigid_registrate">
+        <li class="contentli">点云去除重叠：在点云去除重叠的时候，也可以融合重叠接缝处的误差痕迹。具体效果可以参考“如何融合已经注册对齐的数据”部分的讲解。</li>
+        <li class="contentli">点云去除重影：如果用户已经得到了一个整体点云，并且有了重影，没有办法应用非刚体注册。那么可以先检测出点云的重影部分，再删除掉这些局部点云。如图所示，左边的蓝色点云局部放大后，有重影：红色是检测出的重影部分。用户可以删掉它们。右边两个模型是点云三角化的结果，左边的网格是原始点云的重建结果，右边网格是去除重影后的重建结果。对比红线框部分的网格，明显看出去除重影后的重接结果质量要好很多。</li>
+        <img class="featurette-image img-responsive center-block" src="/images/overlap_compare.png" alt="overlap_compare">
+        <hr class="line-divider">
+
+        <h4>任意点云序列的注册</h4>
+        <p>多角度点云的拼接，需要帧与帧之间有重叠。用户连续扫描模型的时候，相邻两帧可以认为是有重叠的。但是，有的时候，这种重叠关系丢失了，也就是不知道与当前帧重叠的是哪一帧。如图所示，左边是用户随意扫描的四帧点云。这时候，也可以应用无标记注册的功能，来自动的找出重叠关系，并且把所有点云拼接起来。如图右所示。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/RegistratePointCloudList.png" alt="RegistratePointCloudList">
+
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

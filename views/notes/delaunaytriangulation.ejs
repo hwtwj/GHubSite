@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>从Delaunay三角化到网格质量</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+    <script src="/javascripts/Dependence/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>从Delaunay三角化到网格质量 <small></small></h2>
+
+        <h4>Delaunay三角化</h4>
+        <p>Delaunay三角化，就是点云的一种三角化方法，它具有某些好的性质：</p>
+        <li class="contentli">网格中的最小角最大化</li>
+        <li class="contentli">任意三角形的外接圆内不含三角形以外的顶点</li>
+        <li class="contentli">三角化的网格是点云的凸包</li>
+        <li class="contentli">最大化所有三角面片的内切圆的平均值</li>
+        <li class="contentli">其它......</li>
+        <img class="featurette-image img-responsive center-block" src="/images/delaunayproperty.jpg" alt="delaunay property">
+        <hr class="line-divider">
+
+        <h4>带约束的Delaunay三角化</h4>
+        <p>有时候，点云包含一些线段连接约束，如下图1所示。有些约束边并不满足Denaulay性质，所以，它并不能得到整体的Delaunay三角化结果(如下图2是点云的一个Delaunay三角化结果)。我们可以放开一些Delaunay性质约束，使其尽量的接近Delaunay三角化。下图3是一个带约束的Denaulay三角化的结果。可以比较一下图2和图3的结果差异。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/cdt.jpg" alt="constrained delaunay triangulation">
+        <hr class="line-divider">
+
+        <h4>Voronoi图</h4>
+        <p>给定一群平面（或曲面）的点，其Voronoi图，把平面（或者曲面）分隔成一块一块的区域，每个区域包含一个点，并且这块区域到所有点的最近点为其所包含的点。如图左所示。这些线也是相邻两点的垂直平分线。如果是曲面上的点，点之间的距离为曲面的测地距离。</p>
+        <p>Voronoi图和Delaunay三角化的图，互为对偶图。如图右所示。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/voronoi_diagram.jpg" alt="voronoi_diagram">
+        <hr class="line-divider">
+
+        <h4>重心Voronoi图</h4>
+        <p>重心Voronoi图，是一种特殊的Voronoi图，其每个区域的重心和其对应点重合。如右图所示，这就是一个重新Voronoi图。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/cvt.jpg" alt="cvt">
+        <hr class="line-divider">
+
+        <h4>网格质量</h4>
+        <p>网格质量包含两方面的内容：拓扑质量和几何质量。</p>
+        <li class="contentli">拓扑质量：如下图所示，图2和图3是图1点云不同的三角化结果。图2经过一系列拓扑优化，如Delaunay边翻转操作，得到图3的高质量网格。</li>
+        <img class="featurette-image img-responsive center-block" src="/images/tupologyquality.jpg" alt="tupology quality">
+        <li class="contentli">几何质量：几何质量一般指顶点的坐标分布。如下图1所示，虽然这是一个Delaunay三角化，但明显可以看出其网格质量很很差的，经过一系列几何优化（如重心Voronoi优化）后，顶点分布更加均匀，然后再做一个Delaunay三角化就得到了图2的结果。</li>
+        <img class="featurette-image img-responsive center-block" src="/images/geometry_optimization.jpg" alt="geometry optimization">
+        <hr class="line-divider">
+
+        <h4>重新网格化(Remesh)</h4>
+        <p>Remesh并没有一个严格的定义，简单的讲，Remesh就是从一个输入网格生成另一个网格，并且满足一定的要求。常见的有三角网格到三角网格的Remesh，或者三角网格到四边网格的Remesh。这是一个典型的应用驱动的功能，不同的应用所需要的性质是有差别的，即使是同一个性质，有时候是硬约束，有时候是软约束。常见的一些性质有：</p>
+        <li class="contentli">新网格是原网格的一个好的逼近</li>
+        <li class="contentli">避免狭长面片，退化面片</li>
+        <li class="contentli">网格顶点的度数尽量均匀</li>
+        <li class="contentli">网格顶点分布要光滑，比如均匀分布，几何相关的各项异性分布</li>
+        <li class="contentli">新网格要保持流形结构</li>
+        <li class="contentli">保持特征边</li>
+        <img class="featurette-image img-responsive center-block" src="/images/remesh_head.jpg" alt="remesh">
+        <p>Remesh的方法，大致可以分为局部和全局的：</p>
+        <li class="contentli">局部方法：经过一系列的局部拓扑和几何操作的迭代，来Remesh整个网格。它的优点是计算速度比较快，容易实现；缺点是缺乏整体质量的把控，是一种启发式方法。</li>
+        <li class="contentli">全局方法：一般指把网格分割成一片一片的，然后分片参数化子网格。参数化的过程中，保持住边界的连续性。也有一些全局参数化的方法，不要网格分割这一步。最后再把参数域的网格拓扑结构反映射回原网格。它的优点是网格的全局质量容易把控，缺点也显而易见，强烈的依赖参数化方法，稳定高质量的实现会比较困难。</li>
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

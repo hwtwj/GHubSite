@@ -137,4 +137,99 @@ router.get("/wangqifeng", function (req, res) {
     res.render('wangqifeng.ejs');
 });
 
+router.get("/notes", function (req, res) {
+    "use strict";
+    res.render('notes/notes.ejs');
+});
+
+router.get("/notes/3darchitecture", function (req, res) {
+    "use strict";
+    res.render('notes/3darchitecture.ejs');
+});
+
+router.get("/notes/debugprogram", function (req, res) {
+    "use strict";
+    res.render('notes/debugprogram.ejs');
+});
+
+router.get("/notes/pointcloudrepresentation", function (req, res) {
+    "use strict";
+    res.render('notes/pointcloudrepresentation.ejs');
+});
+
+router.get("/notes/pointcloudnormal", function (req, res) {
+    "use strict";
+    res.render('notes/pointcloudnormal.ejs');
+});
+
+router.get("/notes/transform", function (req, res) {
+    "use strict";
+    res.render('notes/transform.ejs');
+});
+
+router.get("/notes/3dfeature", function (req, res) {
+    "use strict";
+    res.render('notes/3dfeature.ejs');
+});
+
+router.get("/notes/registration", function (req, res) {
+    "use strict";
+    res.render('notes/registration.ejs');
+});
+
+router.get("/notes/kinectdata", function (req, res) {
+    "use strict";
+    res.render('notes/kinectdata.ejs');
+});
+
+router.get("/notes/stlformat", function (req, res) {
+    "use strict";
+    res.render('notes/stlformat.ejs');
+});
+
+router.get("/notes/meshdatastructure", function (req, res) {
+    "use strict";
+    res.render('notes/meshdatastructure.ejs');
+});
+
+router.get("/notes/measuremesh", function (req, res) {
+    "use strict";
+    res.render('notes/measuremesh.ejs');
+});
+
+router.get("/notes/uvunfold", function (req, res) {
+    "use strict";
+    res.render('notes/uvunfold.ejs');
+});
+
+router.get("/notes/colormesh", function (req, res) {
+    "use strict";
+    res.render('notes/colormesh.ejs');
+});
+
+router.get("/notes/3dpicking", function (req, res) {
+    "use strict";
+    res.render('notes/3dpicking.ejs');
+});
+
+router.get("/notes/delaunaytriangulation", function (req, res) {
+    "use strict";
+    res.render('notes/delaunaytriangulation.ejs');
+});
+
+router.get("/notes/subdividemodeling", function (req, res) {
+    "use strict";
+    res.render('notes/subdividemodeling.ejs');
+});
+
+router.get("/notes/patternrecognition", function (req, res) {
+    "use strict";
+    res.render('notes/patternrecognition.ejs');
+});
+
+router.get("/notes/numericaloptimization", function (req, res) {
+    "use strict";
+    res.render('notes/numericaloptimization.ejs');
+});
+
 module.exports = router;

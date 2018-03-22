@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>三维点云表示</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+    <script src="/javascripts/Dependence/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>三维点云表示 <small></small></h2>
+
+        <h4>点云数据结构</h4>
+        <p>点云数据结构非常简单，只有点的三维坐标信息和法线信息。下面是一个点云表示的抽象类：</p>
+<pre class="prettyprint">
+    class GPP_EXPORT IPointCloud
+    {
+    public:
+        IPointCloud(){}
+
+        virtual Int GetPointCount() const = 0;
+        virtual Vector3 GetPointCoord(Int pid) const = 0;
+        virtual void SetPointCoord(Int pid, const Vector3& coord) = 0;
+        virtual Vector3 GetPointNormal(Int pid) const = 0;
+        virtual void SetPointNormal(Int pid, const Vector3& normal) = 0;
+        virtual bool HasNormal() const = 0;
+        virtual void SetHasNormal(bool has) = 0;
+        
+        virtual Int InsertPoint(const Vector3& coord) = 0;
+        virtual Int InsertPoint(const Vector3& coord, const Vector3& normal) = 0;
+        
+        virtual void SwapPoint(Int pointId0, Int pointId1) = 0; 
+        virtual void PopbackPoints(Int popCount) = 0;
+        virtual void Clear(void) = 0;
+
+        virtual ~IPointCloud(){};
+    };
+</pre>
+        <li class="contentli">点云顶点的存储格式一般是线性的，获取方便，但是删除会存在一些效率问题。IPointCloud提供了SwapPoint函数把需要删除的元素交换到尾部，然后再通过PopbackPoints删除尾部元素.</li>
+        <li class="contentli">Clear函数负责清除Point Coordinate, Point Normal. 回到构造类初始化时的状态.</li>
+        <li class="contentli">HasNormal函数主要用意: 有时候点云创建后没有法线信息，IPointCloud提供这个函数查询点云是否有可靠法线信息. SetHasNormal函数可以设置点云是否有法线信息。</li>
+        <p>IPointCloud是一个抽象类，不能直接使用。用户可以继承这个接口类，实现其成员函数。这样设计的一个好处是，用户无需改变自己已有的数据结构，只要实现了这个接口类，就可以调用Geometry++里所有关于点云的算法了。真正体现了即插即用的特点。比如用户已经有了一个点云类MyPointCloudData，则我们可以定义一个类MyPointCloud，并用它来调用Geometry++里的各种点云算法：</p>
+<pre class="prettyprint">
+    class MyPointCloud : public IPointCloud
+    {
+        MyPointCloudData* mData;
+        MyPointCloud(MyPointCloudData* data) : mData(data) 
+        {}
+        virtual Int GetPointCount() const
+        { 
+            mData->GetPointCloud(); 
+        }
+        virtual Vector3 GetPointCoord() const 
+        { 
+            mData->GetPointCoord(); 
+        }
+        virtual void SetPointCoord(Int pid, const Vector& coord) 
+        { 
+            mData->SetPointCoord(pid, coord[0], coord[1], coord[2]); 
+        }
+        // 其它成员函数类似
+    };
+
+    MyPointCloud pointCloud(myPointCloudData); // 用自己的点云数据初始化MyPointCloud
+    ErrorCode res = ConsolidatePointCloud::LaplaceSmooth(pointCloud, 0.2, 5); // 调用点云算法API来修改自己的点云数据
+    res = ConsolidatePointCloud::CalculatePointCloudNormal(pointCloud);
+</pre>
+        <hr class="line-divider">
+
+        <h4>有序点云是什么</h4>
+        <p>一帧扫描数据是一副深度图，属于灰度图。像素的灰度值代表的是深度信息，可以通过相机参数把每个像素点变换到世界坐标系，这样每个像素就对应一个三维点，有些点是无效的。下图是一个典型的深度点云。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/depthdata.jpg" alt="depth data">
+        <p>有序点云是一个方阵，如图所示。点云按照方阵一行一行的，从左上角到右下角排列。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/grid_coordinate.jpg" alt="grid coordinate">
+        <hr class="line-divider">
+
+        <h4>有序点云到无序点云遗失了哪些信息</h4>
+        <li class="contentli">有序点云按顺序排列，可以很容易的找到它的相邻点信息。</li>
+        <li class="contentli">无效点信息也有用，可以通过它快速准确的找到点云边界。</li>
+        <li class="contentli">有序点云一般是在相机坐标系里的，所以法线是面向相机的，所以法线定向问题自然就解决了。如果曲面几何是光滑变化的，还可以应用法线的Z分量来定义点云的边界。如下图所示，颜色代表了法线Z分量。有些扫描仪在边界处的误差比较大，可以用这个方法很快速准确的去掉边界处的点。</li>
+        <img class="featurette-image img-responsive center-block" src="/images/BoundaryDetection.jpg" alt="BoundaryDetection">
+        <p>与无序点云相比，有序点云的处理速度可以快很多。</p>
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

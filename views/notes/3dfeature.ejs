@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>三维几何特征</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+    <script src="/javascripts/Dependence/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>三维几何特征 <small></small></h2>
+
+        <h4>三维几何描述子(3D Geometry Descriptor)</h4>
+        <p>三维几何描述子是对三维元素的几何表示。这里的元素可以是一个点云，网格，也可以是点云里的一个点，网格里的一个顶点或面。一个好的几何描述子，一般有这些特性：</p>
+        <li class="contentli">区分性强(Descriptive)：描述子差别大小与几何差别大小正相关。</li>
+        <li class="contentli">简洁(Concise)</li>
+        <li class="contentli">可重复计算(Repeatable)：相同或相似的特征在不同区域的计算可以可到相同或相似的结果。</li>
+        <li class="contentli">抗噪性强(Robust to Noise)</li>
+        <p>这几个特性常常是矛盾的。比如过于简洁的描述子，区分性就不那么强；区分性太强的描述子，抗噪性和可重复计算会比较弱。</p>
+        <p>几何描述子从构建方式上来看，可以分为两类：</p>
+        <li class="contentli">人工构建：传统的几何描述子，一般通过经验，人工的定义一些局部的几何特性。通常先定义出一个局部坐标架(Local Reference Frame)或者局部坐标轴(Local Reference Axis)，如图所示。然后计算一些局部的几何统计量，比如法线夹角，局部高度分布，局部水平投影分布等。</li>
+        <img class="featurette-image img-responsive center-block" src="/images/referenceframe.jpg" alt="referenceframe">
+        <li class="contentli">机器学习：一般是具体应用驱动，采用机器学习的方式构建几何描述子。这类描述子对某类具体应用，具有很好的特性，比如区分性强，抗噪性强。</li>
+        <p>人工构建的描述子，计算比较简单，但是经常需要参数调整。机器学习的方式，通过数据驱动来学习这些参数，适用于某一类具体的应用场景。</p>
+        <hr class="line-divider">
+
+        <h4>三维几何特征(3D Geometry Feature)</h4>
+        <p>三维几何特征，应该具有独特的区分特性。比如脸能够区分不同的人，那么人脸就是很好的一个人的特征。从构建方式上看，几何特征也分为两类：</p>
+        <li class="contentli">人工构建：可以通过经验或者计算出描述子的分布，人工定义分布概率小的描述子为几何特征。</li>
+        <li class="contentli">机器学习：通过数据驱动，来学习出几何特征。深度学习里，一块很重要的内容就是特征学习(Feature Learning)。</li>
+        <p>三维几何特征相关的常见应用：</p>
+        <li class="contentli">三维目标检测，识别：在语音，图像领域，已经有很多相关的研究工作了。可以借鉴其成熟的方法。</li>
+        <li class="contentli">点云注册：理论上讲，三个点对就可以定义出一个刚体变换。那么是不是找出这三个点对就可以找出注册变换了？在实际生产中，任何依赖特征对应正确性的方法，都是不稳定的。几何特征一般用于缩小正确点对的搜索范围，而不是直接用于寻找正确点对。</li>
+
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

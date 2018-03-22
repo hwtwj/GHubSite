@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>点云法线</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+    <script src="/javascripts/Dependence/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>点云法线 <small></small></h2>
+
+        <h4>点云法线有什么用</h4>
+        <li class="contentli">点云渲染：法线信息可以用于光照渲染，有些地方也称着色。如下图所示，左边的点云没有法线信息，右边的点云有法线信息。比如Phone光照模型里，漫反射光照符合Lambert余弦定律：漫反射光强与N * L成正比，N为法线方向，L为点到光源的向量。所以，在模型边缘处，N与L近似垂直，着色会比较暗。</li>
+        <img class="featurette-image img-responsive center-block" src="/images/pointnormal.jpg" alt="point normal">
+        <li class="contentli">点云的几何属性：法线可用于计算几何相关的信息，广泛应用于点云注册，点云重建，特征点检测等。</li>
+        <li class="contentli">另外法线信息还可以用于区分薄板正反面。</li>
+        <hr class="line-divider">
+
+        <h4>怎么计算法线</h4>
+        <p>点云采样于物体表面，物体表面的法线即为点云法线，故可先对物体表面的几何进行估计，即可计算出点云法线。一般可用低阶多项式曲面进行局部拟合，如左图所示。如果点云均匀分布，希望计算速度快，也可以用平面进行局部拟合，平面法线即为点云法线，如右图所示。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/curve_line.jpg" alt="curve line">
+        <p>在特征比较尖锐的地方，如左图所示，法线计算容易被光滑掉。右图直线是物体真实的几何，可以比较红色法线方向的差别。特征点的法线，可以用迭代权重的方法来修正，如先用平面局部拟合，然后给局部的点计算权重，离平面越远的点权重越小，然后再用带权重的点局部拟合平面，如此迭代即可。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/feature_normal.jpg" alt="feature normal">
+        <hr class="line-divider">
+
+        <h4>法线如何定向</h4>
+        <p>点云法线计算，最难的地方在于全局的定向。法线有两个互为相反的方向。所谓全局定向，就是视觉上连续的一片点云法线方向要一致，片于片之间的定向也要视觉一致。对于任给的一个点云，想要完全正确的定向，是很困难的。</p>
+        <p>如果点云分布比较均匀，在光滑的地方，相邻两个点法线的夹角会很小，可以认为近似平行，即fabs(Ni * Nj) ≈ 1，如果定向一致，则Ni * Nj ≈ 1。一个经典的定向方法是，给点云的每个点找k个最近点，并连上k条边，这样点云就变成一个图结构了，也叫Riemannian图。然后给每条边一个权重w = 1 - |Ni * Nj|。w越小，表明两点之间的法线越接近。然后从某一点出发，找出这个图的最小支撑树，并使得相邻点的定向一致。</p>
+        <p>这个定向方法在不光滑的地方，距离很近的薄板等情况下，可能会出问题。另外，如果点云有多个片区，虽然每个片区内部可以定向一致，但是片区之间的整体定向也是很难确定的。有不少论文针对这些情况设计了新的定向方法，但是新方法的条件假设也更多了。从全局效果来讲，不如这个方法的适普性好。因为算法假设越少，适普性也就越好。</p>
+        <hr class="line-divider">
+
+        <h4>扫描数据的完美定向</h4>
+        <p>扫描数据是可以完美定向的。因为扫描得到的深度点云，法线都朝向相机方向的。在之后的注册，融合等一些列处理过程中，不要轻易的丢弃法线的定向信息。多帧点云注册到一块，融合后，可以更新法线但是保持之前的全局定向.</p>
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

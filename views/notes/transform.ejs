@@ -1,0 +1,63 @@
+c<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>三维变换</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+    <script src="/javascripts/Dependence/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>三维变换 <small></small></h2>
+
+        <h4>齐次坐标</h4>
+        <p>齐次坐标，就是在传统坐标后面加入一维变量：C -> (C, W)。在三维空间中，它把三维坐标(X, Y, Z)提升到了四维的射影空间中(X, Y, Z, W)，对应的线性变换就是射影变换。齐次坐标转回三维空间坐标分两种情况，如果W为0，则(X, Y, Z)表示三维空间中的一个方向，如果W不为0，则对应的三维点坐标为(X/W, Y/W, Z/W)。齐次坐标表示有两个好处：一个是可以区分向量和点，另一个是齐次坐标下的矩阵可以表示平移变换。</p>
+        <li class="contentli">透视变换：一般的射影变换是一个4X4的矩阵变换，如下图1所示，它可以表示射影空间中任意的线性变换，如透视变换。</li>
+        <li class="contentli">仿射变换：如果把矩阵元素做一些限制到下图2，则为一个仿射变换。它可以表示三维空间中任意的线性变换。</li>
+        <li class="contentli">刚体变换：如果把图2的a元素的矩阵块限制为正交矩阵块r，如下图3所示，它就变成了一个刚体变换。它可以表示旋转变换和平移变换。</li>
+        <img class="featurette-image img-responsive center-block" src="/images/transform_matrix.jpg" alt="transform matrix">
+        <hr class="line-divider">
+
+        <h4>四元数</h4>
+        <p>四元数是二维空间的复数x + y * i在四维空间的推广x * i + y * j + z * k + w。复数可以很方便的表示二维空间的旋转变换，很自然的，人们想把它推广到三维空间，比如x * i + y * j + z。但是人们尝试过各种三维推广后，都失败了，主要原因是三维的复数不能满足代数上的一些性质。后来，爱尔兰数学家Hanmilton把复数成功推广到四维空间，也就是四元数：x * i + y * j + z * k + w，其中i * i = -1，j * j = -1，k * k = -1。四元数可以方便的表示三维空间中绕任意轴旋转的变换。所以，我们常用它来计算三维空间的旋转变换，只是一种计算方法而已。</p>
+        <hr class="line-divider">
+
+        <h4>欧拉角</h4>
+        <p>欧拉角可以用于描述三维旋转变换。它将旋转分解成分别绕三个坐标轴旋转一定角度的组合。如下面的旋转可以分解为：R = Rz(a) * Rx(b) * Ry(r)</p>
+        <img class="featurette-image img-responsive center-block" src="/images/eular_angle.png" alt="eular angle">
+        <p>在一些应用领域，也常用yaw, pitch, roll来表示绕坐标轴的旋转，如图所示：</p>
+        <img class="featurette-image img-responsive center-block" src="/images/yaw.png" alt="eular angle">
+
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

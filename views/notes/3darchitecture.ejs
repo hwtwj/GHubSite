@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>三维数据处理软件架构</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>三维数据处理软件架构 <small></small></h2>
+
+        <h4>三维数据处理软件都包含哪些模块</h4>
+        <p>三维数据处理软件，一般包含三个模块：数据管理和处理，三维渲染，UI。 这与图形学的三个经典问题是相对应的：建模，渲染和交互。与一般常见的数据处理软件，比如图像视频处理，不同的是，这里的数据展示模块需要三维渲染。与之对应的UI操作，也变成了一些三维空间的变换，比如模型的旋转缩放等。</p>
+        <hr class="line-divider">
+
+        <h4>如何搭建一个简单的三维数据处理软件</h4>
+        <p>那么如何快速的搭建一个三维数据处理软件呢？采用搭积木的方式，每个模块都有很多现成的开发包可以选择。比如UI模块处，一般常见的有MFC，QT，MyGUI（Magic3D使用的UI）等。数据处理算法方面，常见的有Geometry++，CGAL，OpenMesh，PCL等。渲染模块，可以使用OpenGL或者Direct3D，也可以使用渲染引擎，如OGRE，OSG等。</p>
+        <hr class="line-divider">
+
+        <h4>如何选择几何算法开发包</h4>
+        <p>几何算法模块，一般有三种选择：自主开发，使用开源库，使用商业库。如何选择呢？开发包API的生命周期，大概分为开发，维护和升级。对于一个算法，几乎不可能开发出放之四海皆准的API。它的绝大部分时间都在维护和升级。开发包的选择，其实就是一个成本问题。开发阶段主要是时间成本，如何快速的实现目标功能是最关键的问题。维护和升级阶段需要尽量低的成本开销。所谓开源库免费，其实只是在开发阶段免费，而开发阶段最看重的却是时间成本。有了源代码就需要人去维护，没有人维护的源代码是没有用处的。商业库的主要优势就是有专业的团队来维护和升级这些API，并且成本会比个人做得更低。如果想清楚API的生命周期以及每个阶段的成本开销后，根据自身具体情况，就能很容易的做出选择了。</p>
+        <hr class="line-divider">
+
+        <h4>数字几何处理是什么</h4>
+        <p>数字几何处理，一般是指点云网格数据的处理。和传统的NURBS正向建模的模型相比，数字几何处理的对象一般是三维扫描仪采集的数据，是曲面的离散表达，也就是数字化的。它的研究内容包括数据的获取，存储，表示，编辑，可视化等等。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/digital_media.jpg" alt="digital media">
+        <hr class="line-divider">
+
+        <h4>OpenGL是什么</h4>
+        <p>OpenGL是一套跨平台的图形绘制API，它通过一系列API把三维模型渲染到2D屏幕上。OpenGL采用了流水线机制，其绘制过程也称为渲染流水线。此外还有OpenGLES，主要用于嵌入式系统，或者移动平台；WebGL主要用于Web浏览器里的图形绘制。</p>
+        <hr class="line-divider">
+
+        <h4>OpenGL流水线</h4>
+        <p>OpenGL通过一系列API可以设置渲染流水线的状态，所以OpenGL也是一个状态机。三维模型通过一些处理，最终渲染到2D屏幕上：</p>
+        <li class="contentli">模型离散为三角面片：所有模型都需要离散为三角面片，OpenGL只接受三角面片输入。注意，虽然OpenGL也可以接受四边形，NURBS等输入，其本质最后都是三角面片的绘制。</li>
+        <li class="contentli">Vertex Shader把三维三角片转化到屏幕坐标系下的2D三角片：这个过程包含了变换，裁剪等操作</li>
+        <li class="contentli">2D三角片的光栅化：2D三角片被离散化，用屏幕坐标系的像素来表示，这也叫光栅化。</li>
+        <li class="contentli">Pixel Shader为光栅化后的模型像素着色。</li>
+        <p>上面是渲染流水线的大致描述，其中还有很多细节，不同的API也有些细节上的差别。最早的OpenGL是固定的流水线，也就是只能通过API来设置一些流水线中的状态。现代的OpenGL开放出了一些Shader，用户可以自己为Shader写代码，利用Shader可以写出各式各样的渲染效果。</p>
+        <hr class="line-divider">
+
+        <h4>渲染模块使用OpenGL还是渲染引擎</h4>
+        <p>如果渲染模块不是主要业务，建议使用渲染引擎。因为引擎内有很多现成的工具可以使用，减少开发的时间成本。</p>
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

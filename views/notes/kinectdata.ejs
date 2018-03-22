@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>Kinect数据</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+    <script src="/javascripts/Dependence/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>Kinect数据 <small></small></h2>
+
+        <h4>Kinect数据如何处理？精度很低吗</h4>
+        <p>Kinect数据属于低精度的深度视频数据，两个特点：一个是精度低，一个是视频数据。可以应用KinectFusion技术把连续的K(比如K取30)帧数据融合到一块，作为一帧数据用于后续处理。如下图所示，左图是一帧数据，右图是取了连续的30帧数据融合到一块的数据。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/kinectfusion.jpg" alt="kinect fusion">
+        <hr class="line-divider">
+
+        <h4>KinectFusion是什么</h4>
+        <p>KinectFusion的核心有两个技术，一个是ICP，一个是符号距离函数。它的思路是一边注册，一边融合。由于是深度视频，帧与帧之间的位置差别不大，可以看作是粗注册好的数据，所以可以直接应用ICP进行精细注册。融合采用了符号距离函数技术，它在空间中定义了一个到曲面的距离场，0等值面则为测量的曲面。ICP的缺点在KinectFusion中都能体现出来，比如滑动区域会融合失败。另外它并没有考虑全局注册，如果数据有大的回路，会有对不齐的现象出现。</p>
+        <hr class="line-divider">
+
+        <h4>为什么需要全局注册</h4>
+        <p>Kinect数据精度不高，在扫描一些大物体的时候，注册误差会累积得很厉害。如下图所示，第一列截取了三对ICP注册后的点云，局部来看注册得很好。然后逐对点云两两ICP注册，如中图所示，点云注册的效果并不好，累计误差很严重。第三列是点云经过全局注册后效果，注册误差被分散到每一帧中去了，从而减少整体的注册误差。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/kinect_global_registrate.jpg" alt="kinect_global_registrate">
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

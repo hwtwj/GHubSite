@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>细分网格建模</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+    <script src="/javascripts/Dependence/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>细分网格建模 <small></small></h2>
+
+        <h4>细分曲面介绍</h4>
+        <p>在三维建模领域里，细分曲面算是一个比较常见的术语了，经常用于动画角色的原型设计，甚至在工业设计领域，也开始流行用细分建模来进行原型设计。教科书里一讲到细分曲面，必然提一下《Geri's Game》，这部动画片里人物造型应用的就是细分曲面技术。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/geri_game.jpeg" alt="Geri's Game">
+        <p>那么究竟什么是细分曲面呢？小时候学素描，开始的时候都要学着画一个圆。一般从正方形开始，然后不断的割角，最后就成了一个圆。这其实就是一个细分曲线。这类作图方法，可以形象地称为切割磨光方法：设计师先勾划出物体的大致轮廓线，然后不断的细化割角。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/subdivide_cycle.jpeg" alt="subdivide cycle">
+        <p>把画圆的方法推广到三维，就得到了画球的方法。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/subdivide_sphere.jpeg" alt="subdivide sphere">
+        <p>应用细分曲面做三维模型的原型设计非常的方便。通常只需要两个步骤，先创建出模型的大致轮廓，然后设置需要切割的点线面。比如这个桌子模型，先创建出它的轮廓模型，看起来非常简单，然后设置哪些点线面需要切割。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/subdivide_table.jpeg" alt="subdivide table">
+        <p>细分曲面的核心就一个点：细分规则。不同的细分规则，生成的细分曲面外形是有区别的。常见的细分规则有Catmull-Clark细分，Doo-Sabin细分，Loop细分等。具体的细分规则可以参考教科书或者相关论文。</p>
+        <p>上面我们讲了，细分曲面可以应用于原型设计。主要特点是上手简单且表现力也很丰富。另外，一般的工业设计软件常用的曲面表示是样条曲面（分段多项式表示的曲面），这属于一种连续的信息表示，用于生产制造时，需要对曲面进行离散化。比如3D打印制造，它的输入就是一个网格。细分建模，可以直接得到网格，不需要样条曲面这种中间格式的表示。</p>
+        <p>在显卡上，也有细分曲面的应用。在游戏场景中，由于实时性的要求，网格的面片数量要求要尽量的低，但是，网格少了，模型的细节也少了。为了尽可能的提升网格的数量，显卡渲染流水线中加入Tessellation模块，这个模块直接在硬件上对网格进行了细分。</p>
+        <p>细分建模产生的网格，其面片分布非常的规则(regular)。规则的网格不管是用于几何处理，还是用于有限元计算，都有非常好的性质，比如计算稳定性。另外，细分网格表示的数据量非常小，很适合于网络传输。</p>
+        <hr class="line-divider">
+
+        <h4>细分网格建模</h4>
+        <p>三维公园提供了在线的三维建模工具，用户可以直接在浏览器中进行三维设计。细分建模主要面对人群是普通的三维设计爱好者，不需要专业的三维设计知识，就能快速上手进行三维建模。用户创建的模型，可以直接导出进行3D打印，注册用户也可以在线保存自己的三维设计。</p>
+        <p>建模工具采用了最新的浏览器3D技术：WebGL，它是HTML5标准中的3D技术。目前浏览器对WebGL已经有了很好的支持了，常见的浏览器如Chrome，Firefox，Safari，Opera，以及国内的搜狗浏览器，猎豹浏览器，360安全浏览器，傲游浏览器，2345王牌浏览器等，都能很好的支持WebGL。相信将来Web3D将会给Web带来更加炫酷的用户体验。</p>
+        <p>细分​建模的核心操作就三个：拉伸，变换，光滑。这三个操作的简单组合，就能创建出常见的三维模型。拉伸操作通过简单面挤出就能创建出新的模型部件，比如这个桌子，就是通过一个box，经过一系列的拉伸操作得到的。​</p>
+        <img class="featurette-image img-responsive center-block" src="/images/extrude_table.jpeg" alt="extrude table">
+        <p>光滑操作可以改变模型的局部光滑性，与整体细分不同的是，它的指定是局部的，可以保持住一些尖锐的几何部分。​我们给这个方桌子指定光滑性后，就得到了这个漂亮的<a href="/cagemodeling?designId=demon%233" target="_blank">桌子模型</a>。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/smooth_table.jpeg" alt="smooth table">
+        <p>用户创建的三维模型，可以导出来(STL, OBJ格式)进行3D打印。注册用户也可以在线存储自己的三维设计。用户可以在线浏览三维公园里的三维设计，注册用户甚至可以在已有的设计基础上进行修改，这就是模板设计，不需要从零开始做设计。设计回放功能，可以栩栩如生的回放设计过程，在回放过程中，我们可以学习到别人的设计设计思路，比如这个飞机的设计回放：</p>
+        <img class="featurette-image img-responsive center-block" src="/images/feature-modelshow.gif" alt="feature-modelshow">
+        <p>对三维建模的感兴趣的朋友，可以去试一试<a href="/cagemodeling" target="_blank">细分建模</a>。不管你是专业的设计师，还是普通的爱好者，在三维公园，你都可以秀出你的设计创意。</p>
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

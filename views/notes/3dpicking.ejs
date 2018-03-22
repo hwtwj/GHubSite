@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>三维拾取</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+    <script src="/javascripts/Dependence/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>三维拾取 <small></small></h2>
+
+        <h4>3D中的坐标系统</h4>
+        <p>3D系统中有各种各样的坐标系，如世界坐标系，相机坐标系，屏幕坐标系等。总的来讲，一种是全局坐标系，比如世界坐标系；一种是局部坐标系，它是相对于某种参照物为原点的坐标系，如相机坐标系。</p>
+        <li class="contentli">世界坐标系：三维世界的全局坐标系</li>
+        <li class="contentli">相机坐标系：以相机为原点，相机朝向为坐标轴的局部坐标系</li>
+        <li class="contentli">屏幕坐标系：三维模型投影到2D屏幕上的坐标系，鼠标坐标就在屏幕坐标系中</li>
+        <li class="contentli">父节点坐标系：三维场景树中，以父节点为原点的坐标系</li>
+        <hr class="line-divider">
+
+        <h4>三维拾取</h4>
+        <p>三维拾取，一般是指用户通过鼠标坐标，发射一条朝向屏幕内部的射线，来拾取三维场景中的物体。鼠标坐标在屏幕坐标系中，三维物体在世界坐标系中。首先需要把它们统一到同一个坐标系中，然后再进行求交计算。</p>
+        <li class="contentli">转换到屏幕坐标系：可以把模型通过矩阵变换M，变换到屏幕坐标系中，然后再和鼠标坐标求交。一般M=projectM * viewM * worldM，其中worldM是模型在世界坐标系中的变换矩阵，viewM相机坐标系中的视图矩阵，projectM是相机坐标系中投影矩阵。这三个矩阵可以通过gluProject函数得到，一些三维渲染引擎里也有api可以查询这些矩阵。</li>
+        <li class="contentli">转换到世界坐标系：也可以把鼠标发射的射线转换到世界坐标系，与三维模型进行求交计算。这个变换过程和上面是相反的。</li>
+        <p>三维拾取常常需要实时响应，这就要求拾取的实现是高效的。一般常见的思路，是快速排出掉不可能相交的物体，排除的越多，计算的就越快。</p>
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

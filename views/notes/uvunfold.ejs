@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>网格UV展开</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/prettify.css" rel="stylesheet" />
+    <script src="/javascripts/Dependence/prettify.js"></script>
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+    <script src="/javascripts/Dependence/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2><a href="/demo/unfold" target="_blank">网格UV展开</a> <small></small></h2>
+
+        <h4>UV展开是什么</h4>
+        <p>参数曲面的参数域变量一般用UV字母来表达，比如参数曲面F(u,v)。所以一般叫的三维曲面本质上是二维的，它所嵌入的空间是三维的。凡是能通过F(u,v)来表达的曲面都是参数曲面，比如NURBS曲面。对于三角网格，如果能把它与参数平面建立一一映射，那么它也就被参数化了，这个映射就是UV展开。如下图所示，左图是右边网格在参数平面上的展开，这样每个顶点都有了一个uv参数值，这也被称为纹理坐标。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/uvunfold.jpg" alt="uvunfold">
+        <h5>图1</h5>
+        <hr class="line-divider">
+
+        <h4>什么样的网格可以做UV展开</h4>
+        <p>那是不是所有的网格都可以做UV展开呢？答案是否定的。只有圆盘拓扑结构的网格才能展开到平面上，比如一个球，无论如何都不可能在不撕裂的情况下展开到平面。对于任意拓扑结构的网格，需要给它添加割缝，把它分割成一片一片的圆盘结构，再做展开。如下图所示，这个模型被分割成了很多片，再展开到了平面。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/texturemapping.jpg" alt="texturemapping">
+        <h5>图2</h5>
+        <hr class="line-divider">
+
+        <h4>UV展开的扭曲程度</h4>
+        <p>网格展开到平面区域，除了可展曲面，其它曲面在展开后都会产生一些扭曲。一般有两种扭曲。一种是曲面本身的几何所决定的，比如球面展开到平面，一定会产生扭曲。想要减少展开的扭曲程度，可以在扭曲程度大的地方增加曲面割线。另一种是展开算法中的约束产生的扭曲，比如固定边界的UV展开。一种直观的观察展开扭曲程度的方式是，把一张棋盘格图片贴到网格上，棋盘格越均匀，UV展开扭曲越小。</p>
+        <hr class="line-divider">
+
+        <h4>固定边界与自由边界</h4>
+        <p>如图所示，左图是自由边界的UV展开，右图是固定边界的UV展开。可以看到自由边界的展开结果扭曲程度要小很多。</p>
+        <li class="contentli">自由边界：自由边界的展开结果扭曲程度要小很多。但是边界如果比较复杂的时候，边界处可能会产生自交情况。</li>
+        <li class="contentli">固定边界：固定边界的展开一般应用于特定需求。需要注意的是，边界约束条件的合理性能影响UV展开的效果。</li>
+        <img class="featurette-image img-responsive center-block" src="/images/free_fix_boundary.jpg" alt="free_fix_boundary">
+        <h5>图3</h5>
+        <hr class="line-divider">
+
+        <h4>顶点坐标与纹理坐标的关系</h4>
+        <p>纹理坐标与顶点坐标不是一一对应的，但我们经常听见“顶点的纹理坐标”这个说法，严格来说是不准确的。下面用一个图来解释（这里考虑三角网格的情况，其余情况类似）：</p>
+        <img class="featurette-image img-responsive center-block" src="/images/texturecoord.jpg" alt="texturecoord">
+        <p>可以看出顶点坐标与纹理坐标其实没有直接联系，他们是用过三角面片间接联系起来的。它们之间没有一一对应的关系。</p>
+        <hr class="line-divider">
+
+        <h4>顶点纹理坐标和三角形纹理坐标</h4>
+        <p>严格来讲，顶点并没有纹理坐标的概念，只有三角形有纹理坐标的概念。网格UV展开到平面的时候，如果没有割缝产生，那么每个顶点在其相邻三角形内的纹理坐标都是一样的，故可简称为顶点的纹理坐标。如果有割缝产生，割缝处的顶点在不同三角形内的纹理坐标是不一样的。这时，顶点和纹理坐标是一对多的关系。下面说说在实际程序中，顶点纹理坐标和三角形纹理坐标的应用场景。</p>
+        <li class="contentli">单连通圆盘拓扑的UV展开：如图1情况所示。这种情况下，顶点和纹理坐标是一一对应的，一个顶点可以存一个纹理坐标。一般这类的UV展开，都是使用的顶点纹理坐标的概念。</li>
+        <li class="contentli">任意网格的UV展开：如图2情况所示。这种情况下，缝隙处的顶点和纹理坐标是一对多的关系。可以把纹理坐标存在三角形内。在非缝隙处，纹理坐标的存储有冗余信息。如果需要减少存储空间，也可以把纹理坐标存成一个数组（纹理坐标都不相等），然后每个三角形存纹理坐标的索引，类似OBJ的文件格式。</li>
+        <hr class="line-divider">
+
+        <h4>网格割缝和纹理坐标缝隙的区别</h4>
+        <p>这是两个不同的概念。把网格顶点映射到纹理坐标域所得到的2D网格，和原始网格的拓扑结构可以是不同的。你可以把这两个网格看成是两个独立的网格。纹理坐标的缝隙是2D网格的边界。网格割缝是把网格的拓扑结构改变了，割缝处会产生新的网格顶点。纹理坐标缝隙，是在展开的UV空间中，顶点纹理坐标的缝隙。缝隙处网格顶点和纹理坐标是一对多的关系。</p>
+        <p>如果在纹理坐标缝隙处把网格割开，那么割开后的网格顶点和纹理坐标就是一一对应的关系了。</p>
+        <hr class="line-divider">
+
+        <h4>网格割缝的创建</h4>
+        <p>UV展开的应用里，经常需要创建一些网格割缝。好的割缝，一般有这些性质：</p>
+        <li class="contentli">长度很短</li>
+        <li class="contentli">割线光滑</li>
+        <li class="contentli">沿着特征边</li>
+        <li class="contentli">分布在视觉不明显的地方</li>
+        <li class="contentli">在全自动UV展开应用里，割缝首先要能把网格割成一片一片的圆盘结构</li>
+        <hr class="line-divider">
+
+        <h4>纹理贴图应用</h4>
+        <p>网格UV展开经常用于纹理贴图应用。如下图所示，网格UV展开到平面后，把网格对应的贴图填充到UV坐标域，就得到了右边的纹理图。网格在渲染的时候，每个三角片离散化后，每个离散点会根据UV坐标值去纹理图里拾取颜色。拾取的方法，可以是UV坐标值最近点颜色，也可以根据UV坐标值的相邻四个像素做双线性差值。</p>
+        <p></p>
+        <img class="featurette-image img-responsive center-block" src="/images/texture_coordinate.jpg" alt="texturecoord">
+
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <body onload="prettyPrint()">
+  </body>
+</html>

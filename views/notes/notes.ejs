@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计">
+    <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理">
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>三维数据处理实践</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/notes.css" rel="stylesheet">
+    <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
+    <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+  </head>
+
+  <body>
+
+    <% include ../homepagetoolbar %>
+    
+    <div class="container">
+        <h2>三维数据处理实践</h2>
+        <hr class="line-divider">
+
+        <a href="/notes/3darchitecture"><h3>三维数据处理软件架构 <small>- 如何搭建一个简单的三维数据处理软件？如何选择几何算法开发包? 使用OpenGL还是渲染引擎... </small></h3></a>
+        <hr class="line-divider">
+
+        <a href="/notes/subdividemodeling"><h3>细分网格建模 <small>- 网格细分是什么？细分网格如何应用于三维建模... </small></h3></a>
+        <hr class="line-divider">
+
+        <a href="/notes/debugprogram"><h3>程序调试 <small>- 程序出问题了怎么办？如何重现问题？如何定位问题... </small></h3></a>
+        <hr class="line-divider">
+
+        <a href="/notes/pointcloudrepresentation"><h3>三维点云表示 <small>- 有序点云是什么？有序点云到无序点云遗失了什么信息... </small></h3></a>
+        <hr class="line-divider">
+
+        <a href="/notes/pointcloudnormal"><h3>点云法线 <small>- 点云法线有什么用？怎么计算？如何定向... </small></h3></a>
+        <hr class="line-divider">
+
+        <a href="/notes/registration"><h3>点云拼接注册 <small>- 点云拼接，配准，注册有什么联系？如何注册融合扫描数据... </small></h3></a>
+        <hr class="line-divider">
+
+        <a href="/notes/kinectdata"><h3>Kinect数据 <small>- Kinect数据如何处理？精度非常低吗？KinectFusion是什么... </small></h3></a>
+        <hr class="line-divider">
+
+        <a href="/notes/meshdatastructure"><h3>三维网格表示 <small>- 网格有哪些数据结构？半边结构好用吗？网格有哪些常见的属性？... </small></h3></a>
+        <hr class="line-divider">
+
+        <a href="/notes/stlformat"><h3>从STL文件到网格拓扑 <small>- STL文件是什么？网格拓扑是什么？为什么不建议使用STL格式？拓扑修复是什么... </small></h3></a>
+        <hr class="line-divider">
+
+        <a href="/notes/delaunaytriangulation"><h3>从Delaunay三角化到网格质量 <small>- Delaunay三角化是什么？如何提升网格质量... </small></h3></a>
+        <hr class="line-divider">
+
+        <a href="/notes/measuremesh"><h3>网格测量 <small>- 测地距离是什么？曲率是什么？软件中的单位系统... </small></h3></a>
+        <hr class="line-divider">
+
+        <a href="/notes/uvunfold"><h3>网格UV展开 <small>- UV展开是什么？什么样的网格可以做UV展开？UV展开的扭曲程度... </small></h3></a>
+        <hr class="line-divider">
+
+        <a href="/notes/colormesh"><h3>彩色网格 <small>- 如何制作彩色网格？单光源点云颜色修正，多角度点云颜色融合，色彩信息的存储，纹理贴图的色彩融合... </small></h3></a>
+        <hr class="line-divider">
+
+        <a href="/notes/transform"><h3>三维变换 <small>- 齐次坐标是什么？四元数和三维旋转的关系？欧拉角又是什么... </small></h3></a>
+        <hr class="line-divider">
+
+        <a href="/notes/3dfeature"><h3>三维几何特征 <small>- 常用的三维几何描述子有哪些，三维几何特征检测，识别... </small></h3></a>
+        <hr class="line-divider">
+
+        <a href="/notes/3dpicking"><h3>三维拾取 <small>- 3D中的坐标系统，如何进行三维拾取... </small></h3></a>
+        <hr class="line-divider">
+
+        <a href="/notes/numericaloptimization"><h3>数值优化 <small>- 有哪些数值优化的方法？最速下降法，牛顿法，数值优化的常见问题... </small></h3></a>
+        
+    </div>
+
+    <hr>
+    <% include ../homepagefooter %>
+  
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
