@@ -29,12 +29,10 @@
             <div class="col-sm-3 col-md-2 sidebar">
                 <h3>Geometry++文档</h3>
                 <h4><a href="/geometryplusplus">返回</a></h4>
+                <h4><a href="/bgl/document">BGL</a></h4>
                 <h4><a href="#overview">使用简介</a></h4>
-                <h4><a href="#pcinterface">点云</a></h4>
+                <h4><a href="#pcsampling">点云</a></h4>
                 <ul class="sideul">
-                    <li class="sideli"><a href="#pcinterface">点云表示</a></li>
-                    <li class="sideli"><a href="#pcparser">导入导出</a></li>
-                    <li class="sideli"><a href="#pcgridpointcloud">有序点云</a></li>
                     <li class="sideli"><a href="#pcsampling">采样</a></li>
                     <li class="sideli"><a href="#pcnormal">法向量</a></li>
                     <li class="sideli"><a href="#pcsmooth">光滑</a></li>
@@ -45,11 +43,9 @@
                     <li class="sideli"><a href="#pcsum">多帧去重</a></li>
                     <li class="sideli"><a href="#pldeform">点云变形</a></li>
                 </ul>
-                <h4><a href="#meshinterface">网格</a></h4>
+                <h4><a href="#poepof">网格</a></h4>
                 <ul class="sideul">
-                    <li class="sideli"><a href="#meshinterface">三角网格表示</a></li>
                     <li class="sideli"><a href="#poepof">边点和面点</a></li>
-                    <li class="sideli"><a href="#meshparser">导入导出</a></li>
                     <li class="sideli"><a href="#meshremovegeometrynoise">去噪光滑</a></li>
                     <li class="sideli"><a href="#meshisolate">去孤立项</a></li>
                     <li class="sideli"><a href="#meshdetailenhancement">几何细节增强</a></li>
@@ -94,21 +90,13 @@
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2" main>
                 <a name="overview"><h5>简介</h5></a>
-                <p>Geometry++是一个关于三维数据(点云，网格)处理的几何库. 它包含了三维数据处理最基础的算法, 可以作为三维数据处理软件的几何引擎来使用. 它有如下特点:</p>
-                <ul class="sideul">
-                    <li class="sideli">算法前沿高效, 工程稳定可靠</li>
-                    <li class="sideli">使用简易, 非常容易集成进原有的系统: Geometry++的算法都是基于ITriMesh和IPointCloud两个接口类来实现的, 您只需要继承实现这两个接口类, 就可以调用所有的API, 三维数据的表示还是基于原有的系统</li>
-                    <li class="sideli">可维护: Bug反馈后会及时修正, 优于开源库的使用体验</li>
-                </ul>
+                <p>Geometry++是一个关于三维数据(点云，网格)处理的几何库. 它包含了三维数据处理最基础的算法, 可以作为三维数据处理软件的几何引擎来使用.</p>
                 <hr class="featurette-divider">
 
-                <a name="magic3d"><h5>Magic3D</h5></a>
-                <p>Geometry++开发的使用范例可以参考<a class="code" href="/magic3d" target="_blank">Magic3D</a>软件的实现. Magic3D提供了点云和网格数据处理的基本功能，底层的几何算法调用了Geometry++ SDK</p>
-                <hr class="featurette-divider">
 
                 <a name="usagescenario"><h5>使用场景</h5></a>
-                <p>1. 用户已经拥有了一套三维数据处理系统, 想调用Geometry++里面的一些功能. 这种情况只需要实现IPointCloud和ITriMesh两个接口类, 便可以调用所有的算法. 具体的用法可以参考<a href="#pcinterface">IPointCloud</a>, <a href="#meshinterface">ITriMesh</a>和相应API的介绍.</p>
-                <p>2. 用户的三维数据处理模块打算基于Geometry++. 这种情况用户可以使用PointCloud和TriMesh两个类来表示自己的三维数据, 再调用所有的算法. 具体的用法可以参考<a href="#pcinterface">IPointCloud</a>, <a href="#meshinterface">ITriMesh</a>以及相应ASPI的介绍.</p>
+                <p>1. 用户已经拥有了一套三维数据处理系统, 想调用Geometry++里面的一些功能. 这种情况只需要实现IPointCloud和ITriMesh两个接口类, 便可以调用所有的算法. 具体的用法可以参考<a href="/bgl/document#ipointcloud">IPointCloud</a>, <a href="/bgl/document#itrimesh">ITriMesh</a>和相应API的介绍.</p>
+                <p>2. 用户的三维数据处理模块打算基于Geometry++. 这种情况用户可以使用PointCloud和TriMesh两个类来表示自己的三维数据, 再调用所有的算法. </p>
                 <hr class="featurette-divider">
 
                 <a name="usageintroduction"><h5>使用简介</h5></a>
@@ -116,210 +104,6 @@
                 <p>2. 库: 设置好对应版本动态链接库的路径. 如果是Windows平台，需要在预处理里定义宏GPP_DLL_EXPORT，WIN32</p>
                 <hr class="featurette-divider">
 
-                <a name="pcinterface"><h5>点云表示</h5></a>
-<pre class="prettyprint">
-class IPointCloud;
-</pre>
-                <p>点云数据结构接口. Geometry++点云算法都是基于IPointCloud接口来调用的.</p>
-                <p>用法：继承这个接口类，实现其成员函数.</p>
-                <p>优点：可以很方便的在已有的程序中使用Geometry++提供的点云算法，只需要实现这个接口类，就可以调用所有点云相关的算法</p>
-                <p>用法说明:</p>
-                <p>1. 假设用户表示点云数据的类为MyPointCloudData, 则可以定义一个类MyPointCloud</p>
-                <!-- <?prettify lang=scm?> -->
-<pre class="prettyprint">
-    class MyPointCloud : public IPointCloud
-    {
-        MyPointCloudData* mData;
-        MyPointCloud(MyPointCloudData* data) : mData(data) 
-        {}
-        virtual Int GetPointCount() const
-        { 
-            mData->GetPointCloud(); 
-        }
-        virtual Vector3 GetPointCoord() const 
-        { 
-            mData->GetPointCoord(); 
-        }
-        virtual void SetPointCoord(Int pid, const Vector& coord) 
-        { 
-            mData->SetPointCoord(pid, coord[0], coord[1], coord[2]); 
-        }
-        // 其它成员函数类似
-    };
-
-    MyPointCloud pointCloud(myPointCloudData); // 用自己的点云数据初始化MyPointCloud
-    ErrorCode res = ConsolidatePointCloud::LaplaceSmooth(pointCloud, 0.2, 5); // 调用点云算法API来修改自己的点云数据
-    res = ConsolidatePointCloud::CalculatePointCloudNormal(pointCloud);
-    // 其它点云算法API的具体用法可以参考相应模块的介绍
-</pre>
-
-                <p>2. 点云顶点的存储格式一般是线性的，获取方便，但是删除会存在一些效率问题. IPointCloud提供了SwapPoint函数把需要删除的元素交换到尾部，然后再通过PopbackPoints删除尾部元素.</p>
-                <p>3. Clear函数负责清除Point Coordinate, Point Normal. 回到构造类初始化时的状态.</p>
-                <p>4. HasNormal函数主要用意: 有时候点云创建后没有法线信息，IPointCloud提供这个函数查询点云是否有可靠法线信息. SetHasNormal函数可以设置点云是否有法线信息</p>
-                <hr class="line-divider">
-
-<pre class="prettyprint">
-class PointCloud;
-</pre>
-                <p>IPointCloud接口类和IGridPointCloud接口类的一个实现，用户可以直接使用它来表示点云数据</p>
-                <p>这是PointCloud的一个<a class="code" href="/file/PointCloud.cpp" target="_blank">实现示例</a>，用户自己实现IPointCloud的时候可以参考一下</p>
-                <p>UnifyCoords的典型使用场景：在多帧点云注册过程中，如果对第一帧点云应用了前一个UnifyCoords，为了保持之后帧的点云做同样的平移缩放变换，可以用前一个UnifyCoords的返回值来设置这个UnifyCoords，使得每一帧的点云做同样的变换</p>
-                <hr class="featurette-divider">
-
-                <a name="pcparser"><h5>点云导入导出</h5></a>
-<pre class="prettyprint">
-PointCloud* Parser::ImportPointCloud(std::string fileName);
-</pre>
-                <p>目前支持的文件格式：obj, asc. 用户也可以导入其它格式的点云数据, 只需要自己写一个Parser, 然后用导入的数据创建点云类(例如PointCloud)即可使用了</p>
-                <p>fileName: 格式为path/xxx.obj, path/xxx.asc, path可以是绝对路径，也可以相对路径</p>
-                <p>返回值: 如果导入失败则返回NULL</p>
-                <hr class="line-divider">
-<pre class="prettyprint">
-void Parser::ExportPointCloud(std::string fileName, const IPointCloud* pointCloud);
-</pre>
-                <p>目前支持的文件格式：obj, asc, ply.</p>
-                <p>fileName: 格式为path/xxx.obj, path/xxx.asc, path可以是绝对路径，也可以相对路径</p>
-                <hr class="featurette-divider">
-
-                <a name="pcgridpointcloud"><h5>有序点云</h5></a>
-                <pre class="prettyprint">
-class IGridPointCloud;
-</pre>
-                <p>有序点云的数据结构接口。</p>
-                <p>有序点云是一个方阵，如图所示。点云按照方阵一行一行的，从左上角到右下角排列。</p>
-                <img class="featurette-image img-responsive center-block" src="/images/grid_coordinate.jpg" alt="Grid Point Cloud">
-                <p>优点：相比IPointCloud，IGridPointCloud多了点云的位置连接关系信息。相关的计算可以更加快速。</p>
-                <p>用法说明：</p>
-                <li>InitGrid：初始化有序点云，设置长宽。初始化的点云格点默认为invalid</li>
-                <li>RemoveOuterBlankGrids：移出掉四周无效的点，并重新设置点云的长宽。如下图所示，原始点云变为了红色框内缩小长宽的有序点云。</li>
-                <img class="featurette-image img-responsive center-block" src="/images/RemoveOuterBlankGrids.jpg" alt="RemoveOuterBlankGrids">
-                <li>SetHasGridNormal：设置点云是否带有法线。如果有，需要为法线分配内存空间</li>
-                <li>SetGridCoord：为valid的格点设置空间坐标</li>
-                <li>SetGridNormal：为valid的格点设置法线信息</li>
-                <li>ValidGrid：有效格点的信息（坐标，法线等）也可以像IPointCloud里Point一样按某种顺序排列起来，根据索引顺序访问。</li>
-                <li>GetValidGridCount：获取有效格点的个数。类似IPointCloud::GetPointCount。</li>
-                <li>GetValidGridCoord：根据有效格点的索引，获取其坐标。类似IPointCloud::GetPointCoord。</li>
-                <li>GetValidGridNormal：根据有效格点的索引，获取其法线。类似IPointCloud::GetPointNormal。</li>
-                <li>GetGridPointId：获取格点对应的有效格点的索引。若格点无效，则返回-1</li>
-                <li>GetPointGridId：获取有效格点对应的格点坐标</li>
-                <li>导入导出：Geometry++里可以使用gbg和gtg格式的文件存储有序点云。具体的导入导出格式，可以参考<a class="code" href="/file/Parser.cpp" target="_blank">Parser</a></li>
-                <li>注：PointCloud是IGridPointCloud接口类的一个实现。</li>
-                <hr class="line-divider">
-
-                <pre class="prettyprint">
-ErrorCode ConsolidateGrid::CalculateGridNormal(IGridPointCloud* pointCloud);
-</pre>
-                <p>计算有序点云法线</p>
-                <p>pointCloud：输入的有序点云</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="line-divider">
-
-                <pre class="prettyprint">
-ErrorCode ConsolidateGrid::CalculateGridIsolation(const IGridPointCloud* pointCloud, std::vector< Real >* isolation, Real maxExtendNormalAngle);
-</pre>
-                <p>用法：计算每个点的孤立值. 孤立值代表了这个点所在局部块占整体点云的比例。其几何意义为，点云被分割为不同的块，每个块内点的孤立值为块内点数占总点数的比例。孤立值越小，孤立项的几率越大，范围是(0, 1). 比如可以认为孤立值小于0.1的点就为孤立项。</p>
-                <p>pointCloud：有序点云数据</p>
-                <p>isolation: 点云孤立值，范围是[0, 1]。isolation的顺序与有效格点的顺序一致。</p>
-                <p>maxExtendNormalAngle：邻居点法线的最大夹角：如果大于这个值，则不会判定为邻居点</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="line-divider">
-
-                <pre class="prettyprint">
-ErrorCode ConsolidateGrid::CalculateGridDensity(const IGridPointCloud* pointCloud, Real& density);
-</pre>
-                <p>计算有序点云密度</p>
-                <p>pointCloud：输入的有序点云</p>
-                <p>density：点云密度</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="line-divider">
-
-                <pre class="prettyprint">
-ErrorCode ConsolidateGrid::DetectGridBoundary(const IGridPointCloud* pointCloud, Int boundarySize, std::vector< std::pair< Int, Int > >& boundaryIds);
-</pre>
-                <p>计算有序点云边界点</p>
-                <p>pointCloud：输入的有序点云</p>
-                <p>boundarySize：点云边缘厚度</p>
-                <p>boundaryIds：点云边界点。std::pair<Int, Int>是点云的grid坐标值</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="line-divider">
-
-                <pre class="prettyprint">
-ErrorCode ConsolidateGrid::SmoothGridGeometry(IGridPointCloud* pointCloud, Int neighborWidth, Int iterationCount);
-</pre>
-                <p>光滑有序点云几何</p>
-                <p>pointCloud：输入的有序点云</p>
-                <p>neighborWidth：点云光滑邻域大小</p>
-                <p>iterationCount：光滑迭代次数</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="line-divider">
-
-                <pre class="prettyprint">
-ErrorCode ConsolidateGrid::SmoothGridNormal(IGridPointCloud* pointCloud, Int neighborWidth, Int iterationCount);
-</pre>
-                <p>光滑有序点云法线</p>
-                <p>pointCloud：输入的有序点云</p>
-                <p>neighborWidth：点云光滑邻域大小</p>
-                <p>iterationCount：光滑迭代次数</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="line-divider">
-
-                <pre class="prettyprint">
-ErrorCode SampleGrid::UniformSample(const IGridPointCloud* pointCloud, Int sampleCount, std::vector< std::pair< Int, Int > >* sampleIndex);
-</pre>
-                <p>有序点云均匀采样</p>
-                <p>pointCloud：输入的有序点云</p>
-                <p>sampleCount：采样的目标点数，点数应小于点云点的个数</p>
-                <p>sampleIndex：返回采样点的索引结果</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="line-divider">
-
-                <pre class="prettyprint">
-ErrorCode SampleGrid::GeometrySample(const IGridPointCloud* pointCloud, Int sampleCount, Real uniformWeight, std::vector< std::pair< Int, Int > >* sampleIndex);
-</pre>
-                <p>有序点云几何采样，采样结果在几何特征明显的地方数量会多一些</p>
-                <p>pointCloud：输入的有序点云</p>
-                <p>sampleCount：采样的目标点数，点数应小于点云点的个数</p>
-                <p>uniformWeight：采样结果的均匀性，范围[0, 1]. 参数越大，均匀性越好.</p>
-                <p>sampleIndex：返回采样点的索引结果</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="line-divider">
-
-                <pre class="prettyprint">
-ErrorCode SampleGrid::Simplify(const IGridPointCloud* pointCloud, Real interval, GridSimplifyType type, IGridPointCloud* simplifiedCloud);
-</pre>
-                <p>有序点云简化：根据点间距做点云简化。</p>
-                <p>pointCloud：输入的有序点云</p>
-                <p>interval：简化目标点间距。注意，此间距是一个参考值，简化后的点云密度在此值附近，不一定严格相等。</p>
-                <p>type：GRID_SIMPLIFY_SAMPLE-从原始点云采样；GRID_SIMPLIFY_MERGE-简化时候会合并点云</p>
-                <p>simplifiedCloud：简化后的点云。</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="line-divider">
-
-                <pre class="prettyprint">
-ErrorCode RegistrateGrid::ICPRegistrate(const IGridPointCloud* pointCloudRef, const IGridPointCloud* pointCloudFrom, Matrix4x4* resultTransform, const Matrix4x4* initTransform = NULL, Int maxTryCount = 3);
-</pre>
-                <p>注意：点云必须带有法线信息。<p>
-                <p>有序点云的ICP注册对齐：pointCloudRef = resultTransform * initTransform * pointCloudFrom</p>
-                <p>pointCloudRef: 参考点云，需要注意的是点云需要有法线信息</p>
-                <p>pointCloudFrom: 需要做刚体变换对齐的点云，需要注意的是点云需要有法线信息</p>
-                <p>resultTransform: 所求的刚体变换</p>
-                <p>initTransform: pointCloudFrom的初始变换，如果为NULL，则解释为恒等变换</p>
-                <p>maxTryCount: 最大注册尝试次数。有时候，两个点云的初始位置差别比较大，ICP在注册失败后会调整参数再次尝试。</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="line-divider">
-
-                <pre class="prettyprint">
-ErrorCode RegistrateGrid::AlignGrid(const IGridPointCloud* pointCloudRef, const IGridPointCloud* pointCloudFrom, Matrix4x4* resultTransform, Real accuracy = 0);
-</pre>
-                <p>有序点云的无标记点对齐：pointCloudRef = resultTransform * pointCloudFrom</p>
-                <p>注意: pointCloudRef和pointCloudFrom需要计算好法向量. </p>
-                <p>使用场景: 无标记点的初始对齐变换，初始对齐之后再调用ICP注册进行精细对齐</p>
-                <p>pointCloudRef: 参考点云. 需要注意的是点云需要有法线信息.</p>
-                <p>pointCloudFrom: 需要做刚体变换对齐的点云. 需要注意的是点云需要有法线信息.</p>
-                <p>accuracy: 注册精度，参数范围是[0, 1]. 参数越大，成功率越高，计算速度也越慢。默认精度为0.</p>
-                <p>resultTransform: 所求的刚体变换</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="featurette-divider">
 
                 <a name="pcsampling"><h5>点云采样</h5></a>
 <pre class="prettyprint">
@@ -373,6 +157,38 @@ ErrorCode SamplePointCloud::Simplify(const IPointCloud* pointCloud, Int resoluti
                 <p>pointFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样</p>
                 <p>simplifiedFields: 简化后点云的点属性，格式和pointFields一样。</p>
                 <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode SampleGrid::UniformSample(const IGridPointCloud* pointCloud, Int sampleCount, std::vector< std::pair< Int, Int > >* sampleIndex);
+</pre>
+                <p>有序点云均匀采样</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>sampleCount：采样的目标点数，点数应小于点云点的个数</p>
+                <p>sampleIndex：返回采样点的索引结果</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode SampleGrid::GeometrySample(const IGridPointCloud* pointCloud, Int sampleCount, Real uniformWeight, std::vector< std::pair< Int, Int > >* sampleIndex);
+</pre>
+                <p>有序点云几何采样，采样结果在几何特征明显的地方数量会多一些</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>sampleCount：采样的目标点数，点数应小于点云点的个数</p>
+                <p>uniformWeight：采样结果的均匀性，范围[0, 1]. 参数越大，均匀性越好.</p>
+                <p>sampleIndex：返回采样点的索引结果</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode SampleGrid::Simplify(const IGridPointCloud* pointCloud, Real interval, GridSimplifyType type, IGridPointCloud* simplifiedCloud);
+</pre>
+                <p>有序点云简化：根据点间距做点云简化。</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>interval：简化目标点间距。注意，此间距是一个参考值，简化后的点云密度在此值附近，不一定严格相等。</p>
+                <p>type：GRID_SIMPLIFY_SAMPLE-从原始点云采样；GRID_SIMPLIFY_MERGE-简化时候会合并点云</p>
+                <p>simplifiedCloud：简化后的点云。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
                 <hr class="featurette-divider">
 
                 <a name="pcnormal"><h5>点云法向量</h5></a>
@@ -406,19 +222,24 @@ ErrorCode ConsolidatePointCloud::ReversePatchNormal(IPointCloud* pointCloud, Int
                 <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
                 <hr class="line-divider">
 
-                <p>扫描点云数据的相关介绍可以参考<a class="code" href="http://threepark.net/notes/pointcloudrepresentation" target="_blank">有序点云</a>
 <pre class="prettyprint">
-ErrorCode ConsolidatePointCloud::ConsolidateRawScanData(IPointCloud* pointCloud, Int resolutionX, Int resolutionY, bool removeOutlier, bool zPositive, Real maxZAngle = 90.0 * ONE_RADIAN);
+ErrorCode ConsolidateGrid::CalculateGridNormal(IGridPointCloud* pointCloud);
 </pre>
-                <p>原始扫描数据是一帧深度图，这个api提供了计算扫描数据的法线，移除非扫描点(z >= 0的点)以及飞点的功能</p>
-                <p>pointCloud: 深度图点云. 点云按照方阵一行一行的，从左上角到右下角排列，相机坐标系: x值正方向朝右，y值正方向朝上，z值负方向与相机朝向一致. 最终计算的点云法向量与相机朝向相反(z值正方向)</p>
-                <p>resolutionX: 点云X方向分辨率</p>
-                <p>resolutionY: 点云Y方向分辨率</p>
-                <p>removeOutlier: 是否需要移除飞点</p>
-                <p>zPositive: 点云的z坐标是否大于0 </p>
-                <p>maxZAngle: 去除normal[2] < cos(maxZAngle)的点。几何意义是去除掉边界点。具体说明可以参考<a class="code" href="http://threepark.net/notes/pointcloudrepresentation" target="_blank">有序点云</a>介绍 </p>
+                <p>计算有序点云法线</p>
+                <p>pointCloud：输入的有序点云</p>
                 <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
                 <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode ConsolidateGrid::SmoothGridNormal(IGridPointCloud* pointCloud, Int neighborWidth, Int iterationCount);
+</pre>
+                <p>光滑有序点云法线</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>neighborWidth：点云光滑邻域大小</p>
+                <p>iterationCount：光滑迭代次数</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
 
                 <a name="pcsmooth"><h5>点云光滑</h5></a>
 <pre class="prettyprint">
@@ -446,6 +267,16 @@ ErrorCode ConsolidatePointCloud::SmoothGeometryByNormal(IPointCloud* pointCloud,
     GPP::ErrorCode res = GPP::ConsolidatePointCloud::SmoothNormal(pointCloud);
     res = GPP::ConsolidatePointCloud::SmoothGeometryByNormal(pointCloud);
 </pre>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode ConsolidateGrid::SmoothGridGeometry(IGridPointCloud* pointCloud, Int neighborWidth, Int iterationCount);
+</pre>
+                <p>光滑有序点云几何</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>neighborWidth：点云光滑邻域大小</p>
+                <p>iterationCount：光滑迭代次数</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
                 <hr class="line-divider">
 
                 <a name="pcoutlier"><h5>点云去除飞点孤立项</h5></a>
@@ -526,6 +357,16 @@ ErrorCode CalculateUniformity(const IPointCloud* pointCloud, std::vector< Real >
     }
     res = DeletePointCloudElements(mpPointCloud, deleteIndex);
 </pre>
+                <hr class="line-divider">
+                
+                <pre class="prettyprint">
+ErrorCode ConsolidateGrid::CalculateGridIsolation(const IGridPointCloud* pointCloud, std::vector< Real >* isolation, Real maxExtendNormalAngle);
+</pre>
+                <p>用法：计算每个点的孤立值. 孤立值代表了这个点所在局部块占整体点云的比例。其几何意义为，点云被分割为不同的块，每个块内点的孤立值为块内点数占总点数的比例。孤立值越小，孤立项的几率越大，范围是(0, 1). 比如可以认为孤立值小于0.1的点就为孤立项。</p>
+                <p>pointCloud：有序点云数据</p>
+                <p>isolation: 点云孤立值，范围是[0, 1]。isolation的顺序与有效格点的顺序一致。</p>
+                <p>maxExtendNormalAngle：邻居点法线的最大夹角：如果大于这个值，则不会判定为邻居点</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
                 <hr class="featurette-divider">
 
                 <a name="pcoverlap"><h5>点云去除重影</h5></a>
@@ -709,6 +550,32 @@ ErrorCode DeformPointList::GlobalNonRigidRegistrate(std::vector< IPointCloud* >*
                 <p>initTransformList：pointCloudList的初始变换，如果为NULL，则解释为恒等变换。</p>
                 <p>nonRigidSize：非刚体变换的数量，每个刚体变换作用于点云的一个子片区。数量越多，非刚性越强。数量为1时，即为刚体变换。</p>
                 <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode RegistrateGrid::ICPRegistrate(const IGridPointCloud* pointCloudRef, const IGridPointCloud* pointCloudFrom, Matrix4x4* resultTransform, const Matrix4x4* initTransform = NULL, Int maxTryCount = 3);
+</pre>
+                <p>注意：点云必须带有法线信息。<p>
+                <p>有序点云的ICP注册对齐：pointCloudRef = resultTransform * initTransform * pointCloudFrom</p>
+                <p>pointCloudRef: 参考点云，需要注意的是点云需要有法线信息</p>
+                <p>pointCloudFrom: 需要做刚体变换对齐的点云，需要注意的是点云需要有法线信息</p>
+                <p>resultTransform: 所求的刚体变换</p>
+                <p>initTransform: pointCloudFrom的初始变换，如果为NULL，则解释为恒等变换</p>
+                <p>maxTryCount: 最大注册尝试次数。有时候，两个点云的初始位置差别比较大，ICP在注册失败后会调整参数再次尝试。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode RegistrateGrid::AlignGrid(const IGridPointCloud* pointCloudRef, const IGridPointCloud* pointCloudFrom, Matrix4x4* resultTransform, Real accuracy = 0);
+</pre>
+                <p>有序点云的无标记点对齐：pointCloudRef = resultTransform * pointCloudFrom</p>
+                <p>注意: pointCloudRef和pointCloudFrom需要计算好法向量. </p>
+                <p>使用场景: 无标记点的初始对齐变换，初始对齐之后再调用ICP注册进行精细对齐</p>
+                <p>pointCloudRef: 参考点云. 需要注意的是点云需要有法线信息.</p>
+                <p>pointCloudFrom: 需要做刚体变换对齐的点云. 需要注意的是点云需要有法线信息.</p>
+                <p>accuracy: 注册精度，参数范围是[0, 1]. 参数越大，成功率越高，计算速度也越慢。默认精度为0.</p>
+                <p>resultTransform: 所求的刚体变换</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
                 <hr class="featurette-divider">
 
                 <a name="pcsum"><h5>多帧点云去重</h5></a>
@@ -813,125 +680,10 @@ ErrorCode Deform(IPointCloud* pointCloud, ControlInfo* controlInfo, const std::v
                 <hr class="featurette-divider">
 
 
-                <a name="meshinterface"><h5>三角网格表示</h5></a>
-<pre class="prettyprint">
-class ITriMesh;
-</pre>
-                <p>网格数据结构接口. Geometry++网格算法都是基于ITriMesh接口来调用的.</p>
-                <p>用法：继承这个接口类，实现其成员函数.</p>
-                <p>优点：可以很方便的在已有的程序中使用Geometry++提供的网格算法，只需要实现这个接口类，就可以调用所有网格相关的算法</p>
-                <p>用法说明：</p>
-                <p>1. 假设用户表示三角网格数据的类为MyTriMeshData, 则可以定义一个类MyTriMesh:</p>
-<pre class="prettyprint">
-    class MyTriMesh : public ITriMesh
-    {
-        MyTriMeshData* mData;
-        MyTriMesh(MyTriMeshData* data) : mData(data) 
-        {}
-        virtual Int GetVertecCount() const 
-        { 
-            return mData->GetVertecCount(); 
-        }
-        virtual Vector3 GetVertexCoord(Int vid) const 
-        { 
-            return mData->GetVertexCoord(); 
-        }
-        virtual void SetVertexCoord(Int vid, const Vector3& coord) 
-        { 
-            mData->SetVertexCoord(vid, coord[0], coord[1], coord[2]); 
-        }
-        virtual Int InsertVertex(const Vector3& coord) 
-        { 
-            mData->InsertVertex(coord); 
-            return insertVertexId; 
-        }
-        // 其它成员函数类似
-    };
-
-    MyTriMesh triMesh(myTriMeshData); // 用自己的三角网格数据初始化MyTriMesh
-    ErrorCode res = ConsolidateMesh::LaplaceSmooth(triMesh, 0.2, 5, true); // 调用网格算法API来修改自己的网格数据
-    res = ConsolidateMesh::MakeTriMeshManifold(triMesh);
-    // 其它网格算法API的具体用法可以参考相应模块的介绍
-</pre>
-                <p>2. 构建网格示例:</p>
-<pre class="prettyprint">
-    for (GPP::Int vid = 0; vid < vertexCount; vid++)
-    {
-        triMesh->InsertVertex(vertexCoord[vid]);
-    }
-    for (GPP::Int fid = 0; fid < faceCount; fid++)
-    {
-        triMesh->InsertTriangle(triangleIndex[fid][0], triangleIndex[fid][1], triangleIndex[fid][2]);
-    }
-    triMesh->UpdateNormal();
-</pre>       
-                <hr class="line-divider">
-                <p>3. 三角网格顶点和面的存储格式是线性的，获取方便，但是删除会存在一些效率问题. ITriMesh提供了SwapVertex(SwapTriangles) 函数把需要删除的元素交换到尾部，然后再通过PopbackVertices(PopbackTriangles)删除尾部元素.</p>
-                <p>4. Clear函数负责清除Vertex Coordinate, Vertex Normal, Triangle Index, Triangle Normal. 回到构造类初始化时的状态.</p>
-                <p>5. UpdateNormal负责重新计算网格的顶点和三角面的法线信息.</p>
-                <hr class="featurette-divider">
-                
-<pre class="prettyprint">
-class TriMesh;
-</pre>
-                <p>ITriMesh接口类的一个实现，用户可以直接使用它来表示网格数据</p>
-                <p>这是ITriMesh的一个<a class="code" href="/file/TriMesh.cpp" target="_blank">实现示例</a>，用户自己实现ITriMesh的时候可以参考一下</p>
-                <p>用法说明：</p>
-                <p>1. FuseVertex用于建立STL格式网格的连接关系. 顶点位置相同的点会被处理为一个顶点. STL格式不能表示带缝的网格，因为它没有拓扑信息, 属于Triangle Soup. 建议使用OBJ格式的网格</p>
-                <p>2. UnifyCoords使得TriMesh的顶点坐标会被平移和均匀缩放到范围(-bboxSize, bboxSize)以内</p>
-                <hr class="featurette-divider">
-                
-                <a name="halfedgemesh"><h5>网格半边结构</h5></a>
-<pre class="prettyprint">
-class HalfMesh;
-</pre>
-                <p>HalfMesh类是网格半边结构的一个实现，用户可以直接使用它来表示网格数据. 半边结构的介绍可以参考这个<a class="code" href="http://www.flipcode.com/archives/The_Half-Edge_Data_Structure.shtml" target="_blank">网页</a></p>
-                <img class="featurette-image img-responsive center-block" src="/images/halfedgestructure.jpg" alt="Half Edge Structure">
-                <div class="imgtext">图示：半边数据结构示例. 左边红点为内点，右边红点为边界点</div>
-                <p>用法说明：</p>
-                <p>1. 构建网格示例:</p>
-<pre class="prettyprint">
-    for (GPP::Int vid = 0; vid < vertexCount; vid++)
-    {
-        halfMesh->InsertVertex(vertexCoord[vid]);
-    }
-    std::vector< Vertex3D* > vertexList;
-    for (GPP::Int fid = 0; fid < faceCount; fid++)
-    {
-        vertexList.clear();
-        vertexList.push_back(halfMesh->GetVertex(triangleIndex[fid][0]));
-        vertexList.push_back(halfMesh->GetVertex(triangleIndex[fid][1]));
-        vertexList.push_back(halfMesh->GetVertex(triangleIndex[fid][2]));
-        halfMesh->InsertFace(vertexList);
-    }
-    halfMesh->SetBoundaryVertexEdge();
-    halfMesh->UpdateNormal();
-</pre>
-                <hr class="line-divider">
-                <p>2. 如果知道Vertex, Edge, Face的数量，在做Insert前，可以调用ReverseVertex, ReserveEdge, ReserveFace来提升Insert的效率，原理类似std::vector::reserve</p>
-                <p>3. 访问顶点邻域示例:</p>
-<pre class="prettyprint">
-    Edge3D* startEdge = vertex->GetEdge();
-    Edge3D* curEdge = startEdge;
-    do {
-        if (curEdge->GetPair()->GetFace() == NULL)
-            break;
-        curEdge = curEdge->GetPair()->GetNext();
-    } while (curEdge != startEdge);
-</pre>
-                <hr class="line-divider">   
-                <p>4. 对于边界点，函数SetBoundaryVertexEdge使得其出边(GetEdge)位于边界边(如上图右红边所示)</p>
-                <p>5. ValidateTopology做了3件事情: a. 移出没有Face的Edge; b. SetBoundaryVertexEdge; c. 移出孤立Vertex. 一般对HalfMesh做了拓扑改变后用</p>
-                <p>6. 边界点判断：vertex->GetEdge()->GetFace() == NULL; 边界边判断: edge->GetFace() == NULL || edge->GetPair()->GetFace() == NULL</p>
-                <p>7. Edge3D的Pair Edge(GetPair)一定不是NULL. 如果Edge3D的Face(GetFace)不是NULL, 则Pre Edge(GetPre)和Next Edge(GetNext)一定不是NULL</p>
-                <p></p>
-                <hr class="featurette-divider">
-
                 <a name="poepof"><h5>边点和面点</h5></a>
 <pre class="prettyprint">
 struct PointOnEdge;
 </pre>
-
                 <p>边点：位于网格边上的点。含有三个数据成员。mVertexIdStart, mVertexIdEnd为该网格点所在的边；mWeight为插值坐标，取值范围为[0, 1]，mWeight越大，边点越接近mVertexIdStart顶点。</p>
                 <p>注意：在某些API中，mVertexIdEnd有可能为-1，此时表示该边点完全和顶点mVertexIdStart重合，此时mWeight应为1.0。</p>
 
@@ -977,21 +729,6 @@ struct PointOnFace;
     // pofColor 即为面点的插值颜色
 </pre>
 
-                <hr class="featurette-divider">
-
-                <a name="meshparser"><h5>网格导入导出</h5></a>
-<pre class="prettyprint">
-TriMesh* Parser::ImportTriMesh(std::string fileName);
-</pre>
-                <p>目前支持的文件格式: obj, stl, off, ply. 用户也可以导入其它格式的网格数据, 只需要自己写一个Parser, 然后用导入的数据创建网格类(例如TriMesh)即可使用了</p>
-                <p>fileName: 格式为path/xxx.obj, path/xxx.stl, path可以是绝对路径，也可以相对路径</p>
-                <p>返回值: 如果导入失败则返回NULL</p>
-                <hr class="featurette-divider">
-<pre class="prettyprint">
-void Parser::ExportTriMesh(std::string fileName, const ITriMesh* triMesh);
-</pre>
-                <p>目前支持的文件格式: obj, stl, ply</p>
-                <p>fileName: 格式为path/xxx.obj, path/xxx.stl, path可以是绝对路径，也可以相对路径</p>
                 <hr class="featurette-divider">
 
                 <a name="meshremovegeometrynoise"><h5>网格去噪</h5></a>

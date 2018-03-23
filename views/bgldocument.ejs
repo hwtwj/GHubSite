@@ -28,21 +28,25 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <h3>BGL文档</h3>
-                <h4><a href="/geometryplusplus">返回</a></h4>
+                <h4><a href="/geometryplusplus/document">返回</a></h4>
                 <h4><a href="#overview">使用简介</a></h4>
-                <h4><a href="#pcinterface">点云</a></h4>
+                <h4><a href="#ipointcloud">点云</a></h4>
                 <ul class="sideul">
-                    <li class="sideli"><a href="#pcinterface">点云表示</a></li>
+                    <li class="sideli"><a href="#ipointcloud">IPontCloud</a></li>
+                    <li class="sideli"><a href="#igridpointcloud">IGridPointCloud</a></li>
+                    <li class="sideli"><a href="#pointcloud">PointCloud</a></li>
                     <li class="sideli"><a href="#pcparser">导入导出</a></li>
-                    <li class="sideli"><a href="#pcgridpointcloud">有序点云</a></li>
                 </ul>
-                <h4><a href="#meshinterface">网格</a></h4>
+                <h4><a href="#itrimesh">网格</a></h4>
                 <ul class="sideul">
-                    <li class="sideli"><a href="#meshinterface">三角网格表示</a></li>
-                    <li class="sideli"><a href="#poepof">边点和面点</a></li>
+                    <li class="sideli"><a href="#itrimesh">ITriMesh</a></li>
+                    <li class="sideli"><a href="#trimesh">TriMesh</a></li>
                     <li class="sideli"><a href="#meshparser">导入导出</a></li>
                 </ul>
-                <h4><a href="#toolkit">数学工具</a></h4>
+                <h4><a href="#multithreadsetting">工具</a></h4>
+                <ul class="sideul">
+                    <li class="sideli"><a href="#multithreadsetting">多线程设置</a></li>
+                </ul>
                 <h4><a href="#faq">常见问题</a></h4>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2" main>
@@ -52,19 +56,15 @@
 
                 <a name="usageintroduction"><h5>使用简介</h5></a>
                 <p>1. 头文件: 所有的头文件都在include文件夹里, 设置好头文件包含路径, 在使用api的源文件里包含BGL.h</p>
-                <p>2. 库: 设置好对应版本动态链接库的路径. 如果是Windows平台，需要在预处理里定义宏GPP_DLL_EXPORT，WIN32</p>
+                <p>2. 库: 设置好对应版本动态链接库的路径. 如果是Windows平台，需要在预处理里定义宏BGL_DLL_EXPORT，WIN32</p>
                 <hr class="featurette-divider">
 
-                <a name="pcinterface"><h5>点云表示</h5></a>
-<pre class="prettyprint">
-class IPointCloud;
-</pre>
+                <a name="ipointcloud"><h5>IPointCloud</h5></a>
                 <p>点云数据结构接口. Geometry++点云算法都是基于IPointCloud接口来调用的.</p>
                 <p>用法：继承这个接口类，实现其成员函数.</p>
                 <p>优点：可以很方便的在已有的程序中使用Geometry++提供的点云算法，只需要实现这个接口类，就可以调用所有点云相关的算法</p>
                 <p>用法说明:</p>
-                <p>1. 假设用户表示点云数据的类为MyPointCloudData, 则可以定义一个类MyPointCloud</p>
-                <!-- <?prettify lang=scm?> -->
+                <li>假设用户表示点云数据的类为MyPointCloudData, 则可以定义一个类MyPointCloud</li>
 <pre class="prettyprint">
     class MyPointCloud : public IPointCloud
     {
@@ -91,18 +91,314 @@ class IPointCloud;
     res = ConsolidatePointCloud::CalculatePointCloudNormal(pointCloud);
     // 其它点云算法API的具体用法可以参考相应模块的介绍
 </pre>
-
-                <p>2. 点云顶点的存储格式一般是线性的，获取方便，但是删除会存在一些效率问题. IPointCloud提供了SwapPoint函数把需要删除的元素交换到尾部，然后再通过PopbackPoints删除尾部元素.</p>
-                <p>3. Clear函数负责清除Point Coordinate, Point Normal. 回到构造类初始化时的状态.</p>
-                <p>4. HasNormal函数主要用意: 有时候点云创建后没有法线信息，IPointCloud提供这个函数查询点云是否有可靠法线信息. SetHasNormal函数可以设置点云是否有法线信息</p>
+                <li>构造点云：通过InsertPoint不断的往点云里加点.</li>
+                <li>点云顶点的存储格式是线性的，获取方便，但是删除会存在一些效率问题. IPointCloud提供了SwapPoint函数把需要删除的元素交换到尾部，然后再通过PopbackPoints删除尾部元素.</li>
+                <li>Clear函数负责清除Point Coordinate, Point Normal, Point Color. 回到构造类初始化时的状态.</li>
+                <li>HasNormal, HasColor函数主要用意: 有时候点云创建后没有法线或者颜色信息，IPointCloud提供这些函数查询点云是否有可靠的法线或者颜色信息. SetHasNormal, SetHasColor函数可以设置点云是否有法线或者颜色信息</li>
                 <hr class="line-divider">
 
+                <a name="igridpointcloud"><h5>IGridPointCloud</h5></a>
+                <p>有序点云的数据结构接口，它继承于IPointCloud。</p>
+                <p>有序点云是一个方阵，如图所示。点云按照方阵一行一行的，从左上角到右下角排列。</p>
+                <img class="featurette-image img-responsive center-block" src="/images/grid_coordinate.jpg" alt="Grid Point Cloud">
+                <p>优点：相比IPointCloud，IGridPointCloud多了点云的位置连接关系信息。相关的计算可以更加快速。</p>
+                <p>用法说明：</p>
+                <li>构造有序点云：首先通过InitGrid初始化有序点云，设置长宽。初始化的点云格点默认为invalid。然后通过SetGridCoord往点云里加点。与IPointCloud不同的是，它不能通过InsertPoint函数来加点，因为这个函数没有格点坐标信息。</li>
+                <li>RemoveOuterBlankGrids：移出掉四周无效的点，并重新设置点云的长宽。如下图所示，原始点云变为了红色框内缩小长宽的有序点云。</li>
+                <img class="featurette-image img-responsive center-block" src="/images/RemoveOuterBlankGrids.jpg" alt="RemoveOuterBlankGrids">
+                <li>SetGridCoord：为格点设置坐标。也可以通过此函数来向点云里加点，因为格点默认是invalid，设置坐标以后就valid</li>
+                <li>SetGridNormal：为格点设置法线信息。注意，此格点必须是valid</li>
+                <li>GetGridPointId：获取格点对应的有效格点的索引。若格点无效，则返回-1</li>
+                <li>GetPointGridId：获取有效格点对应的格点坐标</li>
+                <li>导入导出：可以使用gbg和gtg格式的文件存储有序点云。</li>
+                <hr class="line-divider">
+
+                <a name="pointcloud"><h5>PointCloud</h5></a>
+                <p>PointCloud是IPointCloud接口类和IGridPointCloud接口类的一个实现，用户可以直接使用它来表示点云数据</p>
+                <p>这是PointCloud的一个实现示例：</p>
 <pre class="prettyprint">
-class PointCloud;
-</pre>
-                <p>IPointCloud接口类和IGridPointCloud接口类的一个实现，用户可以直接使用它来表示点云数据</p>
-                <p>这是PointCloud的一个<a class="code" href="/file/PointCloud.cpp" target="_blank">实现示例</a>，用户自己实现IPointCloud的时候可以参考一下</p>
-                <p>UnifyCoords的典型使用场景：在多帧点云注册过程中，如果对第一帧点云应用了前一个UnifyCoords，为了保持之后帧的点云做同样的平移缩放变换，可以用前一个UnifyCoords的返回值来设置这个UnifyCoords，使得每一帧的点云做同样的变换</p>
+    Int PointCloud::GetPointCount() const
+    {
+        return mCoordList.size();
+    }
+
+    Vector3 PointCloud::GetPointCoord(Int pid) const
+    {
+        return mCoordList.at(pid);
+    }
+
+    void PointCloud::SetPointCoord(Int pid, const Vector3& coord)
+    {
+        mCoordList.at(pid) = coord;
+    }
+
+    bool PointCloud::HasNormal() const
+    {
+        return mHasNormal;
+    }
+    
+    void PointCloud::SetHasNormal(bool hasNormal)
+    {
+        mHasNormal = hasNormal;
+        if (mHasNormal && mNormalList.size() < mCoordList.size())
+        {
+            mNormalList.resize(mCoordList.size());
+        }
+    }
+
+    Vector3 PointCloud::GetPointNormal(Int pid) const
+    {
+        if (mHasNormal)
+        {
+            return mNormalList.at(pid);
+        }
+        else
+        {
+            return Vector3(0, 0, 0);
+        }
+    }
+
+    void PointCloud::SetPointNormal(Int pid, const Vector3& normal)
+    {
+        mNormalList.at(pid) = normal;
+    }
+
+    bool PointCloud::HasColor(void) const
+    {
+        return mHasColor;
+    }
+
+    void PointCloud::SetHasColor(bool has)
+    {
+        mHasColor = has;
+        if (mHasColor && mColorList.size() < mCoordList.size())
+        {
+            mColorList.resize(mCoordList.size());
+        }
+    }
+
+    Vector3 PointCloud::GetPointColor(Int pid) const
+    {
+        if (mHasColor)
+        {
+            return mColorList.at(pid);
+        }
+        else
+        {
+            return mDefaultColor;
+        }
+    }
+
+    void PointCloud::SetPointColor(Int pid, const Vector3& color)
+    {
+        mColorList.at(pid) = color;
+    }
+
+    void PointCloud::ReservePoint(Int pointCount)
+    {
+        mCoordList.reserve(pointCount);
+        if (mHasNormal)
+        {
+            mNormalList.reserve(pointCount);
+        }
+        if (mHasColor)
+        {
+            mColorList.reserve(pointCount);
+        }
+    }
+
+    Int PointCloud::InsertPoint(const Vector3& coord)
+    {
+        mCoordList.push_back(coord);
+        if (mHasNormal)
+        {
+            mNormalList.resize(mCoordList.size());
+        }
+        if (mHasColor)
+        {
+            mColorList.resize(mCoordList.size());
+        }
+        if (mIsGrid)
+        {
+            ClearGridTopologyInfo();
+        }
+        return mCoordList.size() - 1;
+    }
+
+    Int PointCloud::InsertPoint(const Vector3& coord, const Vector3& normal)
+    {
+        mCoordList.push_back(coord);
+        mNormalList.push_back(normal);
+        if (mHasColor)
+        {
+            mColorList.resize(mCoordList.size());
+        }
+        if (mIsGrid)
+        {
+            ClearGridTopologyInfo();
+        }
+        return mCoordList.size() - 1;
+    }
+
+    void PointCloud::SwapPoint(Int pointId0, Int pointId1)
+    {
+        Vector3 tempCoord = mCoordList.at(pointId0);
+        mCoordList.at(pointId0) = mCoordList.at(pointId1);
+        mCoordList.at(pointId1) = tempCoord;
+        if (mHasNormal)
+        {
+            Vector3 tempNormal = mNormalList.at(pointId0);
+            mNormalList.at(pointId0) = mNormalList.at(pointId1);
+            mNormalList.at(pointId1) = tempNormal;
+        }
+        if (mHasColor)
+        {
+            Vector3 tempColor = mColorList.at(pointId0);
+            mColorList.at(pointId0) = mColorList.at(pointId1);
+            mColorList.at(pointId1) = tempColor;
+        }
+        if (mIsGrid)
+        {
+            Int gridIndex0 = mPoint2GridMap.at(pointId0);
+            Int gridIndex1 = mPoint2GridMap.at(pointId1);
+            mGrid2PointMap.at(gridIndex0) = pointId1;
+            mGrid2PointMap.at(gridIndex1) = pointId0;
+            mPoint2GridMap.at(pointId0) = gridIndex1;
+            mPoint2GridMap.at(pointId1) = gridIndex0;
+        }
+    }
+
+    void PointCloud::PopbackPoints(Int popCount)
+    {
+        Int pointCount = mCoordList.size();
+        mCoordList.erase(mCoordList.begin() + pointCount - popCount, mCoordList.end());
+        if (mHasNormal)
+        {
+            mNormalList.erase(mNormalList.begin() + pointCount - popCount, mNormalList.end());
+        }
+        if (mHasColor)
+        {
+            mColorList.erase(mColorList.begin() + pointCount - popCount, mColorList.end());
+        }
+        if (mIsGrid)
+        {
+            for (Int pid = 1; pid <= popCount; pid++)
+            {
+                mGrid2PointMap.at(mPoint2GridMap.at(pointCount - pid)) = -1;
+            }
+            mPoint2GridMap.erase(mPoint2GridMap.begin() + pointCount - popCount, mPoint2GridMap.end());
+        }
+    }
+
+    void PointCloud::InitGrid(Int width, Int height)
+    {
+        mGridWidth = width;
+        mGridHeight = height;
+        std::vector<Int>().swap(mPoint2GridMap);
+        std::vector<Int>().swap(mGrid2PointMap);
+        mGrid2PointMap.resize(width * height, -1);
+        mIsGrid = true;
+        std::vector<Vector3>().swap(mCoordList);
+        std::vector<Vector3>().swap(mNormalList);
+        std::vector<Vector3>().swap(mColorList);
+    }
+
+    bool PointCloud::IsGridValid(Int wid, Int hid) const
+    {
+        return (mGrid2PointMap.at(hid * mGridWidth + wid) != -1);
+    }
+
+    void PointCloud::InvalidateGrid(Int wid, Int hid)
+    {
+        Int gridIndex = hid * mGridWidth + wid;
+        if (mGrid2PointMap.at(gridIndex) != -1)
+        {
+            SwapPoint(mGrid2PointMap.at(gridIndex), mPoint2GridMap.size() - 1);
+            PopbackPoints(1);
+        }
+    }
+
+    Int PointCloud::GetGridPointId(Int wid, Int hid) const
+    {
+        return mGrid2PointMap.at(hid * mGridWidth + wid);
+    }
+
+    void PointCloud::GetPointGridId(Int pointId, Int& wid, Int& hid) const
+    {
+        wid = mPoint2GridMap.at(pointId) % mGridWidth;
+        hid = mPoint2GridMap.at(pointId) / mGridWidth;
+    }
+
+    Vector3 PointCloud::GetGridCoord(Int wid, Int hid) const
+    {
+        return mCoordList.at(mGrid2PointMap.at(hid * mGridWidth + wid));
+    }
+
+    void PointCloud::SetGridCoord(Int wid, Int hid, const Vector3& coord)
+    {
+        Int gridIndex = hid * mGridWidth + wid;
+        if (mGrid2PointMap.at(gridIndex) == -1)
+        {
+            mGrid2PointMap.at(gridIndex) = mPoint2GridMap.size();
+            mPoint2GridMap.push_back(gridIndex);
+            mCoordList.push_back(coord);
+            if (mHasNormal)
+            {
+                mNormalList.resize(mCoordList.size());
+            }
+            if (mHasColor)
+            {
+                mColorList.resize(mCoordList.size());
+            }
+        }
+        else
+        {
+            mCoordList.at(mGrid2PointMap.at(gridIndex)) = coord;
+        }
+    }
+    
+    Vector3 PointCloud::GetGridNormal(Int wid, Int hid) const
+    {
+        if (mHasNormal)
+        {
+            return mNormalList.at(mGrid2PointMap.at(hid * mGridWidth + wid));
+        }
+        else
+        {
+            return Vector3(0, 0, 0);
+        }
+    }
+
+    void PointCloud::SetGridNormal(Int wid, Int hid, const Vector3& normal)
+    {
+        mNormalList.at(mGrid2PointMap.at(hid * mGridWidth + wid)) = normal;
+    }
+
+    Vector3 PointCloud::GetGridColor(Int wid, Int hid) const
+    {
+        if (mHasColor)
+        {
+            return mColorList.at(mGrid2PointMap.at(hid * mGridWidth + wid));
+        }
+        else
+        {
+            return mDefaultColor;
+        }
+    }
+
+    void PointCloud::SetGridColor(Int wid, Int hid, const Vector3& color)
+    {
+        mColorList.at(mGrid2PointMap.at(hid * mGridWidth + wid)) = color;
+    }
+
+    bool PointCloud::HasGridTopology(void) const
+    {
+        return mIsGrid;
+    }
+</pre>                
+                <p>注意事项：</p>
+                <li>UnifyCoords的典型使用场景：在多帧点云使用过程中，如果对第一帧点云应用了前一个UnifyCoords，为了保持之后帧的点云做同样的平移缩放变换，可以用前一个UnifyCoords的返回值来设置这个UnifyCoords，使得每一帧的点云做同样的变换</li>
+                <li>有序点云在调用了InsertPoint之后，会变成无序点云</li>
                 <hr class="featurette-divider">
 
                 <a name="pcparser"><h5>点云导入导出</h5></a>
@@ -113,49 +409,28 @@ PointCloud* Parser::ImportPointCloud(std::string fileName);
                 <p>fileName: 格式为path/xxx.obj, path/xxx.asc, path可以是绝对路径，也可以相对路径</p>
                 <p>返回值: 如果导入失败则返回NULL</p>
                 <hr class="line-divider">
+
 <pre class="prettyprint">
 void Parser::ExportPointCloud(std::string fileName, const IPointCloud* pointCloud);
 </pre>
                 <p>目前支持的文件格式：obj, asc, ply.</p>
                 <p>fileName: 格式为path/xxx.obj, path/xxx.asc, path可以是绝对路径，也可以相对路径</p>
-                <hr class="featurette-divider">
-
-                <a name="pcgridpointcloud"><h5>有序点云</h5></a>
-                <pre class="prettyprint">
-class IGridPointCloud;
-</pre>
-                <p>有序点云的数据结构接口。</p>
-                <p>有序点云是一个方阵，如图所示。点云按照方阵一行一行的，从左上角到右下角排列。</p>
-                <img class="featurette-image img-responsive center-block" src="/images/grid_coordinate.jpg" alt="Grid Point Cloud">
-                <p>优点：相比IPointCloud，IGridPointCloud多了点云的位置连接关系信息。相关的计算可以更加快速。</p>
-                <p>用法说明：</p>
-                <li>InitGrid：初始化有序点云，设置长宽。初始化的点云格点默认为invalid</li>
-                <li>RemoveOuterBlankGrids：移出掉四周无效的点，并重新设置点云的长宽。如下图所示，原始点云变为了红色框内缩小长宽的有序点云。</li>
-                <img class="featurette-image img-responsive center-block" src="/images/RemoveOuterBlankGrids.jpg" alt="RemoveOuterBlankGrids">
-                <li>SetHasGridNormal：设置点云是否带有法线。如果有，需要为法线分配内存空间</li>
-                <li>SetGridCoord：为valid的格点设置空间坐标</li>
-                <li>SetGridNormal：为valid的格点设置法线信息</li>
-                <li>ValidGrid：有效格点的信息（坐标，法线等）也可以像IPointCloud里Point一样按某种顺序排列起来，根据索引顺序访问。</li>
-                <li>GetValidGridCount：获取有效格点的个数。类似IPointCloud::GetPointCount。</li>
-                <li>GetValidGridCoord：根据有效格点的索引，获取其坐标。类似IPointCloud::GetPointCoord。</li>
-                <li>GetValidGridNormal：根据有效格点的索引，获取其法线。类似IPointCloud::GetPointNormal。</li>
-                <li>GetGridPointId：获取格点对应的有效格点的索引。若格点无效，则返回-1</li>
-                <li>GetPointGridId：获取有效格点对应的格点坐标</li>
-                <li>导入导出：Geometry++里可以使用gbg和gtg格式的文件存储有序点云。具体的导入导出格式，可以参考<a class="code" href="/file/Parser.cpp" target="_blank">Parser</a></li>
-                <li>注：PointCloud是IGridPointCloud接口类的一个实现。</li>
                 <hr class="line-divider">
 
-                
-
-                <a name="meshinterface"><h5>三角网格表示</h5></a>
 <pre class="prettyprint">
-class ITriMesh;
+void Parser::ExportGridPointCloud(std::string fileName, const IGridPointCloud* pointCloud);
 </pre>
-                <p>网格数据结构接口. Geometry++网格算法都是基于ITriMesh接口来调用的.</p>
+                <p>目前支持的文件格式：gbg(二进制), gtg(文本).</p>
+                <p>fileName: 格式为path/xxx.gbg, path/xxx.gtg, path可以是绝对路径，也可以相对路径</p>
+                <hr class="featurette-divider">
+
+
+                <a name="itrimesh"><h5>ITriMesh</h5></a>
+                <p>三角网格数据结构接口. Geometry++网格算法都是基于ITriMesh接口来调用的.</p>
                 <p>用法：继承这个接口类，实现其成员函数.</p>
                 <p>优点：可以很方便的在已有的程序中使用Geometry++提供的网格算法，只需要实现这个接口类，就可以调用所有网格相关的算法</p>
                 <p>用法说明：</p>
-                <p>1. 假设用户表示三角网格数据的类为MyTriMeshData, 则可以定义一个类MyTriMesh:</p>
+                <li>假设用户表示三角网格数据的类为MyTriMeshData, 则可以定义一个类MyTriMesh:</li>
 <pre class="prettyprint">
     class MyTriMesh : public ITriMesh
     {
@@ -187,7 +462,7 @@ class ITriMesh;
     res = ConsolidateMesh::MakeTriMeshManifold(triMesh);
     // 其它网格算法API的具体用法可以参考相应模块的介绍
 </pre>
-                <p>2. 构建网格示例:</p>
+                <li>构建网格示例:</li>
 <pre class="prettyprint">
     for (GPP::Int vid = 0; vid < vertexCount; vid++)
     {
@@ -200,117 +475,378 @@ class ITriMesh;
     triMesh->UpdateNormal();
 </pre>       
                 <hr class="line-divider">
-                <p>3. 三角网格顶点和面的存储格式是线性的，获取方便，但是删除会存在一些效率问题. ITriMesh提供了SwapVertex(SwapTriangles) 函数把需要删除的元素交换到尾部，然后再通过PopbackVertices(PopbackTriangles)删除尾部元素.</p>
-                <p>4. Clear函数负责清除Vertex Coordinate, Vertex Normal, Triangle Index, Triangle Normal. 回到构造类初始化时的状态.</p>
-                <p>5. UpdateNormal负责重新计算网格的顶点和三角面的法线信息.</p>
+                <li>三角网格顶点和面的存储格式是线性的，获取方便，但是删除会存在一些效率问题. ITriMesh提供了SwapVertex(SwapTriangles) 函数把需要删除的元素交换到尾部，然后再通过PopbackVertices(PopbackTriangles)删除尾部元素.</li>
+                <li>网格拓扑改变后，顶点和三角片所对应的属性如何相应的改变：这里的拓扑改变是指Swap**, Popback**函数。TriMesh在调用这类函数之后，顶点或三角片的顺序发生了变化。如果我们能知道变化后和变化前，顶点和三角片的对应，则可以其对应的属性就可以做相应的更新了。一般有两种思路：1. 属性属于网格的成员变量，则可以在Swap**, Popback**里做相应的属性更新，具体可以参考TriMesh的实现；2. 属性独立于网格存在，则用户可以在网格类里添加顶点和三角片的Id信息，并在Swap**, Popback**里做相应的Id更新，这样就可以得到改变后顶点或三角片与之前的对应信息了，下面是一个示例：</li>
+<pre class="prettyprint">
+    void MyTriMesh::SwapVertex(Int vertexId0, Int vertexId1)
+    {
+        Int tempId = mVertexIds.at(vertexId0);
+        mVertexIds.at(vertexId0) = mVertexIds.at(vertexId1);
+        mVertexIds.at(vertexId1) = tempId;
+    }
+
+    void MyTriMesh::PopbackVertices(Int popCount)
+    {
+        mVertexIds.erase(mVertexIds.begin() + mVertexIds.size() - popCount, mVertexIds.end());
+    }
+
+    void MyTriMesh::SwapTriangles(Int fid0, Int fid1)
+    {
+        Int tempId = mTriangleIds.at(fid0);
+        mTriangleIds.at(fid0) = mTriangleIds.at(fid1);
+        mTriangleIds.at(fid1) = tempId;
+    }
+
+    void MyTriMesh::PopbackTriangles(Int popCount)
+    {
+        mTriangleIds.erase(mTriangleIds.begin() + mTriangleIds.size() - popCount, mTriangleIds.end());
+    }
+</pre>
+                <li>Clear函数负责清除Vertex Coordinate, Vertex Normal, Triangle Index, Triangle Normal. 回到构造类初始化时的状态.</li>
+                <li>UpdateNormal负责重新计算网格的顶点和三角面的法线信息.</li>
                 <hr class="featurette-divider">
                 
-<pre class="prettyprint">
-class TriMesh;
-</pre>
+                <a name="trimesh"><h5>TriMesh</h5></a>
                 <p>ITriMesh接口类的一个实现，用户可以直接使用它来表示网格数据</p>
-                <p>这是ITriMesh的一个<a class="code" href="/file/TriMesh.cpp" target="_blank">实现示例</a>，用户自己实现ITriMesh的时候可以参考一下</p>
-                <p>用法说明：</p>
-                <p>1. FuseVertex用于建立STL格式网格的连接关系. 顶点位置相同的点会被处理为一个顶点. STL格式不能表示带缝的网格，因为它没有拓扑信息, 属于Triangle Soup. 建议使用OBJ格式的网格</p>
-                <p>2. UnifyCoords使得TriMesh的顶点坐标会被平移和均匀缩放到范围(-bboxSize, bboxSize)以内</p>
-                <hr class="featurette-divider">
-                
-                <a name="halfedgemesh"><h5>网格半边结构</h5></a>
+                <p>这是TriMesh的一个实现示例:</p>
 <pre class="prettyprint">
-class HalfMesh;
-</pre>
-                <p>HalfMesh类是网格半边结构的一个实现，用户可以直接使用它来表示网格数据. 半边结构的介绍可以参考这个<a class="code" href="http://www.flipcode.com/archives/The_Half-Edge_Data_Structure.shtml" target="_blank">网页</a></p>
-                <img class="featurette-image img-responsive center-block" src="/images/halfedgestructure.jpg" alt="Half Edge Structure">
-                <div class="imgtext">图示：半边数据结构示例. 左边红点为内点，右边红点为边界点</div>
-                <p>用法说明：</p>
-                <p>1. 构建网格示例:</p>
-<pre class="prettyprint">
-    for (GPP::Int vid = 0; vid < vertexCount; vid++)
+    Int TriMesh::GetVertexCount() const
     {
-        halfMesh->InsertVertex(vertexCoord[vid]);
+        return mVertexCoordList.size();
     }
-    std::vector< Vertex3D* > vertexList;
-    for (GPP::Int fid = 0; fid < faceCount; fid++)
+
+    Vector3 TriMesh::GetVertexCoord(Int vid) const
     {
-        vertexList.clear();
-        vertexList.push_back(halfMesh->GetVertex(triangleIndex[fid][0]));
-        vertexList.push_back(halfMesh->GetVertex(triangleIndex[fid][1]));
-        vertexList.push_back(halfMesh->GetVertex(triangleIndex[fid][2]));
-        halfMesh->InsertFace(vertexList);
+        return mVertexCoordList.at(vid);
     }
-    halfMesh->SetBoundaryVertexEdge();
-    halfMesh->UpdateNormal();
-</pre>
-                <hr class="line-divider">
-                <p>2. 如果知道Vertex, Edge, Face的数量，在做Insert前，可以调用ReverseVertex, ReserveEdge, ReserveFace来提升Insert的效率，原理类似std::vector::reserve</p>
-                <p>3. 访问顶点邻域示例:</p>
-<pre class="prettyprint">
-    Edge3D* startEdge = vertex->GetEdge();
-    Edge3D* curEdge = startEdge;
-    do {
-        if (curEdge->GetPair()->GetFace() == NULL)
-            break;
-        curEdge = curEdge->GetPair()->GetNext();
-    } while (curEdge != startEdge);
-</pre>
-                <hr class="line-divider">   
-                <p>4. 对于边界点，函数SetBoundaryVertexEdge使得其出边(GetEdge)位于边界边(如上图右红边所示)</p>
-                <p>5. ValidateTopology做了3件事情: a. 移出没有Face的Edge; b. SetBoundaryVertexEdge; c. 移出孤立Vertex. 一般对HalfMesh做了拓扑改变后用</p>
-                <p>6. 边界点判断：vertex->GetEdge()->GetFace() == NULL; 边界边判断: edge->GetFace() == NULL || edge->GetPair()->GetFace() == NULL</p>
-                <p>7. Edge3D的Pair Edge(GetPair)一定不是NULL. 如果Edge3D的Face(GetFace)不是NULL, 则Pre Edge(GetPre)和Next Edge(GetNext)一定不是NULL</p>
-                <p></p>
-                <hr class="featurette-divider">
 
-                <a name="poepof"><h5>边点和面点</h5></a>
-<pre class="prettyprint">
-struct PointOnEdge;
-</pre>
+    void TriMesh::SetVertexCoord(Int vid, const Vector3& coord)
+    {
+        mVertexCoordList.at(vid) = coord;
+    }
 
-                <p>边点：位于网格边上的点。含有三个数据成员。mVertexIdStart, mVertexIdEnd为该网格点所在的边；mWeight为插值坐标，取值范围为[0, 1]，mWeight越大，边点越接近mVertexIdStart顶点。</p>
-                <p>注意：在某些API中，mVertexIdEnd有可能为-1，此时表示该边点完全和顶点mVertexIdStart重合，此时mWeight应为1.0。</p>
+    Vector3 TriMesh::GetVertexNormal(Int vid) const
+    {
+        return mVertexNormalList.at(vid);
+    }
 
-<pre class="prettyprint">
-struct PointOnFace;
-</pre>
-                <p>面点：位于网格三角形内（或边界上）的点。含有2个数据成员。mFaceId为面点位于的三角形Id，mCoords为面点关于该三角形的重心坐标。</p>
-                <p>注意：</p><p>1. 重心坐标的顺序(mCoords[0], mCoords[1], mCoords[2])和从网格接口GetTriangleVertexIds(mFaceId, vertexIds)中的vertexIds[3]的顺序对应。</p>
-                <p>2. 当面点刚好位于三角的边上或者顶点上时，面点的表示不唯一。</p>
-                <p>3. 在某些API中，mCoords[i]有可能为-1.0，此时表示面点刚好位于三角形的边界（仅有一个mCoords[i]为-1.0，其它两个mCoords[i]相加为1.0）或顶点（有两个mCoords[i]为-1.0，且第三个重心坐标为1.0）上。</p>
+    void TriMesh::SetVertexNormal(Int vid, const Vector3& normal)
+    {
+        if (mVertexNormalList.empty())
+        {
+            mVertexNormalList.resize(mVertexCoordList.size());
+        }
+        mVertexNormalList.at(vid) = normal;
+    }
 
-<pre class="prettyprint">
-    // 计算边点和面点的位置
-    GPP::Vector3 poeCoord(0, 0, 0);
-    if (poe.mVertexEnd == -1)
-        poeCoord = triMesh->GetVertexCoord(poe.mVertexStartId);
-    else
-        poeCoord = triMesh->GetVertexCoord(poe.mVertexStartId) * poe.mWeight + triMesh->GetVertexCoord(poe.mVertexEndId) * (1.0 - poe.mWeight);
-    // poeCoord 即为边点的位置
+    bool TriMesh::HasVertexNormal(void) const
+    {
+        return mHasVertexNormal;
+    }
+
+    Int TriMesh::GetTriangleCount() const
+    {
+        return mTriangleList.size();
+    }
+
+    void TriMesh::GetTriangleVertexIds(Int fid, Int vertexIds[3]) const
+    {
+        vertexIds[0] = mTriangleList.at(fid)->mIndex[0];
+        vertexIds[1] = mTriangleList.at(fid)->mIndex[1]; 
+        vertexIds[2] = mTriangleList.at(fid)->mIndex[2]; 
+    }
+
+    void TriMesh::SetTriangleVertexIds(Int fid, Int vertexId0, Int vertexId1, Int vertexId2)
+    {
+        mTriangleList.at(fid)->mIndex[0] = vertexId0;
+        mTriangleList.at(fid)->mIndex[1] = vertexId1;
+        mTriangleList.at(fid)->mIndex[2] = vertexId2;
+    }
+
+    Vector3 TriMesh::GetTriangleNormal(Int fid) const
+    {
+        return mTriangleNormalList.at(fid);
+    }
+
+    void TriMesh::SetTriangleNormal(Int fid, const Vector3& normal)
+    {
+        if (mTriangleNormalList.empty())
+        {
+            mTriangleNormalList.resize(mTriangleList.size());
+        }
+        mTriangleNormalList.at(fid) = normal;
+    }
+
+    bool TriMesh::HasTriangleNormal(void) const
+    {
+        return mHasTriangleNormal;
+    }
+
+    Vector3 TriMesh::GetVertexColor(Int vid) const
+    {
+        if (mHasVertexColor)
+        {
+            return mVertexColorList.at(vid);
+        }
+        else
+        {
+            return mDefaultColor;
+        }
+    }
+
+    void TriMesh::SetVertexColor(Int vid, const Vector3& color)
+    {
+        mVertexColorList.at(vid) = color;
+    }
+
+    Vector3 TriMesh::GetVertexTexcoord(Int vid) const
+    {
+        return mVertexTexCoordList.at(vid);
+    }
+
+    void TriMesh::SetVertexTexcoord(Int vid, const Vector3& texcoord)
+    {
+        mVertexTexCoordList.at(vid) = texcoord;
+    }
+
+    Vector3 TriMesh::GetTriangleColor(Int fid, Int localVid) const
+    {
+        if (mHasTriangleColor)
+        {
+            return mTriangleColorList.at(fid * 3 + localVid);
+        }
+        else
+        {
+            return mDefaultColor;
+        }
+    }
     
-    GPP::Vector3 pofCoord(0, 0, 0);
-    GPP::Int vertexIds[3] = {-1, -1, -1};
-    triMesh->GetTriangleVertexIds(pof.mFaceId, vertexIds);
-    for (int fvid = 0; fvid < 3; ++fvid)
+    void TriMesh::SetTriangleColor(Int fid, Int localVid, const Vector3& color)
     {
-        if (pof.mCoords[fvid] < 0.0)
-            continue;
-        else
-            pofCoord += triMesh->GetVertexCoord(vertexIds[fvid]) * pof.mCoords[fvid];
+        mTriangleColorList.at(fid * 3 + localVid) = color;
     }
-    // pofCoord 即为面点的位置
 
-    // 给定网格顶点处的一组数值（如颜色，纹理等），插值出面点或边点的对应值
-    // vertexColors: 定义在顶点上的颜色
-    GPP::Vector3 pofColor(0, 0, 0);
-    for (int fvid = 0; fvid < 3; ++fvid)
+    Vector3 TriMesh::GetTriangleTexcoord(Int fid, Int localVid) const
     {
-        if (pof.mCoords[fvid] < 0.0)
-            continue;
-        else
-            pofColor += vertexColors[vertexIds[fvid]] * pof.mCoords[fvid];
+        return mTriangleTexCoordList.at(fid * 3 + localVid);
     }
-    // pofColor 即为面点的插值颜色
+
+    void TriMesh::SetTriangleTexcoord(Int fid, Int localVid, const Vector3& texcoord)
+    {
+        mTriangleTexCoordList.at(fid * 3 + localVid) = texcoord;
+    }
+
+    Int TriMesh::InsertVertex(const Vector3& coord)
+    {
+        mVertexCoordList.push_back(coord);
+        if (mHasVertexNormal)
+        {
+            mVertexNormalList.push_back(Vector3(0, 0, 0));
+        }
+        if (mHasVertexColor)
+        {
+            mVertexColorList.push_back(Vector3(0, 0, 0));
+        }
+        if (mHasVertexTexCoord)
+        {
+            mVertexTexCoordList.push_back(Vector3(0, 0, 0));
+        }
+        return (mVertexCoordList.size() - 1);
+    }
+    
+    Int TriMesh::InsertVertex(const Vector3& coord, const Vector3& normal)
+    {
+        mVertexCoordList.push_back(coord);
+        mVertexNormalList.push_back(normal);
+        if (mHasVertexColor)
+        {
+            mVertexColorList.push_back(Vector3(0, 0, 0));
+        }
+        if (mHasVertexTexCoord)
+        {
+            mVertexTexCoordList.push_back(Vector3(0, 0, 0));
+        }
+        return (mVertexCoordList.size() - 1);
+    }
+
+    void TriMesh::SetHasVertexColor(bool has)
+    {
+        mHasVertexColor = has;
+        if (mHasVertexColor && mVertexColorList.size() < mVertexCoordList.size())
+        {
+            mVertexColorList.resize(mVertexCoordList.size());
+        }
+    }
+
+    bool TriMesh::HasVertexColor() const
+    {
+        return mHasVertexColor;
+    }
+
+    void TriMesh::SetHasVertexTexCoord(bool has)
+    {
+        mHasVertexTexCoord = has;
+        if (mHasVertexTexCoord && mVertexTexCoordList.size() < mVertexCoordList.size())
+        {
+            mVertexTexCoordList.resize(mVertexCoordList.size());
+        }
+    }
+
+    bool TriMesh::HasVertexTexCoord(void) const
+    {
+        return mHasVertexTexCoord;
+    }
+
+    void TriMesh::SetHasTriangleColor(bool has)
+    {
+        mHasTriangleColor = has;
+        if (mHasTriangleColor && mTriangleColorList.size() < mTriangleList.size() * 3)
+        {
+            mTriangleColorList.resize(mTriangleList.size() * 3);
+        }
+    }
+    
+    bool TriMesh::HasTriangleColor(void) const
+    {
+        return (mHasTriangleColor && (mTriangleColorList.size() == mTriangleList.size() * 3));
+    }
+
+    void TriMesh::SetHasTriangleTexCoord(bool has)
+    {
+        mHasTriangleTexCoord = has;
+        if (mHasTriangleTexCoord && mTriangleTexCoordList.size() < mTriangleList.size() * 3)
+        {
+            mTriangleTexCoordList.resize(mTriangleList.size() * 3);
+        }
+    }
+
+    bool TriMesh::HasTriangleTexCoord(void) const
+    {
+        return mHasTriangleTexCoord;
+    }
+
+    Int TriMesh::InsertTriangle(Int vertexId0, Int vertexId1, Int vertexId2)
+    {
+        TriangleInfo* triangleInfo = new TriangleInfo(vertexId0, vertexId1, vertexId2);
+        mTriangleList.push_back(triangleInfo);
+        if (mHasTriangleNormal)
+        {
+            mTriangleNormalList.push_back(Vector3(0, 0, 0));
+        }
+        if (mHasTriangleTexCoord)
+        {
+            mTriangleTexCoordList.resize(mTriangleTexCoordList.size() + 3);
+        }
+        if (mHasTriangleColor)
+        {
+            mTriangleColorList.resize(mTriangleColorList.size() + 3);
+        }
+        return (mTriangleList.size() - 1);
+    }
+
+    void TriMesh::SwapVertex(Int vertexId0, Int vertexId1)
+    {
+        Vector3 temp = mVertexCoordList.at(vertexId0);
+        mVertexCoordList.at(vertexId0) = mVertexCoordList.at(vertexId1);
+        mVertexCoordList.at(vertexId1) = temp;
+        if (mHasVertexNormal)
+        {
+            Vector3 normalTemp = mVertexNormalList.at(vertexId0);
+            mVertexNormalList.at(vertexId0) = mVertexNormalList.at(vertexId1);
+            mVertexNormalList.at(vertexId1) = normalTemp;
+        }
+        if (mHasVertexColor)
+        {
+            Vector3 tempColor = mVertexColorList.at(vertexId0);
+            mVertexColorList.at(vertexId0) = mVertexColorList.at(vertexId1);
+            mVertexColorList.at(vertexId1) = tempColor;
+        }
+        if (mHasVertexTexCoord)
+        {
+            Vector3 tempCoord = mVertexTexCoordList.at(vertexId0);
+            mVertexTexCoordList.at(vertexId0) = mVertexTexCoordList.at(vertexId1);
+            mVertexTexCoordList.at(vertexId1) = tempCoord;
+        }
+    }
+
+    void TriMesh::PopbackVertices(Int popCount)
+    {
+        Int vertexCount = mVertexCoordList.size();
+        mVertexCoordList.erase(mVertexCoordList.begin() + vertexCount - popCount, mVertexCoordList.end());
+        if (mHasVertexNormal)
+        {
+            mVertexNormalList.erase(mVertexNormalList.begin() + vertexCount - popCount, mVertexNormalList.end());
+        }
+        if (mHasVertexColor)
+        {
+            mVertexColorList.erase(mVertexColorList.begin() + vertexCount - popCount, mVertexColorList.end());
+        }
+        if (mHasVertexTexCoord)
+        {
+            mVertexTexCoordList.erase(mVertexTexCoordList.begin() + vertexCount - popCount, mVertexTexCoordList.end());
+        }
+    }
+
+    void TriMesh::SwapTriangles(Int fid0, Int fid1)
+    {
+        TriangleInfo* temp = mTriangleList.at(fid0);
+        mTriangleList.at(fid0) = mTriangleList.at(fid1);
+        mTriangleList.at(fid1) = temp;
+        if (mHasTriangleNormal)
+        {
+            Vector3 normalTemp = mTriangleNormalList.at(fid0);
+            mTriangleNormalList.at(fid0) = mTriangleNormalList.at(fid1);
+            mTriangleNormalList.at(fid1) = normalTemp;
+        }
+        if (mHasTriangleTexCoord)
+        {
+            Int baseIndex0 = fid0 * 3;
+            Int baseIndex1 = fid1 * 3;
+            for (Int localId = 0; localId < 3; localId++)
+            {
+                Vector3 tempCoord = mTriangleTexCoordList.at(baseIndex0 + localId);
+                mTriangleTexCoordList.at(baseIndex0 + localId) = mTriangleTexCoordList.at(baseIndex1 + localId);
+                mTriangleTexCoordList.at(baseIndex1 + localId) = tempCoord;
+            }
+        }
+        if (mHasTriangleColor)
+        {
+            Int baseIndex0 = fid0 * 3;
+            Int baseIndex1 = fid1 * 3;
+            for (Int localId = 0; localId < 3; localId++)
+            {
+                Vector3 tempCoord = mTriangleColorList.at(baseIndex0 + localId);
+                mTriangleColorList.at(baseIndex0 + localId) = mTriangleColorList.at(baseIndex1 + localId);
+                mTriangleColorList.at(baseIndex1 + localId) = tempCoord;
+            }
+        }
+    }
+
+    void TriMesh::PopbackTriangles(Int popCount)
+    {
+        Int faceCount = mTriangleList.size();
+        for (Int fid = 0; fid < popCount; fid++)
+        {
+            GPPFREEPOINTER(mTriangleList.at(faceCount - 1 - fid));
+        }
+        mTriangleList.erase(mTriangleList.begin() + mTriangleList.size() - popCount, mTriangleList.end());
+        if (mHasTriangleNormal)
+        {
+            mTriangleNormalList.erase(mTriangleNormalList.begin() + mTriangleNormalList.size() - popCount, mTriangleNormalList.end());
+        }
+        if (mHasTriangleTexCoord)
+        {
+            mTriangleTexCoordList.erase(mTriangleTexCoordList.begin() + mTriangleTexCoordList.size() - popCount * 3, mTriangleTexCoordList.end());
+        }
+        if (mHasTriangleColor)
+        {
+            mTriangleColorList.erase(mTriangleColorList.begin() + mTriangleColorList.size() - popCount * 3, mTriangleColorList.end());
+        }
+    }
 </pre>
-
+                <p>注意事项：</p>
+                <li>如果导入的网格是STL格式，请使用FuseVertex建立网格的连接关系. 顶点位置相同的点会被处理为一个顶点. STL格式不能表示带缝的网格，因为它没有拓扑信息, 属于Triangle Soup. 建议使用OBJ格式的网格</li>
+                <li>UnifyCoords使得TriMesh的顶点坐标会被平移和均匀缩放到范围(-bboxSize, bboxSize)以内</li>
                 <hr class="featurette-divider">
 
                 <a name="meshparser"><h5>网格导入导出</h5></a>
@@ -346,7 +882,6 @@ void SetThreadCount(Int count);
                 <div class="question">API调用出现问题</div>
                 <li>检查API的返回码：－6属于没有激活开发包；－8属于函数没有定义，如果你有这个函数的授权，可以前来联系。</li>
                 <li>查看log文件，看能不能得到提示</li>
-                <li>其它情况，可以详细参考<a href="#dump">调试</a>部分的介绍。</li>
 
                 <div class="question">一般性问题还是特例问题</div>
                 <li>某个api调用出现问题时，可以多试试几个例子，看看是对所有例子都有问题，还是个例有问题。如果对所有例子都有问题，一般都是用法有问题。</li>
@@ -354,10 +889,9 @@ void SetThreadCount(Int count);
                 <div class="question">程序崩溃了（Crash）怎么办</div>
                 <li>请仔细确认程序的崩溃点！如果有异常发生，请在软件程序里Catch住异常。异常的捕获处理属于软件部分的内容。</li>
 
-                
                 <div class="question">反馈问题时模型的导出</div>
                 <li>导出模型坐标时，确保导出的坐标精度是没有截断的，如std::ofstream导出时可以调用precision来设置精度。</li>
-                <li>网格导出时，一般使用OBJ格式，不要使用STL，因为STL没有网格拓扑信息。不同软件系统重构STL拓扑的实现可能不一样。具体可以参考<a href="http://threepark.net/notes/stlformat" target="_blank">为什么不建议使用STL格式。</a></li>
+                <li>网格导出时，一般使用OBJ格式，不要使用STL，因为STL没有网格拓扑信息。不同软件系统重构STL拓扑的实现可能不一样。具体可以参考<a href="/notes/stlformat" target="_blank">为什么不建议使用STL格式。</a></li>
                 
                 <div class="question">总之，最重要的环节是问题重现。只有问题能够重现出来，才能得到有效的解决。反馈问题前，请先想想反馈的信息是否能够得到问题重现。</div>
                 <hr class="featurette-divider">
