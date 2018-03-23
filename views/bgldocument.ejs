@@ -474,9 +474,8 @@ void Parser::ExportGridPointCloud(std::string fileName, const IGridPointCloud* p
     }
     triMesh->UpdateNormal();
 </pre>       
-                <hr class="line-divider">
                 <li>三角网格顶点和面的存储格式是线性的，获取方便，但是删除会存在一些效率问题. ITriMesh提供了SwapVertex(SwapTriangles) 函数把需要删除的元素交换到尾部，然后再通过PopbackVertices(PopbackTriangles)删除尾部元素.</li>
-                <li>网格拓扑改变后，顶点和三角片所对应的属性如何相应的改变：这里的拓扑改变是指Swap**, Popback**函数。TriMesh在调用这类函数之后，顶点或三角片的顺序发生了变化。如果我们能知道变化后和变化前，顶点和三角片的对应，则可以其对应的属性就可以做相应的更新了。一般有两种思路：1. 属性属于网格的成员变量，则可以在Swap**, Popback**里做相应的属性更新，具体可以参考TriMesh的实现；2. 属性独立于网格存在，则用户可以在网格类里添加顶点和三角片的Id信息，并在Swap**, Popback**里做相应的Id更新，这样就可以得到改变后顶点或三角片与之前的对应信息了，下面是一个示例：</li>
+                <a name="topology"><li>网格拓扑改变后，顶点和三角片所对应的属性如何相应的改变：这里的拓扑改变是指Swap**, Popback**函数。TriMesh在调用这类函数之后，顶点或三角片的顺序发生了变化。如果我们能知道变化后和变化前，顶点和三角片的对应，则可以其对应的属性就可以做相应的更新了。一般有两种思路：1. 属性属于网格的成员变量，则可以在Swap**, Popback**里做相应的属性更新，具体可以参考TriMesh的实现；2. 属性独立于网格存在，则用户可以在网格类里添加顶点和三角片的Id信息，并在Swap**, Popback**里做相应的Id更新，这样就可以得到改变后顶点或三角片与之前的对应信息了，下面是一个示例：</li></a>
 <pre class="prettyprint">
     void MyTriMesh::SwapVertex(Int vertexId0, Int vertexId1)
     {

@@ -192,7 +192,7 @@ ErrorCode SampleGrid::Simplify(const IGridPointCloud* pointCloud, Real interval,
                 <hr class="featurette-divider">
 
                 <a name="pcnormal"><h5>点云法向量</h5></a>
-                <p>点云法线的介绍可以参考<a class="code" href="http://threepark.net/notes/pointcloudnormal" target="_blank">点云法线</a>，特别是如何给点云法线完美的定向。</p>
+                <p>点云法线的介绍可以参考<a class="code" href="/notes/pointcloudnormal" target="_blank">点云法线</a>，特别是如何给点云法线完美的定向。</p>
 <pre class="prettyprint">
 ErrorCode ConsolidatePointCloud::CalculatePointCloudNormal(IPointCloud* pointCloud, bool isDepthImage = false, Int neighborCount = 9);
 </pre>
@@ -462,7 +462,7 @@ ErrorCode RemoveOverlap(const IPointCloud* pointCloud, Real maxOverlapDist, std:
                 
 
                 <a name="pcregistration"><h5>点云注册对齐</h5></a>
-                <p>点云拼接注册的相关介绍可以参考<a class="code" href="http://threepark.net/notes/registration" target="_blank">点云拼接注册</a>
+                <p>点云拼接注册的相关介绍可以参考<a class="code" href="/notes/registration" target="_blank">点云拼接注册</a>
 <pre class="prettyprint">
 ErrorCode RegistratePointCloud::_AlignPointPair(const std::vector< Vector3 >& pointsRef, const std::vector< Vector3 >& pointsFrom, Matrix4x4* resultTransform, const Matrix4x4* initTransform = NULL);
 </pre>
@@ -785,18 +785,19 @@ ErrorCode EnhanceDetail(ITriMesh* triMesh, Real intensity = 2.0);
                 <hr class="featurette-divider">
 
                 <a name="meshtopologyconsolidation"><h5>网格拓扑修整</h5></a>
-                <p>网格拓扑的相关介绍可以参考<a class="code" href="http://threepark.net/notes/stlformat" target="_blank">从STL文件到网格拓扑</a>
+                <p>网格拓扑的相关介绍可以参考<a class="code" href="/notes/stlformat" target="_blank">从STL文件到网格拓扑</a>
 <pre class="prettyprint">
-bool _IsTriMeshManifold(ITriMesh* triMesh);
+bool ConsolidateMesh::IsTriMeshManifold(const ITriMesh* triMesh, Int* invalidVertexId = NULL);;
 </pre>
                 <p>判断三角网格是否流形结构. 非流形结构包括: 孤立顶点, 顶点邻域包含多个连通区域, 三角面片定向不统一协调</p>
                 <p>triMesh: 网格数据</p>
+                <p>invalidVertexId: 检测过程中遇到的第一个非流形</p>
                 <p>返回值: 如果是流形结构则返回true，不是则返回false</p>
                 <hr class="line-divider">
 <pre class="prettyprint">
-ErrorCode MakeTriMeshManifold(ITriMesh* triMesh, std::map< Int, Int >* insertVertexIdMap = NULL);
+ErrorCode ConsolidateMesh::MakeTriMeshManifold(ITriMesh* triMesh, std::map< Int, Int >* insertVertexIdMap = NULL);
 </pre>
-                <p>移除非流形结构</p>
+                <p>移除非流形结构：包括孤立顶点, 顶点邻域包含多个连通区域, 三角面片定向不统一协调。拓扑修复过程中，可能会删除无效顶点或者三角片，网格对应属性的更新方法，可以参考<a class="code" href="/bgl/document#topology" target="_blank">属性更新</a></p>
                 <p>triMesh: 网格数据</p>
                 <p>insertVertexIdMap: 拓扑修复的时候，有可能会添加网格顶点，新加的顶点是从原始顶点做的拷贝。这个map是新加顶点到其拷贝顶点的映射。主要用处在，计算新加顶点的属性，比如颜色值。</p>
                 <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
@@ -804,7 +805,7 @@ ErrorCode MakeTriMeshManifold(ITriMesh* triMesh, std::map< Int, Int >* insertVer
 
                 <a name="meshgeometryconsolidation"><h5>网格几何修整</h5></a>
 <pre class="prettyprint">
-ErrorCode ConsolidateGeometry(ITriMesh* triMesh, Real minTriangleAngle, Real minEdgeLength, Real foldoverAngleTol);
+ErrorCode ConsolidateMesh::ConsolidateGeometry(ITriMesh* triMesh, Real minTriangleAngle, Real minEdgeLength, Real foldoverAngleTol);
 </pre>
                 <p>优化退化三角形角, 退化三角边，折叠三角形，不改变网格的拓扑结构</p>
                 <p>triMesh: 网格数据</p>
@@ -816,7 +817,7 @@ ErrorCode ConsolidateGeometry(ITriMesh* triMesh, Real minTriangleAngle, Real min
 
                 <a name="meshfillhole"><h5>网格补洞</h5></a>
 <pre class="prettyprint">
-ErrorCode FindHoles(const ITriMesh* triMesh, std::vector< std::vector< Int > > *holesIds);
+ErrorCode FillMeshHole::FindHoles(const ITriMesh* triMesh, std::vector< std::vector< Int > > *holesIds);
 </pre>
                 <p>找网格的洞</p>
                 <p>triMesh: 网格数据</p>
@@ -825,8 +826,7 @@ ErrorCode FindHoles(const ITriMesh* triMesh, std::vector< std::vector< Int > > *
                 <hr class="line-divider">
 
 <pre class="prettyprint">
-ErrorCode FillHoles(ITriMesh* triMesh, const std::vector< Int >* boundarySeedIds = NULL, FillMeshHoleType method = FILL_MESH_HOLE_FLAT,
-            const std::vector< Real >* vertexFields = NULL, std::vector< Real >* insertedVertexFields = NULL);
+ErrorCode FillMeshHole::FillHoles(ITriMesh* triMesh, const std::vector< Int >* boundarySeedIds = NULL, FillMeshHoleType method = FILL_MESH_HOLE_FLAT, const std::vector< Real >* vertexFields = NULL, std::vector< Real >* insertedVertexFields = NULL);
 </pre>
                 <p>补网格的洞</p>
                 <p>triMesh: 网格数据</p>
@@ -843,7 +843,7 @@ ErrorCode FillHoles(ITriMesh* triMesh, const std::vector< Int >* boundarySeedIds
                 <hr class="line-divider">
 
 <pre class="prettyprint">
-ErrorCode BridgeEdges(ITriMesh* triMesh, const Int edge1VertexIds[2], const Int edge2VertexIds[2], const std::vector< Real >* vertexFields = NULL, std::vector< Real >* insertedVertexFields = NULL);
+ErrorCode FillMeshHole::BridgeEdges(ITriMesh* triMesh, const Int edge1VertexIds[2], const Int edge2VertexIds[2], const std::vector< Real >* vertexFields = NULL, std::vector< Real >* insertedVertexFields = NULL);
 </pre>
                 <p>桥接网格任意边界上的一对边</p>
                 <p>triMesh：网格数据</p>
@@ -890,11 +890,12 @@ ErrorCode QuadricSimplify(ITriMesh* triMesh, Int targetVertexCount, bool keepBou
                 <hr class="line-divider">
 
 <pre class="prettyprint">
-ErrorCode SimplifyWithTextureCoords(ITriMesh* triMesh, Int targetVertexCount, const std::vector< Vector3 >* texCoords, std::vector< Vector3 >* simplifiedTexCoords, const std::vector< Real >* vertexFields = NULL, std::vector< Real >* simplifiedVertexFields = NULL);
+ErrorCode SimplifyWithTextureCoords(ITriMesh* triMesh, Int targetVertexCount, bool keepBoundary, const std::vector< Vector3 >* texCoords, std::vector< Vector3 >* simplifiedTexCoords, const std::vector< Real >* vertexFields = NULL, std::vector< Real >* simplifiedVertexFields = NULL);
 </pre>
                 <p>减少网格顶点个数，并尽量保持输入网格的几何和纹理坐标不变. 简化过程中，会保持网格边界和纹理坐标边界不变</p>
                 <p>triMesh: 网格数据</p>
                 <p>targetVertexCount: 简化网格的目标顶点个数，应小于输入网格顶点个数</p>
+                <p>keepBoundary: 是否保持网格边界的点不变</p>
                 <p>texCoords: 网格纹理坐标，按照triMesh中三角面片顺序排列：texCoord_tri0_v0, texCoord_tri0_v1, texCoord_tri0_v2, ......</p>
                 <p>simplifiedTexCoords: 简化后网格的纹理坐标，也是按照三角面片顺序排列</p>
                 <p>vertexFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样</p>
@@ -912,7 +913,7 @@ ErrorCode SimplifyWithTextureCoords(ITriMesh* triMesh, Int targetVertexCount, co
         texCoords.push_back(triMesh->GetTriangleTexcoord(fid, 2));
     }
     std::vector< GPP::Vector3 > simplifiedTexCoords;
-    GPP::ErrorCode res = GPP::SimplifyMesh::SimplifyWithTextureCoords(triMesh, targetVertexCount, &texCoords, &simplifiedTexCoords, NULL, NULL);
+    GPP::ErrorCode res = GPP::SimplifyMesh::SimplifyWithTextureCoords(triMesh, targetVertexCount, false, &texCoords, &simplifiedTexCoords, NULL, NULL);
     if (res != GPP_NO_ERROR)
     {
         return res;
@@ -933,7 +934,7 @@ ErrorCode SimplifyWithTextureCoords(ITriMesh* triMesh, Int targetVertexCount, co
 <pre class="prettyprint">
 ErrorCode UniformRemesh(ITriMesh* triMesh, Int targetVertexCount, Real sharpAngle, Int optimiseCount = 2, const std::vector< Real >* vertexFields = NULL, std::vector< Real >* remeshVertexFields = NULL);
 </pre>
-                <p>重新网格化（Remesh）：网格顶点分布更加均匀。相关概念可以参考<a class="code" href="http://threepark.net/notes/delaunaytriangulation" target="_blank">从Delaunay三角化到网格质量</a></p>
+                <p>重新网格化（Remesh）：网格顶点分布更加均匀。相关概念可以参考<a class="code" href="/notes/delaunaytriangulation" target="_blank">从Delaunay三角化到网格质量</a></p>
                 <p>triMesh: 网格数据</p>
                 <p>targetVertexCount: 重新网格化的目标顶点个数。</p>
                 <p>sharpAngle: 网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。重新网格化的时候，会保持住sharp边的几何。参数范围是(0, 180 * ONE_RADIAN)。</p>
@@ -948,7 +949,7 @@ ErrorCode UniformRemesh(ITriMesh* triMesh, Int targetVertexCount, Real sharpAngl
 <pre class="prettyprint">
 ErrorCode ConstrainedDelaunayOptimization(ITriMesh* triMesh, Real* sharpAngle, const std::vector< std::vector< Int > >* polylineList, const std::vector< Int >* forbiddenEdges);
 </pre>
-                <p>带约束的Delaunay网格优化：优化网格三角形为Delaunay三角形。相关概念可以参考<a class="code" href="http://threepark.net/notes/delaunaytriangulation" target="_blank">从Delaunay三角化到网格质量</a></p>
+                <p>带约束的Delaunay网格优化：优化网格三角形为Delaunay三角形。相关概念可以参考<a class="code" href="/notes/delaunaytriangulation" target="_blank">从Delaunay三角化到网格质量</a></p>
                 <p>triMesh: 网格数据</p>
                 <p>sharpAngle: 网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。Delaunay优化的时候，会保持住sharp边不变。参数范围是(0, 180 * ONE_RADIAN)。可以设置为NULL。</p>
                 <p>polylineList: 约束多边形。多边形上的边会保持连接关系不变。这是个二维数组，每一维是一条多边形。可以设置为NULL。</p>
@@ -959,7 +960,7 @@ ErrorCode ConstrainedDelaunayOptimization(ITriMesh* triMesh, Real* sharpAngle, c
 <pre class="prettyprint">
 ErrorCode CentroidVoronoiOptimization(ITriMesh* triMesh, Real* sharpAngle, std::vector< Real >* vertexFields, const std::vector< Int >* forbiddenEdges, const std::vector< Int >* fixVertices, const std::vector< std::vector< Int > >* fixPolylines);
 </pre>
-                <p>重心Voronoi优化：优化网格三角形为Delaunay三角形，并且三角形分布更加均匀。相关概念可以参考<a class="code" href="http://threepark.net/notes/delaunaytriangulation" target="_blank">从Delaunay三角化到网格质量</a></p>
+                <p>重心Voronoi优化：优化网格三角形为Delaunay三角形，并且三角形分布更加均匀。相关概念可以参考<a class="code" href="/notes/delaunaytriangulation" target="_blank">从Delaunay三角化到网格质量</a></p>
                 <p>triMesh: 网格数据</p>
                 <p>sharpAngle: 网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。Delaunay优化的时候，会保持住sharp边不变。参数范围是(0, 180 * ONE_RADIAN)。可以设置为NULL。</p>
                 <p>vertexFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样。注意这个变量既是输入，又是输出。可以设置为NULL。</p>
@@ -1124,9 +1125,9 @@ class DeformMesh</a>
                 <hr class="featurette-divider">
 
                 <a name="meshunfold"><h5>网格UV展开</h5></a>
-                <p>网格UV展开的相关介绍可以参考<a class="code" href="http://threepark.net/notes/uvunfold" target="_blank">网格UV展开</a>
+                <p>网格UV展开的相关介绍可以参考<a class="code" href="/notes/uvunfold" target="_blank">网格UV展开</a>
 <pre class="prettyprint">
-ErrorCode ConformalMap(const ITriMesh* triMesh, const std::vector< Int >* fixedVertexIndices, const std::vector< Real >* fixedVertexCoords, std::vector< Real >* texCoords);
+ErrorCode UnfoldMesh::ConformalMap(const ITriMesh* triMesh, const std::vector< Int >* fixedVertexIndices, const std::vector< Real >* fixedVertexCoords, std::vector< Real >* texCoords);
 </pre>
                 <p>单连通圆盘拓扑结构的网格UV展开，性质是共形映射，尽量保持三角形的内角不变</p>    
                 <p>triMesh: 网格数据，需要单连通圆盘拓扑结构</p>
@@ -1138,7 +1139,7 @@ ErrorCode ConformalMap(const ITriMesh* triMesh, const std::vector< Int >* fixedV
                 <hr class="line-divider">
 
 <pre class="prettyprint">
-ErrorCode OptimizeIsometric(const ITriMesh* triMesh, std::vector< Real >* texCoords, Int iterationCount, const std::vector< Int >* fixedVertexIndex = NULL);
+ErrorCode UnfoldMesh::OptimizeIsometric(const ITriMesh* triMesh, std::vector< Real >* texCoords, Int iterationCount, const std::vector< Int >* fixedVertexIndex = NULL);
 </pre>
                 <p>单连通圆盘拓扑结构的网格UV展开优化，使得纹理映射更加等距</p>
                 <p>triMesh: 网格数据，需要单连通圆盘拓扑结构</p>
@@ -1216,7 +1217,7 @@ ErrorCode OptimizeIsometric(const ITriMesh* triMesh, std::vector< Real >* texCoo
                 <hr class="line-divider">
 
 <pre class="prettyprint">
-ErrorCode PackUVAtlas(const std::vector< ITriMesh* >& singleRegionList, std::vector< std::vector< Real > >& texCoordList);
+ErrorCode UnfoldMesh::PackUVAtlas(const std::vector< ITriMesh* >& singleRegionList, std::vector< std::vector< Real > >& texCoordList);
 </pre>
                 <p>纹理坐标打包：把多个网格的纹理坐标打包到一个方形区域内。</p>
                 <p>singleRegionList: 网格需要是单连通圆盘拓扑结构。这样网格的顶点和纹理坐标才能是一一对应。</p>
@@ -1225,7 +1226,7 @@ ErrorCode PackUVAtlas(const std::vector< ITriMesh* >& singleRegionList, std::vec
                 <hr class="line-divider">
 
 <pre class="prettyprint">
-ErrorCode GenerateUVAtlas(const ITriMesh* triMesh, Int initChartCount, std::vector< Real >* texCoords, std::vector< Int >* faceTexIds, bool needInitSplit, bool needSplitFoldOver, bool needSplitOverlap);
+ErrorCode UnfoldMesh::GenerateUVAtlas(const ITriMesh* triMesh, Int initChartCount, std::vector< Real >* texCoords, std::vector< Int >* faceTexIds, bool needInitSplit, bool needSplitFoldOver, bool needSplitOverlap, const std::vector< std::vector< Int > >* initSplitLines = NULL);
 </pre>
                 <p>任意拓扑网格全自动UV展开，性质：自动找纹理割缝，自动UV展开，如果展开扭曲大，会自动进行再分割展开，最后自动纹理坐标打包</p>
                 <p>triMesh: 网格数据，任意拓扑结构</p>
@@ -1235,6 +1236,7 @@ ErrorCode GenerateUVAtlas(const ITriMesh* triMesh, Int initChartCount, std::vect
                 <p>needInitSplit: 展开过程中是否需要做初始的纹理割缝，割缝一般位于特征线地方。</p>
                 <p>needSplitFoldOver: 网格展开结果如果有foldover情况，是否需要自动分割再展。</p>
                 <p>needSplitOverlap: 网格展开结果如果有overlap情况，是否需要自动分割再展。</p>
+                <p>initSplitLines: 网格展开时用户的自定义割线。initSplitLines.at(lid)是一条割线顶点序列。如果使用自定义割线，则needInitSplit需要设置为true</p>
                 <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
 <pre class="prettyprint">
     // 任意网格UV展开示例
@@ -1470,7 +1472,7 @@ ErrorCode InterpolateFaceImageColorIds(const ITriMesh* triMesh, std::vector< Ima
                 <hr class="featurette-divider">
 
                 <a name="textureimage"><h5>纹理图制作</h5></a>
-                <p>纹理图制作的相关介绍可以参考<a class="code" href="http://threepark.net/notes/colormesh" target="_blank">彩色网格</a>
+                <p>纹理图制作的相关介绍可以参考<a class="code" href="/notes/colormesh" target="_blank">彩色网格</a>
 <pre class="prettyprint">
 ErrorCode CreateTextureImageByVertexColors(const std::vector< Real >& texCoordinates, const std::vector< Int >& faceTextureIds, const std::vector< Color4 >& texColors, Int outputImageWidth, Int outputImageHeight, std::vector< Color4 >& outputImageData, std::vector< Int >* pixelResultInfos = NULL);
 </pre>
@@ -1990,9 +1992,9 @@ ErrorCode CreateTextureImageByRefImages(const std::vector< Real >& texCoordinate
 
                 <a name="colormerging"><h5>纹理色彩融合</h5></a>
 <pre class="prettyprint">
-ErrorCode TuneColorFromMultiFrame(const IPointCloud* pointCloud, Int neighborCount, const std::vector< Int >& colorIds, std::vector< Vector3 >& pointColors, const Vector3& sharpColorDiff = Vector3(0.1, 1.0, 0.5));
+ErrorCode IntrinsicColor::TuneColorFromMultiFrame(const IPointCloud* pointCloud, Int neighborCount, const std::vector< Int >& colorIds, std::vector< Vector3 >& pointColors, const Vector3& sharpColorDiff = Vector3(0.1, 1.0, 0.5));
 </pre>
-                <p>多角度点云颜色融合：详细介绍可以参考<a href="http://threepark.net/notes/colormesh" target="_blank">多角度点云颜色融合</a></p>
+                <p>多角度点云颜色融合：详细介绍可以参考<a href="/notes/colormesh" target="_blank">多角度点云颜色融合</a></p>
                 <p>注意：同一个colorId的点认为是颜色协调的。不同colorId的点颜色通过colorId的边界地方扩散融合，所以colorId的边界部分如果有黑边存在，融合效果会不理想。去除黑边可以参考API TuneColorFromSingleLight</p>
                 <p>pointCloud: 需要融合颜色的点云。点云需要均匀分布。如果分布的非常不均匀，比如线激光点云，可以参考TuneMeshColorFromMultiPatch的使用。</p>
                 <p>neighborCount: 颜色融合时，点云邻域个数，建议参数为12</p>
@@ -2003,7 +2005,7 @@ ErrorCode TuneColorFromMultiFrame(const IPointCloud* pointCloud, Int neighborCou
                 <hr class="line-divider">
 
 <pre class="prettyprint">
-ErrorCode TuneMeshColorFromMultiPatch(const ITriMesh* triMesh, const std::vector< Int >& colorIds, std::vector< Vector3 >& vertexColors, const Vector3& sharpColorDiff = Vector3(0.1, 1.0, 0.5));
+ErrorCode IntrinsicColor::TuneMeshColorFromMultiPatch(const ITriMesh* triMesh, const std::vector< Int >& colorIds, std::vector< Vector3 >& vertexColors, const Vector3& sharpColorDiff = Vector3(0.1, 1.0, 0.5));
 </pre>
                 <p>网格颜色融合：原理和TuneColorFromMultiFrame一样。不同的地方是，网格有顶点的连接关系，可以自然得到邻域信息，并且局部邻域成片状。点云如果不均匀，其局部邻域不成片状，比如线激光数据。所以颜色融合在网格上计算更加稳定。</p>
                 <p>triMesh: 需要融合颜色的网格</p>
@@ -2014,9 +2016,9 @@ ErrorCode TuneMeshColorFromMultiPatch(const ITriMesh* triMesh, const std::vector
                 <hr class="line-divider">
 
 <pre class="prettyprint">
-ErrorCode TuneColorFromSingleLight(const std::vector< IPointCloud* >& pointCloudList, std::vector< std::vector< Vector3 > >& colorList, bool needBlend, const Real* pointDensity, const std::vector< std::vector< Int > >* originColorIdList, std::vector< std::vector< Int > >* tunedColorIdList);
+ErrorCode IntrinsicColor::TuneColorFromSingleLight(const std::vector< IPointCloud* >& pointCloudList, std::vector< std::vector< Vector3 > >& colorList, bool needBlend, const Real* pointDensity, const std::vector< std::vector< Int > >* originColorIdList, std::vector< std::vector< Int > >* tunedColorIdList);
 </pre>
-                <p>单光源光照的点云颜色融合：详细介绍可以参考<a href="http://threepark.net/notes/colormesh" target="_blank">单光源点云颜色修正</a></p>
+                <p>单光源光照的点云颜色融合：详细介绍可以参考<a href="/notes/colormesh" target="_blank">单光源点云颜色修正</a></p>
                 <p>注：这个API常用于多帧点云去除黑边。黑边地方的点云必须有重叠的部分，且重叠部分有非黑边颜色分布。API原理是通过多帧点云的颜色信息来提升颜色效果，如果没有重合部分，或者重合部分的颜色都是黑的，那么提升的效果就会不理想。</p>
                 <p>pointCloudList: 点云序列，必须是已经注册对齐好的</p>
                 <p>colorList: 点云序列对应的颜色，颜色范围为[0, 1]</p>
@@ -2171,7 +2173,7 @@ ErrorCode TuneColorFromSingleLight(const std::vector< IPointCloud* >& pointCloud
                 <hr class="line-divider">
 
 <pre class="prettyprint">
-ErrorCode TuneTextureImageColor(const ITriMesh* triMesh, const std::vector< Real >& textureCoords, const std::vector< Color4 >& faceVertexColors, const std::vector< Int >& faceVertexImageIds, Int imageWidth, Int imageHeight, std::vector< Color4 >& textureColors, const Vector3& sharpColorDiff = Vector3(0.1, 0.5, 0.5));
+ErrorCode IntrinsicColor::TuneTextureImageColor(const ITriMesh* triMesh, const std::vector< Real >& textureCoords, const std::vector< Color4 >& faceVertexColors, const std::vector< Int >& faceVertexImageIds, Int imageWidth, Int imageHeight, std::vector< Color4 >& textureColors, const Vector3& sharpColorDiff = Vector3(0.1, 0.5, 0.5));
 </pre>
                 <p>融合纹理贴图颜色：纹理贴图一般是多幅图片贴到一个网格上。由于光照原因，不同图片在图片接缝处会有一些色差，而同一个图片的颜色认为是相容的。所以需要融合不同图片在图片接缝处的颜色，使其色差痕迹尽量的小。如图所示，图一的颜色代表了贴图的图片索引号，图二是纹理贴图效果。可以看出，图片接缝处有明显的色差痕迹。图三是颜色融合后的效果。</p>
                 <img class="featurette-image img-responsive center-block" src="/images/TuneTextureImageColor_body.jpg" alt="TuneTextureImageColor_body">
@@ -2263,7 +2265,7 @@ ErrorCode TuneTextureImageColor(const ITriMesh* triMesh, const std::vector< Real
                 <hr class="line-divider">
 
 <pre class="prettyprint">
-ErrorCode TuneImageByPointColor(const std::vector< Int >& pointCoords, const std::vector< Vector3 & pointColors, Int imageWidth, Int imageHeight, std::vector< Color4 >& imageColors);
+ErrorCode IntrinsicColor::TuneImageByPointColor(const std::vector< Int >& pointCoords, const std::vector< Vector3 & pointColors, Int imageWidth, Int imageHeight, std::vector< Color4 >& imageColors);
 </pre>
                 <p>应用点云颜色作为约束，驱动彩色图像颜色融合</p>
                 <p>pointCoords: 点云在图像中的坐标，排列顺序为coord0_X, coord0_Y, coord1_X, coord1_Y......</p>
@@ -2324,7 +2326,7 @@ ErrorCode TuneImageByPointColor(const std::vector< Int >& pointCoords, const std
                 <hr class="line-divider">
 
 <pre class="prettyprint">
-ErrorCode TuneImageByTriangleColor(const std::vector< Int >& vertexCoords, const std::vector< Vector3 >& vertexColors, const std::vector< Int > vertexFlags, const std::vector< Int >& faceVertexIds, Int imageWidth, Int imageHeight, std::vector< Color4 >& imageColors);
+ErrorCode IntrinsicColor::TuneImageByTriangleColor(const std::vector< Int >& vertexCoords, const std::vector< Vector3 >& vertexColors, const std::vector< Int > vertexFlags, const std::vector< Int >& faceVertexIds, Int imageWidth, Int imageHeight, std::vector< Color4 >& imageColors);
 </pre>
                 <p>应用网格三角形顶点颜色作为约束，驱动彩色图像颜色融合</p>
                 <p>vertexCoords: 网格顶点在图像中的坐标，排列顺序为coord0_X, coord0_Y, coord1_X, coord1_Y......</p>
@@ -2409,7 +2411,7 @@ ErrorCode TuneImageByTriangleColor(const std::vector< Int >& vertexCoords, const
                 <hr class="line-divider">
 
 <pre class="prettyprint">
-ErrorCode TuneTextureImageByVertexColor(const std::vector< Real >& textureCoords, const std::vector< Vector3 >& vertexColors, Int imageWidth, Int imageHeight, const std::vector< PixelType > pixelTypes, std::vector< Color4 >& textureColors);
+ErrorCode IntrinsicColor::TuneTextureImageByVertexColor(const std::vector< Real >& textureCoords, const std::vector< Vector3 >& vertexColors, Int imageWidth, Int imageHeight, const std::vector< PixelType > pixelTypes, std::vector< Color4 >& textureColors);
 </pre>
                 <p>应用网格顶点颜色作为约束，驱动纹理贴图颜色融合。</p>
                 <p>textureCoords: 网格顶点的纹理坐标，排列顺序为texCoord0_X, texCoord0_Y, texCoord1_X, texCoord1_Y......</p>
@@ -2799,7 +2801,7 @@ void SetThreadCount(Int count);
                 <li>其它：任何可以帮助问题重现的资料</li>
                 <div class="question">注意：问题反馈的内容，主要是为了重现问题。反馈的内容越精确，问题越能得到重现。解决问题是建立在问题重现的基础之上的。</div>
                 <div class="question">问题反馈，请用准确，定量的专业术语来描述。定性的，或者不准确的的问题反馈，很难得到及时有效的回复。比如“我的SDK为什么不能用呢？”“某某功能为什么不能用啊？为什么出错啊？”“我的程序崩溃是怎么回事呢？”</div>
-                <p>程序调试的相关介绍也可以参考<a class="code" href="http://threepark.net/notes/debugprogram" target="_blank">程序调试</a>
+                <p>程序调试的相关介绍也可以参考<a class="code" href="/notes/debugprogram" target="_blank">程序调试</a>
                 <hr class="featurette-divider">
 
                 <a name="faq"><h5>常见问题</h5></a>
@@ -2836,7 +2838,7 @@ void SetThreadCount(Int count);
                 
                 <div class="question">反馈问题时模型的导出</div>
                 <li>导出模型坐标时，确保导出的坐标精度是没有截断的，如std::ofstream导出时可以调用precision来设置精度。</li>
-                <li>网格导出时，一般使用OBJ格式，不要使用STL，因为STL没有网格拓扑信息。不同软件系统重构STL拓扑的实现可能不一样。具体可以参考<a href="http://threepark.net/notes/stlformat" target="_blank">为什么不建议使用STL格式。</a></li>
+                <li>网格导出时，一般使用OBJ格式，不要使用STL，因为STL没有网格拓扑信息。不同软件系统重构STL拓扑的实现可能不一样。具体可以参考<a href="/notes/stlformat" target="_blank">为什么不建议使用STL格式。</a></li>
                 
                 <div class="question">总之，最重要的环节是问题重现。只有问题能够重现出来，才能得到有效的解决。反馈问题前，请先想想反馈的信息是否能够得到问题重现。</div>
                 <hr class="featurette-divider">
