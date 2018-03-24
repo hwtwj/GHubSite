@@ -232,4 +232,9 @@ router.get("/notes/numericaloptimization", function (req, res) {
     res.render('notes/numericaloptimization.ejs');
 });
 
+router.get("/scandata", function (req, res) {
+    "use strict";
+    res.render('scandata.ejs');
+});
+
 module.exports = router;
