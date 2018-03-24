@@ -1909,17 +1909,6 @@ ErrorCode IntrinsicColor::TuneColorFromMultiFrame(const IPointCloud* pointCloud,
                 <hr class="line-divider">
 
 <pre class="prettyprint">
-ErrorCode IntrinsicColor::TuneMeshColorFromMultiPatch(const ITriMesh* triMesh, const std::vector< Int >& colorIds, std::vector< Vector3 >& vertexColors, const Vector3& sharpColorDiff = Vector3(0.1, 1.0, 0.5));
-</pre>
-                <p>网格颜色融合：原理和TuneColorFromMultiFrame一样。不同的地方是，网格有顶点的连接关系，可以自然得到邻域信息，并且局部邻域成片状。点云如果不均匀，其局部邻域不成片状，比如线激光数据。所以颜色融合在网格上计算更加稳定。</p>
-                <p>triMesh: 需要融合颜色的网格</p>
-                <p>colorIds: 每个点所属的colorId。同一个colorId的点认为是颜色协调的。</p>
-                <p>vertexColors：网格顶点输入颜色，api执行后，网格顶点修改后的颜色可以从这里得到</p>
-                <p>sharpColorDiff：三个分量参数为颜色分量最大色差融合阈值，范围是[0, 1]，如果colorId边界处的色差大于这个阈值的地方，则不做颜色融合。三个分量的意义分别为色度，饱和度，亮度。比如想尽量保持住色度，则可以调小其阈值。</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="line-divider">
-
-<pre class="prettyprint">
 ErrorCode IntrinsicColor::TuneColorFromSingleLight(const std::vector< IPointCloud* >& pointCloudList, std::vector< std::vector< Vector3 > >& colorList, bool needBlend, const Real* pointDensity, const std::vector< std::vector< Int > >* originColorIdList, std::vector< std::vector< Int > >* tunedColorIdList);
 </pre>
                 <p>单光源光照的点云颜色融合：详细介绍可以参考<a href="/notes/colormesh" target="_blank">单光源点云颜色修正</a></p>
