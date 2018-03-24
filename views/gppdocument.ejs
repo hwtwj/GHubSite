@@ -212,16 +212,6 @@ ErrorCode ConsolidatePointCloud::SmoothNormal(IPointCloud* pointCloud, Real norm
                 <hr class="line-divider">
 
 <pre class="prettyprint">
-ErrorCode ConsolidatePointCloud::ReversePatchNormal(IPointCloud* pointCloud, Int pointId, Int neighborCount = 9);
-</pre>
-                <p>用法背景：如果点云有多个分开的部分，在计算点云法线时，可能点云的整体定向不一致，可以通过这个api来局部反向法线</p>
-                <p>pointCloud：点云数据</p>
-                <p>pointId: 局部patch里任意一个点的id</p>
-                <p>neighborCount: 点反向蔓延时的邻域个数，默认值是9，参数值越大，稳定性会更好，但是计算速度也会更慢</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="line-divider">
-
-<pre class="prettyprint">
 ErrorCode ConsolidateGrid::CalculateGridNormal(IGridPointCloud* pointCloud);
 </pre>
                 <p>计算有序点云法线</p>
@@ -250,22 +240,6 @@ ErrorCode ConsolidatePointCloud::SmoothGeometry(IPointCloud* pointCloud, Int nei
                 <p>iterationCount: 投影的迭代次数. 范围>=1. 一般设置为5左右. 想要光滑性更好，可以适当迭代次数. </p>
                 <p>selectIndex: 选择Smooth的点索引。如果为NULL，则全部点云都会Smooth</p>
                 <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="line-divider">
-
-<pre class="prettyprint">
-ErrorCode ConsolidatePointCloud::SmoothGeometryByNormal(IPointCloud* pointCloud, Int neighborCount = 9, Real sharpAngle = ONE_RADIAN * 20, Int iterationCount = 5);
-</pre>
-                <p>背景：根据点云法线信息优化点云几何，是其几何位置与法线协调。</p>
-                <p>pointCloud：点云数据, 需要有法向量</p>
-                <p>neighborCount: 点邻域个数. 默认值是9，如果点云均匀性不好，可以适当调大参数来保证计算结果的稳定</p>
-                <p>sharpAngle: 特征边角。相邻点的法线夹角大于特征边角时，会判断为特征边点，smooth时会尽量保持住特征边几何</p>
-                <p>iterationCount: smooth的迭代次数</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-<pre class="prettyprint">
-    // 结合点云法向量平滑函数, 给点云去噪示例
-    GPP::ErrorCode res = GPP::ConsolidatePointCloud::SmoothNormal(pointCloud);
-    res = GPP::ConsolidatePointCloud::SmoothGeometryByNormal(pointCloud);
-</pre>
                 <hr class="line-divider">
 
                 <pre class="prettyprint">
@@ -320,7 +294,7 @@ ErrorCode ConsolidateGrid::CalculateGridIsolation(const IGridPointCloud* pointCl
 
                 <a name="pcoverlap"><h5>点云去除重影</h5></a>
 <pre class="prettyprint">
-ErrorCode RemoveOverlap(const IPointCloud* pointCloud, Real maxOverlapDist, std::vector< Int >& overlapIndex);
+ErrorCode DetectOverlap(const IPointCloud* pointCloud, Real maxOverlapDist, std::vector< Int >& overlapIndex);
 </pre>
                 <p>用法：去除点云重影部分。如果点法线方向上有点存在，且距离小于maxOverlapDist，则判定为重影点。</p>
                 <p>pointCloud：点云数据， 需要有法向量</p>
@@ -361,7 +335,7 @@ ErrorCode RemoveOverlap(const IPointCloud* pointCloud, Real maxOverlapDist, std:
     if (res != GPP_NO_ERROR) return;
     double maxOverlapDist = density * 10.0;
     std::vector< GPP::Int > overlapIndex;
-    res = GPP::ConsolidatePointCloud::RemoveOverlap(pointCloud, maxOVerlapDist, overlapIndex);
+    res = GPP::ConsolidatePointCloud::DetectOverlap(pointCloud, maxOVerlapDist, overlapIndex);
     if (res != GPP_NO_ERROR) return;
     res = GPP::DeletePointCloudElements(pointCloudd, overlapIndex);
     if (res != GPP_NO_ERROR) return;

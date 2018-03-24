@@ -37,9 +37,9 @@
                         <tr class="danger"><th>0</th><th>网格重建(点云三角化)</th><th>ReconstructMesh::Reconstruct</th></tr>
                         <tr class="active"><th>1</th><th>点云采样（均匀，几何，格栅，简化）</th><th>SamplePointCloud::UniformSample; SamplePointCloud::GeometrySample; SamplePointCloud::GridSample; SamplePointCloud::Simplify; SampleGrid::UniformSample; SampleGrid::GeometrySample; SampleGrid::Simplify</th></tr>
                         <tr class="danger"><th>2</th><th>点云光滑</th><th>ConsolidatePointCloud::SmoothGeometry; ConsolidateGrid::SmoothGridGeometry</th></tr>
-                        <tr class="active"><th>3</th><th>点云法线计算</th><th>ConsolidatePointCloud::CalculatePointCloudNormal; ConsolidatePointCloud::ConsolidateRawScanData; ConsolidatePointCloud::SmoothNormal; ConsolidateGrid::CalculateGridNormal; ConsolidateGrid::SmoothGridNormal</th></tr>
+                        <tr class="active"><th>3</th><th>点云法线计算</th><th>ConsolidatePointCloud::CalculatePointCloudNormal; ConsolidatePointCloud::SmoothNormal; ConsolidateGrid::CalculateGridNormal; ConsolidateGrid::SmoothGridNormal</th></tr>
                         <tr class="danger"><th>4</th><th>点云去飞点，去孤立项</th><th>ConsolidatePointCloud::CalculateIsolation; ConsolidateGrid::CalculateGridIsolation</th></tr>
-                        <tr class="active"><th>52</th><th>点云去重影</th><th>ConsolidatePointCloud::RemoveOverlap</th></tr>
+                        <tr class="active"><th>52</th><th>点云去重影</th><th>ConsolidatePointCloud::DetectOverlap</th></tr>
                         <tr class="danger"><th>58</th><th>有序点云边界检测</th><th>ConsolidateGrid::DetectGridBoundary</th></tr>
                         <tr class="active"><th>19</th><th>有标记点对齐</th><th>RegistratePointCloud::AlignPointCloudByMark</th></tr>
                         <tr class="danger"><th>20</th><th>无标记点对齐</th><th>RegistratePointCloud::AlignPointCloud; RegistrateGrid::AlignGrid</th></tr>
