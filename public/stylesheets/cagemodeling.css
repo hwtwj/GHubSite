@@ -1,0 +1,152 @@
+/* GLOBAL STYLES
+-------------------------------------------------- */
+/* Padding below the footer and lighter body text */
+
+body {
+  padding-bottom: 40px;
+  color: rgb(221, 211, 23);
+  background-color: rgb(200, 200, 200);
+}
+
+
+/* CUSTOMIZE THE NAVBAR
+-------------------------------------------------- */
+.navbar-inverse {
+  background-color: rgb(75, 131, 128);
+  border-color: rgb(75, 131, 128);
+}
+
+.navbar-inverse .navbar-brand {
+  color: rgb(255, 255, 255);
+}
+
+.navbar-inverse .navbar-nav > li > a {
+  color: rgb(255, 255, 255);
+}
+
+.navbar-inverse .navbar-text {
+  color: rgb(255, 255, 255);
+}
+
+/* Special class on .container surrounding .navbar, used for positioning it into place. */
+.navbar-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 20;
+}
+
+/* Flip around the padding for proper display in narrow viewports */
+.navbar-wrapper > .container-fluid {
+  padding-right: 0;
+  padding-left: 0;
+}
+.navbar-wrapper .navbar {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+.navbar-wrapper .navbar .container {
+  height: 50px;
+  width: auto;
+}
+
+.mainview {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0
+}
+
+.mainview h1 {
+  margin-bottom: 10px;
+  font-size: 19px;
+  font-weight: bold;
+  color: rgb(75, 131, 128);
+}
+
+.mainview h2 {
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  color: rgb(75, 131, 128);
+}
+
+.mainview .smoothRadio {
+  font-size: 15px;
+  color: rgb(75, 131, 128);
+}
+
+.mainview .smoothCheckbox {
+  font-size: 15px;
+  color: rgb(75, 131, 128);
+}
+
+.mainview .transformCheckbox {
+  font-size: 15px;
+  color: rgb(75, 131, 128);
+}
+
+.mainview .extrudeCheckbox {
+  font-size: 15px;
+  color: rgb(75, 131, 128);
+}
+
+.mainview .splitCheckbox {
+  font-size: 15px;
+  color: rgb(75, 131, 128);
+}
+
+.mainview .divider {
+  height: 1px;
+  background-color: rgb(255, 255, 255);
+}
+
+.mainview #functionGroup{
+  margin-top: 15px;
+}
+
+.tooltip {
+  font-size: 14px;
+}
+
+.tooltip-inner {
+  text-align: left;
+}
+
+.dropdown-menu > li > a,
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  color: rgb(75, 131, 128);
+  font-size: 15px;
+}
+
+.btn-success {
+  background-color: rgb(75, 131, 128);
+  border-color: #629391;
+}
+
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+
+@media (min-width: 768px) {
+  /* Navbar positioning foo */
+  .navbar-wrapper {
+    margin-top: 0;
+  }
+
+  .navbar-wrapper .container-fluid {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+  
+  .navbar-wrapper .navbar {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  /* The navbar becomes detached from the top, so we round the corners */
+  .navbar-wrapper .navbar {
+    border-radius: 4px;
+  }
+}

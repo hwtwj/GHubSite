@@ -17,6 +17,22 @@ router.get("/magic3d", function (req, res) {
     res.render('magic3d.ejs');
 });
 
+router.get("/cagemodeling", function (req, res) {
+    "use strict";
+    "use strict";
+    var login;
+    if (req.session.user === undefined) {
+        login = false;
+    } else {
+        login = true;
+    }
+    if (req.query.designId === undefined || req.query.designId === "") {
+        res.render("cagemodeling.ejs", {designId: "", login: login});
+    } else {
+        res.render("cagemodeling.ejs", {designId: req.query.designId, login: login});
+    }
+});
+
 router.get("/bgl/document", function (req, res) {
     "use strict";
     res.render('bgldocument.ejs');

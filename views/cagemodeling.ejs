@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在线三维建模网站，采用webgl技术，在浏览器中进行三维设计，在线三维数据处理，Geometry++，几何库">
+    <meta name="keywords" content="三维建模，细分建模，html5，sketchup, 草图大师，stl, obj, 3d打印, 3d模型，三维设计"> 
+    <link rel="icon" href="/images/favicon.png">
+
+    <title>细分建模</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
+
+
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/cagemodeling.css" rel="stylesheet">
+    <script src="/javascripts/Tool/baidutongji.js"></script>
+  </head>
+
+  <body>
+    <!-- TOOLBAR
+    ================================================== -->
+    <div class="navbar-wrapper">
+      <div class="container-fluid">
+
+        <nav class="navbar navbar-inverse navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/geometryplusplus">返回</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <p id="designid" class="navbar-text"><%= designId %></p>
+              <form id="designnamegroup" class="navbar-form navbar-left">
+                <div class="input-group">
+                  <span class="input-group-addon">设计名</span>
+                  <input id="designname" type="text" class="form-control">
+                </div>
+              </form>
+              <ul class="nav navbar-nav navbar-left">
+                <% if (!login) { %>
+                <button id="registration" type="button" class="btn btn-warning navbar-btn" data-toggle="tooltip" data-placement="bottom" title="马上注册, 注册后就可以保存设计">
+                  <span class="glyphicon glyphicon-registration-mark" aria-hidden="true"></span>
+                </button>
+                <% } %>
+                <button id="newworkspace" type="button" class="btn btn-default navbar-btn" data-toggle="tooltip" data-placement="bottom" title="新建一个设计">
+                  <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span>
+                </button>
+                <% if (login) { %>
+                <button id="saveworkspace" type="button" class="btn btn-default navbar-btn" data-toggle="tooltip" data-placement="bottom" title="保存当前设计">
+                  <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                </button>
+                <% } %>
+                <% if (login) { %>
+                <button id="saveasworkspace" type="button" class="btn btn-default navbar-btn" data-toggle="tooltip" data-placement="bottom" title="当前设计另存为另一个新的设计">
+                  <span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span>
+                </button>
+                <% } %>
+                <div id="exportgroup" class="btn-group">
+                  <button id="exportmenu" type="button" class="btn btn-warning navbar-btn dropdown-toggle" data-toggle="dropdown" data-placement="bottom" title="导出模型数据">下载</button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a role="button" id="exportstl">导出STL</a></li>
+                    <li class="divider"></li>
+                    <li><a role="button" id="exportobj">导出OBJ</a></li>
+                  </ul>
+                </div>
+                <button id="undooperation" type="button" class="btn btn-default navbar-btn" data-toggle="tooltip" data-placement="bottom" title="撤销刚才的操作">
+                  <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                </button>
+                <button id="playbackoperation" type="button" class="btn btn-default navbar-btn" data-toggle="tooltip" data-placement="bottom" title="回放所有的操作">
+                  <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                </button>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <button id="rotatecontrol" type="button" class="btn btn-default navbar-btn" data-toggle="tooltip" data-placement="bottom" title="鼠标旋转模型操作，快捷键r">
+                  <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                </button>
+                <button id="translatecontrol" type="button" class="btn btn-default navbar-btn" data-toggle="tooltip" data-placement="bottom" title="鼠标平移相机操作，快捷键t">
+                  <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+                </button>
+                <button id="scalecontrol" type="button" class="btn btn-default navbar-btn" data-toggle="tooltip" data-placement="bottom" title="鼠标缩放模型操作，快捷键s">
+                  <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+                </button>
+                <button id="maximizeviewport" type="button" class="btn btn-default navbar-btn" data-toggle="tooltip" data-placement="bottom" title="最大化视口模型，快捷键n。另外，当前编辑功能为空的时候，也会把模型移动到坐标轴中心">
+                  <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                </button>
+              </ul>
+              <form id="changesubdividetimegroup" class="navbar-form navbar-right">
+                <div class="input-group">
+                  <span class="input-group-addon" data-toggle="tooltip" data-placement="bottom" title="细分次数越高，模型越光滑，模型面片数量越多，计算量越大">细分次数</span>
+                  <input id="changesubdividetime" type="number" value="3" min="0" max="5" step="1" class="form-control">
+                </div>
+              </form>
+              <ul class="nav navbar-nav navbar-right">
+                <button id="switchshadingmode" type="button" class="btn btn-default navbar-btn" data-toggle="tooltip" data-placement="bottom" title="模型显示切换（光滑，平面）">
+                  <span class="glyphicon glyphicon-font" aria-hidden="true"></span>
+                </button>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+      </div>
+    </div>
+
+    <!-- SIDEBAR and CANVAS
+    ================================================== -->
+    <div class="mainview">
+      <div class="container-fluid">
+        <div class="row">
+          <div id="sidebar" class="col-md-2 col-lg-1"></div>
+          <div id="maincanvas" class="col-md-10 col-lg-11"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <script src="http://threepark.net/javascripts/Dependence/three.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
+    <!-- Application Javascript -->
+    <script src="http://threepark.net/javascripts/Src/cagemodeling.min.js"></script>
+    <!-- // <script src="/javascripts/Src/cagemodeling.js"></script> -->
+    <script src="/javascripts/Tool/baidushare.js"></script>
+  </body>
+</html>

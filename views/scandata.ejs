@@ -18,6 +18,9 @@
     <link href="/stylesheets/homepagetoolbar.css" rel="stylesheet">
     <link href="/stylesheets/homepagefooter.css" rel="stylesheet">
     <script src="/javascripts/Tool/baidutongji.js"></script>
+    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
+    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/javascripts/Dependence/jquery-scrolltofixed.js"></script>
   </head>
 
   <body>
@@ -77,10 +80,19 @@
 
     <hr>
     <% include homepagefooter %>
+
+    <script type="text/javascript">
+    $(document).ready(function (e) {
+      $('#test').scrollToFixed();
+      $('.res-nav_click').click(function () {
+        $('.main-nav').slideToggle();
+        return false
+
+      });
+
+    });
+    </script>
   
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
-    <script src="/javascripts/Dependence/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/javascripts/Dependence/ie10-viewport-bug-workaround.js"></script>
     <script src="/javascripts/Src/gppmodels.min.js"></script>
