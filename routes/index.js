@@ -7,6 +7,11 @@ router.get("/", function (req, res) {
     res.render('index.ejs');
 });
 
+router.get("/myspace", function (req, res) {
+    "use strict";
+    res.render('myspace.ejs');
+});
+
 router.get("/slam", function (req, res) {
     "use strict";
     res.render('slam.ejs');
