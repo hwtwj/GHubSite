@@ -20,7 +20,6 @@
     <script src="/javascripts/Tool/baidutongji.js"></script>
     <script src="/javascripts/Dependence/jquery-2.1.3.min.js"></script>
     <script src="/javascripts/Dependence/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/javascripts/Dependence/jquery-scrolltofixed.js"></script>
   </head>
 
   <body>
@@ -49,7 +48,7 @@
         <hr class="featurette-divider">
         <div class="row featurette">
           <div class="col-md-8">
-            <div class="modulecaption">KinectV2 Capture Program</div>            
+            <a name="capture"><div class="modulecaption">KinectV2 Capture Program</div></a>
             <ul class="moduleul">
             <li><div class="modulecontent">有序彩色点云</div></li>
             <li><div class="modulecontent"><a href="http://threepark.net/slamdata/KinectV2.zip" target="_blank" name="downloadprogram">程序下载</a></div></li>
@@ -62,7 +61,7 @@
 
         <hr class="featurette-divider">
         
-          <div class="modulecaption">KinectV2数据集</div>  
+          <a name="data"><div class="modulecaption">KinectV2数据集</div></a>
           <div class="row featurette">
             <div class="col-md-9">
               <ul class="moduleul">
@@ -81,18 +80,6 @@
       <!-- /END THE FEATURETTES -->
     </div><!-- /.container -->
     <% include homepagefooter %>
-
-    <script type="text/javascript">
-    $(document).ready(function (e) {
-      $('#test').scrollToFixed();
-      $('.res-nav_click').click(function () {
-        $('.main-nav').slideToggle();
-        return false
-
-      });
-
-    });
-    </script>
 
   
     <!-- Placed at the end of the document so the pages load faster -->
