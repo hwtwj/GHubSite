@@ -30,6 +30,20 @@
     <div class="container">
         <h2>Kinect数据 <small></small></h2>
 
+        <h4>Kinect V1 和 V2 比较</h4>
+        <p>Kinect V1 和 V2 的外观比较</p>
+        <img class="featurette-image img-responsive center-block" src="/images/kinect_0.png" alt="kinect">
+        <p>Kinect V1 和 V2 的参数比较</p>
+        <img class="featurette-image img-responsive center-block" src="/images/kinect_1.png" alt="kinect">
+        <p>Kinect V1 和 V2 随距离增加的误差分布</p>
+        <img class="featurette-image img-responsive center-block" src="/images/kinect_2.png" alt="kinect">
+        <p>Kinect V1 和 V2 颜色误差分布</p>
+        <img class="featurette-image img-responsive center-block" src="/images/kinect_3.png" alt="kinect">
+        <p>Kinect V2 在边界处有飞点</p>
+        <img class="featurette-image img-responsive center-block" src="/images/kinect_4.png" alt="kinect">
+        <p>参考文献：Comparison of Kinect V1 and V2 Depth Images in Terms of Accuracy and Precision - ACCV2016</p>
+        <hr class="line-divider">
+
         <h4>Kinect数据如何处理？精度很低吗</h4>
         <p>Kinect数据属于低精度的深度视频数据，两个特点：一个是精度低，一个是视频数据。可以应用KinectFusion技术把连续的K(比如K取30)帧数据融合到一块，作为一帧数据用于后续处理。如下图所示，左图是一帧数据，右图是取了连续的30帧数据融合到一块的数据。</p>
         <img class="featurette-image img-responsive center-block" src="/images/kinectfusion.jpg" alt="kinect fusion">
@@ -42,6 +56,13 @@
         <h4>为什么需要全局注册</h4>
         <p>Kinect数据精度不高，在扫描一些大物体的时候，注册误差会累积得很厉害。如下图所示，第一列截取了三对ICP注册后的点云，局部来看注册得很好。然后逐对点云两两ICP注册，如中图所示，点云注册的效果并不好，累计误差很严重。第三列是点云经过全局注册后效果，注册误差被分散到每一帧中去了，从而减少整体的注册误差。</p>
         <img class="featurette-image img-responsive center-block" src="/images/kinect_global_registrate.jpg" alt="kinect_global_registrate">
+        <hr class="line-divider">
+
+        <h4><a href="/slam" target="_blank">Kinect V2 进行室内重建</a></h4>
+        <li class="contentli">前端实时注册融合，局部调整</li>
+        <li class="contentli">后端回路检测，全局注册融合</li>
+        <li class="contentli">纯CPU计算</li>
+        <div class="thumbnail"><video src="/videos/slam_0.mp4" poster="/images/slam_0.png" controls="controls" width="800" height="602" loop="loop">你的浏览器不支持Video标签, 请换一个浏览器，比如Google浏览器</video></div>
     </div>
 
     <hr>
