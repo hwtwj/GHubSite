@@ -40,7 +40,6 @@
                     <li class="sideli"><a href="#pointcloud_select">选择</a></li>
                     <li class="sideli"><a href="#pointcloud_reconstruction">三角化</a></li>
                     <li class="sideli"><a href="#pointcloud_color">颜色</a></li>
-                    <li class="sideli"><a href="#pointcloud_texture">纹理图</a></li>
                 </ul>
                 <div class="sidecaption"><a href="#meshshop">网格编辑模块</a></div>
                 <ul class="sideul">
@@ -89,7 +88,6 @@
                 </ul>
                 <div class="sidecaption"><a href="#texture">纹理贴图模块</a></div>
                 <ul class="sideul">
-                    <li class="sideli"><a href="#texture_color">颜色</a></li>
                     <li class="sideli"><a href="#texture_map">点像对应</a></li>
                     <li class="sideli"><a href="#texture_image">纹理图</a></li>
                     <li class="sideli"><a href="#texture_simplify">简化</a></li>
@@ -212,13 +210,6 @@
                 <li class="contentli">ColorId：导入ColorId信息</li>
                 <li class="contentli">保存：保存ColorId信息</li>
                 <li class="contentli">显示：显示ColorId。相同颜色代表同一个ColorId</li>
-                
-                <hr class="line-divider">
-                <a name="pointcloud_texture"><h4>纹理图</h4></a>
-                <li class="contentli">纹理融合：应用点云颜色驱动对应图片的颜色融合。三个参数为颜色分量最大色差融合阈值，范围是[0, 1]，如果像素色差大于这个阈值的地方，则不做颜色融合。三个分量的意义分别为色度，饱和度，亮度。比如想尽量保持住色度，则可以调小其阈值。</li>
-                <li class="contentli">点像对应：导入点像对应文件和图像。<a href="geometryplusplus/texturemodule" target="_blank">点像对应信息</a>用于颜色融合和纹理贴图制作，图像用于纹理贴图制作。如果没有图像可以选择取消。</li>
-                <li class="contentli">保存：保存当前的点像对应文件</li>
-                <li class="contentli">显示：显示点像对应信息。同一个颜色代表对应同一个图片</li>
 
                 <hr class="featurette-divider">    
                 <a name="meshshop"><h5><img class="featurette-image img-responsive center-block" src="/images/MeshShop_icon.jpg" alt="MeshShop">网格编辑模块: 三维网格处理工具, 包括修复, 滤镜, 细分, 加密, 简化，Remesh，补洞，抽壳，采样等。</h5></a>
@@ -415,13 +406,6 @@
 
                 <hr class="featurette-divider">
                 <a name="texture"><h5><img class="featurette-image img-responsive center-block" src="/images/Texture_icon.jpg" alt="TextureApp"><a href="http://threepark.net/notes/colormesh" target="_blank">纹理贴图模块</a></h5></a>
-                
-                <hr class="line-divider">
-                <a name="texture_color"><h4>颜色</h4></a>
-                <li class="contentli">颜色融合：网格顶点的颜色融合。输入要求是，网格每个顶点需要一个colorId信息。三个参数为颜色分量最大色差融合阈值，范围是[0, 1]，如果colorId边界处的色差大于这个阈值的地方，则不做颜色融合。三个分量的意义分别为色度，饱和度，亮度。比如想尽量保持住色度，则可以调小其阈值。详细信息可以参考<a href="http://threepark.net/notes/colormesh" target="_blank">多角度点云颜色融合。</a> 它是点云应用里颜色融合的网格版本，主要用于处理非均匀点云，比如线激光数据。</li>
-                <li class="contentli">ColorId：导入ColorId信息</li>
-                <li class="contentli">保存：保存ColorId信息</li>
-                <li class="contentli">显示：显示ColorId。相同颜色代表同一个ColorId</li>
                 
                 <hr class="line-divider">
                 <a name="texture_map"><h4>点像对应</h4></a>
