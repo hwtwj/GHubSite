@@ -28,48 +28,25 @@
 
     <div class="container">
         <h2>Geometry++</h2>
-        <div class="headdescription"><a class="btn btn-lg btn-success" href="/slam" target="_blank" role="button">SLAM</a> <a class="btn btn-lg btn-success" href="/magic3d" target="_blank" role="button">Magic3D</a></div>
         
-        <hr class="featurette-divider">
-        <h3>简介</h3>
-        <p>Geometry++是一个关于三维数据(点云，网格)处理的几何库，它包含了三维数据处理最基础的算法，可以作为三维数据处理软件的几何引擎来使用。 </p>
-
-        <hr class="featurette-divider">
-        <h3>功能模块<small> (单击功能名称进入Magic3D对应功能的详细介绍)</small></h3>
-        <table class="table table-bordered">
-            <thread>
-                <tr class="active"><th>名称</th><th>功能</th></tr>
-            </thread>
-            <tbody>
-                <tr class="info"><th>点云处理模块</th><th><a href="/magic3d#pointcloud_reconstruction" target="_blank">点云三角化</a>，<a href="/magic3d#pointcloud_sample" target="_blank">点云采样（均匀，几何，格栅，简化）</a>，<a href="/magic3d#pointcloud_normal" target="_blank">点云法线计算</a>，<a href="/magic3d#pointcloud_repair" target="_blank">点云修复（光滑，去飞点，去孤立项，去重影）</a>，<a href="/magic3d#registration" target="_blank">点云刚性注册（点云全局注册，无标记点拼接，有标记点拼接，ICP注册），多帧点云去除重叠，点云非刚性注册（点云全局注册，ICP注册）</a></th></tr>
-
-                <tr class="active"><th>网格处理模块</th><th><a href="/magic3d#mesh_fill" target="_blank">网格补洞（三角化，平面，切线，曲率），网格桥接</a>，<a href="/magic3d#mesh_cut" target="_blank">面切割网格</a>，<a href="/magic3d#mesh_repair" target="_blank">网格修复（拓扑修复，几何修复，去孤立项）</a>，<a href="/magic3d#mesh_changevertex" target="_blank">网格简化，加密，细分</a>，<a href="/magic3d#mesh_filter" target="_blank">网格去噪，光滑，几何细节增强</a>，<a href="/magic3d#mesh_shell" target="_blank">网格均匀抽壳</a>，<a href="/magic3d#mesh_remesh" target="_blank">重新网格化（Remesh），带约束的Delaunay网格优化，重心Voronoi网格优化</a>，<a href="/magic3d#mesh_sample" target="_blank">网格点采样</a></th></tr>
-
-                <tr class="info"><th>网格UV展开模块</th><th><a href="/magic3d#uvunfold" target="_blank">单连同圆盘拓扑网格UV展开，UV等距优化，任意拓扑网格全自动UV展开，UV Atlas打包</a></th></tr>
-                
-                <tr class="active"><th>网格测量模块</th><th><a href="/magic3d#measure" target="_blank">网格测地线计算（精确，快速，近似），平面截网格线，网格线切割网格，网格线光滑，网格表面积计算，体积计算，网格平均曲率，高斯曲率，主曲率，网格厚度测量，射线与网格求交，点到网格距离测量</a></th></tr>
-                
-                <tr class="info"><th>纹理优化模块</th><th><a href="/magic3d#texture_image" target="_blank">网格纹理贴图制作</a>，<a href="/magic3d#texture_map" target="_blank">点像对应投影</a>，<a href="/magic3d#texture_map" target="_blank">点像对应割缝优化</a>，<a href="/magic3d#pointcloud_color" target="_blank">多角度点云颜色融合</a>，<a href="/magic3d#registration_tune_color" target="_blank">单光源点云颜色修正</a>，<a href="/magic3d#texture_image" target="_blank">纹理贴图颜色修正</a></th></tr>
-                
-                <tr class="active"><th>三维变形模块</th><th><a href="/magic3d#deform_pointcloud" target="_blank">三维点云变形</a>，<a href="/magic3d#deform_mesh" target="_blank">三维网格变形</a></th></tr>
-                
-                <tr class="info"><th>其它功能</th><th><a href="/magic3d#relief_relief" target="_blank">三维浅浮雕制作</a></th></tr>
-            </tbody>
-        </table>
-
+        
 <!--         <hr class="featurette-divider">
-        <h3>视频展示</h3>
-        <p><a href="/demo/texture" target="_blank">纹理网格(图像)制作</a> | <a href="/demo/pointshop" target="_blank">纹理网格(彩色点云)制作</a> | <a href="/demo/registration" target="_blank">点云拼接注册</a> | <a href="/demo/deformation" target="_blank">三维变形</a> | <a href="/demo/unfold" target="_blank">网格UV展开</a> | <a href="/demo/workflow" target="_blank">点云网格化工作流</a> | <a href="/demo/measure" target="_blank">三维测量</a> | <a href="/demo/meshshop" target="_blank">三维浮雕制作</a> | <a href="/demo/overview" target="_blank">Geometry++部分概览</a></p> -->
+        <h3>简介</h3>
+ -->        <h3>Geometry++是一个关于三维数据(点云，网格)处理的几何库，它包含了三维数据处理最基础的算法，可以作为三维数据处理软件的几何引擎来使用。 </h3>
+
+        <div class="headdescription"><a class="btn btn-lg btn-success" href="/slam" target="_blank" role="button">SLAM</a> <a class="btn btn-lg btn-success" href="/magic3d" target="_blank" role="button">Magic3D</a></div>
+
 
         <hr class="featurette-divider">
         <h3>功能展示</h3>
 
         <div class="row featurette">
           <div class="col-md-6">
-            <div class="modulecaption"><a href="/slam" target="_blank">重建三维几何空间</a></div>
+            <div class="modulecaption"><a href="/slam" target="_blank">深度视频配准融合</a></div>
             <ul class="moduleul">
-            <li><div class="modulecontent">CPU实时注册融合</div></li>
-            <li><div class="modulecontent">回路检测，全局注册融合</div></li>
+            <li><div class="modulecontent">前端：实时注册 + 融合 + 局部调整</div></li>
+            <li><div class="modulecontent">后端：回路检测 + 全局注册 + 颜色融合</div></li>
+            <li><div class="modulecontent">纯CPU实时计算</div></li>
             </ul>
           </div>
           <div class="col-md-6">
@@ -86,7 +63,8 @@
             <div class="modulecaption_right">纹理贴图制作</div>
             <ul class="moduleul_right">
             <li><div class="modulecontent">点云，网格纹理贴图制作</div></li>
-            <li><div class="modulecontent">纹理贴图割缝优化</div></li>
+            <li><div class="modulecontent">贴图割缝优化</div></li>
+            <li><div class="modulecontent">贴图色差融合</div></li>
             <li><div class="modulecontent">可以制作带贴图格式的OBJ文件</div></li>
             </ul>
           </div>
@@ -160,7 +138,6 @@
           <div class="col-md-6">
             <div class="modulecaption"><a href="/demo/deformation" target="_blank">三维点云和网格变形</a></div>
             <ul class="moduleul">
-            <li><div class="modulecontent">基于控制点的三维变形</div></li>
             <li><div class="modulecontent">保持模型的几何细节</div></li>
             </ul>
           </div>
@@ -228,6 +205,31 @@
             <img class="featurette-image img-responsive center-block" src="/images/relief.jpg" alt="feature-modeling">
           </div>
         </div>
+
+
+
+        <hr class="featurette-divider">
+        <a name="funclist"><h3>功能模块列表<small> (单击功能名称进入Magic3D对应功能的详细介绍)</small></h3></a>
+        <table class="table table-bordered">
+            <thread>
+                <tr class="active"><th>名称</th><th>功能</th></tr>
+            </thread>
+            <tbody>
+                <tr class="info"><th>点云处理模块</th><th><a href="/magic3d#pointcloud_reconstruction" target="_blank">点云三角化</a>，<a href="/magic3d#pointcloud_sample" target="_blank">点云采样（均匀，几何，格栅，简化）</a>，<a href="/magic3d#pointcloud_normal" target="_blank">点云法线计算</a>，<a href="/magic3d#pointcloud_repair" target="_blank">点云修复（光滑，去飞点，去孤立项，去重影）</a>，<a href="/magic3d#registration" target="_blank">点云刚性注册（点云全局注册，无标记点拼接，有标记点拼接，ICP注册），多帧点云去除重叠，点云非刚性注册（点云全局注册，ICP注册）</a></th></tr>
+
+                <tr class="active"><th>网格处理模块</th><th><a href="/magic3d#mesh_fill" target="_blank">网格补洞（三角化，平面，切线，曲率），网格桥接</a>，<a href="/magic3d#mesh_cut" target="_blank">面切割网格</a>，<a href="/magic3d#mesh_repair" target="_blank">网格修复（拓扑修复，几何修复，去孤立项）</a>，<a href="/magic3d#mesh_changevertex" target="_blank">网格简化，加密，细分</a>，<a href="/magic3d#mesh_filter" target="_blank">网格去噪，光滑，几何细节增强</a>，<a href="/magic3d#mesh_shell" target="_blank">网格均匀抽壳</a>，<a href="/magic3d#mesh_remesh" target="_blank">重新网格化（Remesh），带约束的Delaunay网格优化，重心Voronoi网格优化</a>，<a href="/magic3d#mesh_sample" target="_blank">网格点采样</a></th></tr>
+
+                <tr class="info"><th>网格UV展开模块</th><th><a href="/magic3d#uvunfold" target="_blank">单连同圆盘拓扑网格UV展开，UV等距优化，任意拓扑网格全自动UV展开，UV Atlas打包</a></th></tr>
+                
+                <tr class="active"><th>网格测量模块</th><th><a href="/magic3d#measure" target="_blank">网格测地线计算（精确，快速，近似），平面截网格线，网格线切割网格，网格线光滑，网格表面积计算，体积计算，网格平均曲率，高斯曲率，主曲率，网格厚度测量，射线与网格求交，点到网格距离测量</a></th></tr>
+                
+                <tr class="info"><th>纹理优化模块</th><th><a href="/magic3d#texture_image" target="_blank">网格纹理贴图制作</a>，<a href="/magic3d#texture_map" target="_blank">点像对应投影</a>，<a href="/magic3d#texture_map" target="_blank">点像对应割缝优化</a>，<a href="/magic3d#pointcloud_color" target="_blank">多角度点云颜色融合</a>，<a href="/magic3d#registration_tune_color" target="_blank">单光源点云颜色修正</a>，<a href="/magic3d#texture_image" target="_blank">纹理贴图颜色修正</a></th></tr>
+                
+                <tr class="active"><th>三维变形模块</th><th><a href="/magic3d#deform_pointcloud" target="_blank">三维点云变形</a>，<a href="/magic3d#deform_mesh" target="_blank">三维网格变形</a></th></tr>
+                
+                <tr class="info"><th>其它功能</th><th><a href="/magic3d#relief_relief" target="_blank">三维浅浮雕制作</a></th></tr>
+            </tbody>
+        </table>
 
 
         <!-- <hr class="featurette-divider"> -->
