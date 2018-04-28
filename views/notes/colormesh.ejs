@@ -8,7 +8,7 @@
     <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理">
     <link rel="icon" href="/images/favicon.png">
 
-    <title>彩色网格</title>
+    <title>彩色纹理网格</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
@@ -28,7 +28,7 @@
     <% include ../homepagetoolbar %>
     
     <div class="container">
-        <h2>彩色网格 <small></small></h2>
+        <h2>彩色纹理网格 <small></small></h2>
 
         <h4>彩色网格分类</h4>
         <p>彩色网格主要分两类，一类是彩色顶点网格，一类是彩色贴图网格。</p>
@@ -56,14 +56,15 @@
         <hr class="line-divider">
 
         <h4>点像对应割缝优化</h4>
-        <p>多角度拍摄模型的时候，帧与帧之间一般有重叠区域。重叠区域的网格顶点有多个图片与其对应，也就是有多个点像对应信息。重叠区域的点像对应的选择，能影响贴图效果。如图所示，上面的模型颜色代表了不同的图片索引，下面的图为贴图效果。左边的模型按照图片索引大小，一张一张往网格上贴；右边模型的贴图重叠区域经过了优化。明显能看出，右图的贴图效果优于左图。</p>
-        <img class="featurette-image img-responsive center-block" src="/images/fuse_imagecolorid.jpg" alt="fuse imagecolorid">
+        <p>多角度拍摄模型的时候，帧与帧之间一般有重叠区域。重叠区域的网格顶点有多个图片与其对应，也就是有多个点像对应信息。重叠区域的点像对应的选择，能影响贴图效果。如下图所示，不同的颜色代表不同的图片。左边贴图有明显的图像缝隙痕迹。右边贴图是优化后的结果，图像缝隙色差减小很多。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/fuseimagecolorids_face.jpg" alt="fuse imagecolorid">
         <p></p>
         <hr class="line-divider">
 
-        <h4>模型的光照信息</h4>
-        <p>严格意义上讲，相机拍摄的图像，并不是物体真实的颜色，而是加上光照信息后颜色。如下图所示，左图是模型的真实颜色，右图是加上光照后的图像。由于光照因素对成像效果影响很大，所以不同角度拍摄的图像，常常会有个融合的过程。</p>
-        <img class="featurette-image img-responsive center-block" src="/images/color_shade_compare.jpg" alt="color shade compare">
+        <h4>纹理贴图颜色融合</h4>
+        <p>在一些图片拍摄环境不是很理想的情况下，即使对点像对应的割缝进行了优化，网格的纹理贴图在不同图片之间，也还会有一些色差。颜色融合的一个基本假设是，同一张图片的颜色是协调的，色差只存在于不同图片之间。基于这个假设，根据三角片对应的图片信息，可以直接对纹理图进行颜色融合。如下图所示，左图的颜色代表了贴图的图片索引号，中图是纹理贴图效果。可以看出，图片接缝处有明显的色差痕迹。右图是颜色融合后的效果。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/TuneTextureImageColor_shoe.jpg" alt="fuse texture image">
+        <p></p>
         <hr class="line-divider">
 
         <h4>单光源点云颜色修正</h4>
