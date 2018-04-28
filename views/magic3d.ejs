@@ -421,7 +421,7 @@
                 <hr class="line-divider">
                 <a name="texture_image"><h4>纹理图</h4></a>
                 <li class="contentli">纹理融合：纹理贴图一般是多幅图片贴到一个网格上。由于光照原因，不同图片在图片接缝处会有一些色差，而同一个图片的颜色认为是相容的。所以需要融合不同图片在图片接缝处的颜色，使其色差痕迹尽量的小。如图所示，图一的颜色代表了贴图的图片索引号，图二是纹理贴图效果。可以看出，图片接缝处有明显的色差痕迹。图三是颜色融合后的效果。测试说明：三个参数为颜色分量最大色差融合阈值，范围是[0, 1]，如果像素色差大于这个阈值的地方，则不做颜色融合。三个分量的意义分别为色度，饱和度，亮度。比如想尽量保持住色度，则可以调小其阈值。<a class="code" href="http://threepark.net/file/body_texture_test.rar" target="_blank">测试数据下载</a></li>
-                <img class="featurette-image img-responsive center-block" src="/images/TuneTextureImageColor_body.jpg" alt="TuneTextureImageColor_body">
+                <img class="featurette-image img-responsive center-block" src="/images/TuneTextureImageColor_shoe.jpg" alt="TuneTextureImageColor_shoe">
                 <li class="contentli">顶点颜色：用网格顶点颜色制作纹理贴图。详细信息可以参考<a href="http://threepark.net/notes/colormesh" target="_blank">色彩信息的存储</a></li>
                 <li class="contentli">图像颜色：用图像制作纹理贴图，网格顶点需要点像对应信息和对应图片。详细信息可以参考<a href="http://threepark.net/notes/colormesh" target="_blank">色彩信息的存储</a>。Bilinear：纹理图默认为Nearest类型差值，Bilinear为双线性插值。</li>
                 
