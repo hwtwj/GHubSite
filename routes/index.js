@@ -43,6 +43,11 @@ router.get("/bgl/document", function (req, res) {
     res.render('bgldocument.ejs');
 });
 
+router.get("/testformat", function (req, res) {
+    "use strict";
+    res.render('testformat.ejs');
+});
+
 router.get("/geometryplusplus", function (req, res) {
     "use strict";
     res.render('gppabout.ejs');
@@ -60,7 +65,7 @@ router.get("/geometryplusplus/document", function (req, res) {
 
 router.get("/geometryplusplus/fileformat", function (req, res) {
     "use strict";
-    res.render('gpp_fileformat.ejs');
+    res.render('gpp/gpp_fileformat.ejs');
 });
 
 router.get("/geometryplusplus/pointcloudbasic", function (req, res) {

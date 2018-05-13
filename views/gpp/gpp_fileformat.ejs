@@ -50,7 +50,7 @@
         <p>imageIndex_0 pixelCoordX_0 pixelCoordY_0</p>
         <p>imageIndex_1 pixelCoordX_1 pixelCoordY_1</p>
         <p>......</p>
-        <p>说明：vertexCount为网格或者点云点数；imageIndex_n为图片索引号；pixelCoordX_n, pixelCoordY_n为点在图像中对应的坐标。这部分数据是点在图像中的对应信息，用于纹理贴图制作。</p>
+        <p>说明：此格式意义为：每个顶点只有一个点像对应。vertexCount为网格或者点云点数；imageIndex_n为图片索引号；pixelCoordX_n, pixelCoordY_n为点在图像中对应的坐标。这部分数据是点在图像中的对应信息，用于纹理贴图制作。</p>
         <hr class="line-divider">
 
         <h4>fii</h4>
@@ -59,7 +59,7 @@
         <p>imageIndex_0 pixelCoordX_0 pixelCoordY_0</p>
         <p>imageIndex_1 pixelCoordX_1 pixelCoordY_1</p>
         <p>......</p>
-        <p>说明：faceCount为网格的三角片数；imageIndex_n为图片索引号；pixelCoordX_n, pixelCoordY_n为点在图像中对应的坐标。</p>
+        <p>说明：此格式意义为：三角形顶点在图像中的点像对应。faceCount为网格的三角片数；imageIndex_n为图片索引号；pixelCoordX_n, pixelCoordY_n为点在图像中对应的坐标。</p>
         <hr class="line-divider">
 
         <h4>viis</h4>
@@ -73,11 +73,21 @@
         <p>imageIndex_1_0 pixelCoordX_1_0 pixelCoordY_1_0</p>     
         <p>imageIndex_1_1 pixelCoordX_1_1 pixelCoordY_1_1</p>     
         <p>......</p>     
-        <p>说明：vertexCount为网格顶点数目。vertex_i_idCount为顶点i的点像对应个数。imageIndex_i_n为图片索引号；pixelCoordX_i_n, pixelCoordY_i_n为点在图像中对应的坐标。</p>     
+        <p>说明：此格式意义为：每个顶点在多个图片中有对应。vertexCount为网格顶点数目。vertex_i_idCount为顶点i的点像对应个数。imageIndex_i_n为图片索引号；pixelCoordX_i_n, pixelCoordY_i_n为点在图像中对应的坐标。</p>     
         <hr class="line-divider"> 
 
         <h4>点像对应的坐标系</h4>
         <img class="featurette-image img-responsive center-block" src="/images/image_coordinate.jpg" alt="image_coordinate">
+        <hr class="line-divider">
+
+        <h4>cid</h4>
+        <p>文件名.cid</p>
+        <p>pointCount</p>
+        <p>colorid_0</p>
+        <p>colorid_1</p>
+        <p>......</p>
+        <p>说明：每个点对应一个colorid。相同colorid的颜色，可以认为是协调的，比如取自同一张图像。不同colorid的颜色，可能会有色差。</p>
+        
         
     </div>
 
