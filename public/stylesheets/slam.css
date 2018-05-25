@@ -22,7 +22,7 @@ h2 {
 .modulecaption {
   font-size: 30px;
   font-weight: bold;
-  text-align: left;
+  text-align: center;
   margin-left: 5px;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -148,4 +148,10 @@ a:hover {
   margin: 20px 0;
   height: 1px;
   background-color: rgb(230, 230, 230);
+}
+
+@media (min-width: 1560px) {
+  .container {
+    width: 75%;
+  }
 }

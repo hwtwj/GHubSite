@@ -153,6 +153,14 @@ a:hover {
     padding-left: 40px;
   }
 }
+
+@media (min-width: 1560px) {
+  .container {
+    width: 75%;
+  }
+}
+
 .main .page-header {
   margin-top: 0;
 }
+

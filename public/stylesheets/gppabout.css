@@ -144,3 +144,8 @@ a:hover {
   background-color: rgb(230, 230, 230);
 }
 
+@media (min-width: 1560px) {
+  .container {
+    width: 75%;
+  }
+}

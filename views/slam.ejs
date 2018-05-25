@@ -101,20 +101,21 @@
 
         <hr class="featurette-divider">
         <a name="texture"><div class="modulecaption"><a href="/magic3d#texture" target="_blank">纹理贴图</a></div></a>
-        <div class="modulecontent">深度视频配准融合后，是一个彩色点云。为了提高色彩分辨率，可以应用网格纹理贴图。</div>
-        
         <ul class="moduleul">
-          <li><div class="modulecontent">输入：点云数据 + 图片 + 点像对应</div></li>
-          <li><div class="modulecontent">输出：带纹理网格（如下图所示：网格，带纹理网格，简化的纹理网格）</div></li>
-          <li><div class="modulecontent"><a href="http://threepark.net/slamdata/bedroom_loop_image_2/fusion_res.zip" target="_blank">下图对应的纹理贴图网格</a>（OBJ格式）</div></li></li>
+          <li><div class="modulecontent">深度视频配准融合后得到的点云，经过网格重建得到一个三维网格，如下左图所示。如果采集的深度点云有对应的彩色图像，就可以自动为三维网格做纹理贴图，如下右图所示。<a href="http://threepark.net/slamdata/bedroom_loop_image_2/fusion_res.zip" target="_blank">(OBJ格式的纹理贴图网格)</a></div></li>
+          <img class="featurette-image img-responsive center-block" src="/images/bedroom_loop_image_2_res.jpg" alt="contact">
+          <li><div class="modulecontent">带纹理的网格简化：有些应用场景不需要稠密的网格，需要对网格进行简化，如下图所示。由于网格简化不会影响图片的分辨率，下左图与上面的稠密网格比较，视觉上的色彩是差不多的。</div></li>
+          <img class="featurette-image img-responsive center-block" src="/images/bedroom_loop_image_2_res_simplify.jpg" alt="contact">
+          <li><div class="modulecontent">纹理色彩融合：原始采集的图片，由于光照环境的影响，往往带有色差。如下左图所示，用原始图片做纹理贴图，在不同图片接缝处，有明显的色差痕迹。纹理色彩融合可以提升纹理贴图整体的色彩融合度，如下右图所示。</div></li>
+          <img class="featurette-image img-responsive center-block" src="/images/bedroom_loop_image_2_res_colorfusion.jpg" alt="contact">
+
           <li><div class="modulecontent">测试数据：深度视频（<a href="http://threepark.net/slamdata/bedroom_loop_image_2/part0.zip" target="_blank">part0</a> | <a href="http://threepark.net/slamdata/bedroom_loop_image_2/part1.zip" target="_blank">part1</a> | <a href="http://threepark.net/slamdata/bedroom_loop_image_2/part2.zip" target="_blank">part2</a> | <a href="http://threepark.net/slamdata/bedroom_loop_image_2/part3.zip" target="_blank">part3</a> | <a href="http://threepark.net/slamdata/bedroom_loop_image_2/part4.zip" target="_blank">part4</a> | <a href="http://threepark.net/slamdata/bedroom_loop_image_2/part5.zip" target="_blank">part5</a> | <a href="http://threepark.net/slamdata/bedroom_loop_image_2/part6.zip" target="_blank">part6</a> | <a href="http://threepark.net/slamdata/bedroom_loop_image_2/part7.zip" target="_blank">part7</a> | <a href="http://threepark.net/slamdata/bedroom_loop_image_2/part8.zip" target="_blank">part8</a> | <a href="http://threepark.net/slamdata/bedroom_loop_image_2/part9.zip" target="_blank">part9</a> )，<a href="http://threepark.net/slamdata/bedroom_loop_image_2/image.zip" target="_blank">彩色图片</a>（每30帧点云采样一帧图片），<a href="http://threepark.net/slamdata/bedroom_loop_image_2/map.zip" target="_blank">点像对应</a></div></li>
         </ul>
-        <img class="featurette-image img-responsive center-block" src="/images/bedroom_loop_image_2_res.jpg" alt="contact">
 
         <hr class="featurette-divider">
         <a name="globalreg"><div class="modulecaption"><a href="/magic3d#registration_global" target="_blank">点云全局注册</a></div></a>
         <div class="modulecontent">SLAM前端实时配准融合的点云，在整体上往往有比较大的回路误差。全局注册可以减小回路误差。下面是一些示例数据，用于测试全局注册功能。</div>
-        <hr class="line-divider">
+
 
         <div class="row featurette">
           <div class="col-md-4">
@@ -128,7 +129,7 @@
         </div>
         <hr class="line-divider">
 
-        <div class="row featurette">
+<!--         <div class="row featurette">
           <div class="col-md-4">
             <ul class="moduleul">
               <li><div class="modulecontent"><a href="http://threepark.net/slamdata/bedroom_loop_image_2_res_6.zip" target="_blank">bedroom_loop_image_2_res_6</a></div></li>
@@ -138,9 +139,9 @@
             <img class="featurette-image img-responsive center-block" src="/images/bedroom_loop_image_2_res_6.png" alt="contact">
           </div>
         </div>
-        <hr class="line-divider">
+        <hr class="line-divider"> -->
 
-        <div class="row featurette">
+<!--         <div class="row featurette">
           <div class="col-md-4">
             <ul class="moduleul">
               <li><div class="modulecontent"><a href="http://threepark.net/slamdata/grid_bedroom_0_res_6.zip" target="_blank">grid_bedroom_0_res_6</a></div></li>
@@ -150,7 +151,7 @@
             <img class="featurette-image img-responsive center-block" src="/images/grid_bedroom_0_res_6.png" alt="contact">
           </div>
         </div>
-        <hr class="line-divider">
+        <hr class="line-divider"> -->
         
         <div class="row featurette">
           <div class="col-md-4">
@@ -164,9 +165,9 @@
         </div>
 
         <hr class="featurette-divider">
+        <a name="capture"><div class="modulecaption">KinectV2 Capture Program</div></a>
         <div class="row featurette">
           <div class="col-md-6">
-            <a name="capture"><div class="modulecaption">KinectV2 Capture Program</div></a>
             <ul class="moduleul">
             <li><div class="modulecontent">有序彩色点云</div></li>
             <li><div class="modulecontent"><a href="http://threepark.net/slamdata/KinectV2.zip" target="_blank" name="downloadprogram">程序下载</a></div></li>
