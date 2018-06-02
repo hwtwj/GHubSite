@@ -41,12 +41,18 @@
                 <ul class="sideul">
                     <li class="sideli"><a href="#itrimesh">ITriMesh</a></li>
                     <li class="sideli"><a href="#trimesh">TriMesh</a></li>
+                    <li class="sideli"><a href="#halfmesh">半边结构</a></li>
                     <li class="sideli"><a href="#meshparser">导入导出</a></li>
                 </ul>
                 <h4><a href="#multithreadsetting">工具</a></h4>
                 <ul class="sideul">
+                    <li class="sideli"><a href="#nnquery">最近邻域点查询</a></li>
+                    <li class="sideli"><a href="#generalmatrix">线性方程组(稠密)</a></li>
+                    <li class="sideli"><a href="#sparsematrix">线性方程组(稀疏)</a></li>
+                    <li class="sideli"><a href="#matrix4x4">齐次变换</a></li>
                     <li class="sideli"><a href="#multithreadsetting">多线程设置</a></li>
                 </ul>
+                <h4><a href="#download">下载</a></h4>
                 <h4><a href="#faq">常见问题</a></h4>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2" main>
@@ -848,6 +854,50 @@ void Parser::ExportGridPointCloud(std::string fileName, const IGridPointCloud* p
                 <li>UnifyCoords使得TriMesh的顶点坐标会被平移和均匀缩放到范围(-bboxSize, bboxSize)以内</li>
                 <hr class="featurette-divider">
 
+                <a name="halfmesh"><h5>半边结构</h5></a>
+                <h5>class HalfMesh</h5>
+                <p>HalfMesh类是网格半边结构的一个实现，用户可以直接使用它来表示网格数据. 半边结构的介绍可以参考这个<a class="code" href="http://www.flipcode.com/archives/The_Half-Edge_Data_Structure.shtml" target="_blank">网页</a></p>
+                <img class="featurette-image img-responsive center-block" src="/images/halfedgestructure.jpg" alt="Half Edge Structure">
+                <div class="imgtext">图示：半边数据结构示例. 左边红点为内点，右边红点为边界点</div>
+                <p>用法说明：</p>
+                <p>1. 构建网格示例:</p>
+<pre class="prettyprint">
+    for (GPP::Int vid = 0; vid < vertexCount; vid++)
+    {
+        halfMesh->InsertVertex(vertexCoord[vid]);
+    }
+    std::vector< Vertex3D* > vertexList;
+    for (GPP::Int fid = 0; fid < faceCount; fid++)
+    {
+        vertexList.clear();
+        vertexList.push_back(halfMesh->GetVertex(triangleIndex[fid][0]));
+        vertexList.push_back(halfMesh->GetVertex(triangleIndex[fid][1]));
+        vertexList.push_back(halfMesh->GetVertex(triangleIndex[fid][2]));
+        halfMesh->InsertFace(vertexList);
+    }
+    halfMesh->SetBoundaryVertexEdge();
+    halfMesh->UpdateNormal();
+</pre>
+                <hr class="line-divider">
+                <p>2. 如果知道Vertex, Edge, Face的数量，在做Insert前，可以调用ReverseVertex, ReserveEdge, ReserveFace来提升Insert的效率，原理类似std::vector::reserve</p>
+                <p>3. 访问顶点邻域示例:</p>
+<pre class="prettyprint">
+    Edge3D* startEdge = vertex->GetEdge();
+    Edge3D* curEdge = startEdge;
+    do {
+        if (curEdge->GetPair()->GetFace() == NULL)
+            break;
+        curEdge = curEdge->GetPair()->GetNext();
+    } while (curEdge != startEdge);
+</pre>
+                <hr class="line-divider">   
+                <p>4. 对于边界点，函数SetBoundaryVertexEdge使得其出边(GetEdge)位于边界边(如上图右红边所示)</p>
+                <p>5. ValidateTopology做了3件事情: a. 移出没有Face的Edge; b. SetBoundaryVertexEdge; c. 移出孤立Vertex. 一般对HalfMesh做了拓扑改变后用</p>
+                <p>6. 边界点判断：vertex->GetEdge()->GetFace() == NULL; 边界边判断: edge->GetFace() == NULL || edge->GetPair()->GetFace() == NULL</p>
+                <p>7. Edge3D的Pair Edge(GetPair)一定不是NULL. 如果Edge3D的Face(GetFace)不是NULL, 则Pre Edge(GetPre)和Next Edge(GetNext)一定不是NULL</p>
+                <p></p>
+                <hr class="featurette-divider">
+
                 <a name="meshparser"><h5>网格导入导出</h5></a>
 <pre class="prettyprint">
 TriMesh* Parser::ImportTriMesh(std::string fileName);
@@ -863,6 +913,46 @@ void Parser::ExportTriMesh(std::string fileName, const ITriMesh* triMesh);
                 <p>fileName: 格式为path/xxx.obj, path/xxx.stl, path可以是绝对路径，也可以相对路径</p>
                 <hr class="featurette-divider">
 
+                <a name="nnquery"><h5>最近邻域点查询</h5></a>
+                <p>NNQuery: Nearest Neighbor Query。最近邻域查询工具。</p>
+                <p>NNQuery::Init: NNQuery初始化。它给空间的点集建立一个KD Tree，提供最近邻域点的查询效率。</p>
+                <p>NNQuery::FindKNN: 查找最近的K个点，按照距离的升序排列。</p>
+                <p>NNQuery::FindRadiusNN: 查找半径内的点集，无序。注意squareRadius是半径平方。</p>
+
+                <hr class="featurette-divider">
+
+
+                <a name="generalmatrix"><h5>线性方程组(稠密)</h5></a>
+                <p>求解稠密矩阵的线性方程组。</p>
+                <p>GeneralMatrix：稠密矩阵</p>
+                <p>GeneralMatrix3：3X3的稠密矩阵。与GeneralMatrix的区别在于，GeneralMatrix3的特征值求解速度更快一些。</p>
+                <p>LinearGeneralLUSolver：线性方程组求解，LU分解法。</p>
+                <p>LeastSquareGeneralLDLSolver：最小二乘求解，LDL分解法。</p>
+                <p>SelfAdjointEigenSolver：特征值求解。</p>
+                <p>OrthgonalApproximation：仿射变换的旋转矩阵近似求解。</p>
+                <hr class="featurette-divider">
+
+
+                <a name="sparsematrix"><h5>线性方程组(稀疏)</h5></a>
+                <p>求解稀疏矩阵的线性方程组。</p>
+                <p>SparseMatrix：稀疏矩阵</p>
+                <p>LinearSparseLUSolver：线性方程组求解，LU分解法。</p>
+                <p>LinearSparseLLTSolver：线性方程组求解，LLT分解法。</p>
+                <p>LinearSparseCGSolver：线性方程组求解，共轭梯度法。</p>
+                <p>LeastSquareSparseLLTSolver：最小二乘求解，LLT分解法。</p>
+                <p>LeastSquareSparseCGSolver：最小二乘求解，共轭梯度法。</p>
+                <hr class="featurette-divider">
+
+
+                <a name="matrix4x4"><h5>齐次变换</h5></a>
+                <p>Matrix4X4: 齐次变换矩阵。</p>
+                <p>齐次坐标，就是在传统坐标后面加入一维变量：C -> (C, W)。在三维空间中，它把三维坐标(X, Y, Z)提升到了四维的射影空间中(X, Y, Z, W)，对应的线性变换就是射影变换。齐次坐标转回三维空间坐标分两种情况，如果W为0，则(X, Y, Z)表示三维空间中的一个方向，如果W不为0，则对应的三维点坐标为(X/W, Y/W, Z/W)。齐次坐标表示有两个好处：一个是可以区分向量和点，另一个是齐次坐标下的矩阵可以表示平移变换。</p>
+                <li>透视变换：一般的射影变换是一个4X4的矩阵变换，如下图1所示，它可以表示射影空间中任意的线性变换，如透视变换。</li>
+                <li>仿射变换：如果把矩阵元素做一些限制到下图2，则为一个仿射变换。它可以表示三维空间中任意的线性变换。</li>
+                <li>刚体变换：如果把图2的a元素的矩阵块限制为正交矩阵块r，如下图3所示，它就变成了一个刚体变换。它可以表示旋转变换和平移变换。</li>
+                <img class="featurette-image img-responsive center-block" src="/images/transform_matrix.jpg" alt="transform matrix">
+                <hr class="featurette-divider">
+
 
                 <a name="multithreadsetting"><h5>多线程设置</h5></a>
 <pre class="prettyprint">
@@ -872,6 +962,11 @@ void SetThreadCount(Int count);
                 <hr class="featurette-divider">
 
                 
+                <a name="download"><h5>下载</h5></a>
+                <p><a href="http://threepark.net/bgl/bgl-vs2013-64bit.zip" target="_blank">VS2013_64bit</a> | <a href="http://threepark.net/bgl/bgl-vs2015-64bit.zip" target="_blank">VS2015_64bit</a> | <a href="http://threepark.net/bgl/bgl-vs2017-64bit.zip" target="_blank">VS2017_64bit</a><p>
+                <hr class="featurette-divider">
+
+
                 <a name="faq"><h5>常见问题</h5></a>
                 <div class="question">请不要在release的环境下debug程序，因为release环境下面的调试信息是不准确的。</div>
 
