@@ -241,8 +241,10 @@
                 
                 <hr class="line-divider">
                 <a name="mesh_remesh"><h4>Remesh</h4></a>
-                <li class="contentli">Remesh：重新均匀网格化。第一个参数为Remesh后的顶点个数，第二个参数为sharpAngle，网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。重新网格化的时候，会保持住sharp边的几何。参数范围是(0, 180)。</li>
-                <img class="featurette-image img-responsive center-block" src="/images/remesh_fandisk.jpg" alt="remesh_fandisk">
+                <li class="contentli">Remesh：重新网格化。第一个参数为Remesh后的顶点个数，第二个参数为sharpAngle，网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。重新网格化的时候，会保持住sharp边的几何。参数范围是(0, 180)。</li>
+                <li class="contentli">均匀：网格顶点均匀分布，如下中图所示。</li>
+                <li class="contentli">几何：网格顶点非均匀分布，曲率大的地方顶点密一些，如下右图所示。</li>
+                <img class="featurette-image img-responsive center-block" src="/images/remesh_egea.jpg" alt="remesh_egea">
                 <li class="contentli">CDT：Delaunay网格优化。优化网格连接关系，减少狭长三角形，保持网格顶点数目不变。参数为sharpAngle，网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。重新优化的时候，会保持住sharp边的几何。参数范围是(0, 180)。</li>
                 <li class="contentli">CVT：重心Voronoi网格优化。优化网格连接关系和顶点位置，减少狭长三角形，保持网格顶点数目不变。参数为sharpAngle，网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。重新优化的时候，会保持住sharp边的几何。参数范围是(0, 180)。</li>
                 
@@ -266,7 +268,8 @@
                 <li class="contentli">切割-随机：切割平面的法线为随机方向。</li>
                 
                 <hr class="line-divider">
-                <a name="mesh_sample"><h4>采样：在网格上均匀采点，把网格转为点云，并进入点云处理模块</h4></a>
+                <a name="mesh_sample"><h4>采样-均匀：在网格上均匀采点，把网格转为点云，并进入点云处理模块</h4></a>
+                <h4>采样-几何：在网格上非均匀采点，曲率大的地方点密一些。</h4>
 
                 <hr class="featurette-divider"> 
                 <a name="registration"><h5><img class="featurette-image img-responsive center-block" src="/images/align_icon.jpg" alt="MeshShop"><a href="http://threepark.net/notes/registration" target="_blank">点云注册模块</a></h5></a>
