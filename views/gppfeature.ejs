@@ -28,7 +28,7 @@
         <hr class="featurette-divider">
         <div class="row">
             <div class="col-md-6">
-                <h4>点云处理模块</h4>
+                <h4>点云处理基础模块</h4>
                 <table class="table table-bordered">
                     <thread>
                         <tr class="active"><th>编号</th><th>名称</th><th>对应API</th></tr>
@@ -41,13 +41,22 @@
                         <tr class="danger"><th>4</th><th>点云去飞点，去孤立项</th><th>ConsolidatePointCloud::CalculateIsolation; ConsolidateGrid::CalculateGridIsolation</th></tr>
                         <tr class="active"><th>52</th><th>点云去重影</th><th>ConsolidatePointCloud::DetectOverlap</th></tr>
                         <tr class="danger"><th>58</th><th>有序点云边界检测</th><th>ConsolidateGrid::DetectGridBoundary</th></tr>
-                        <tr class="active"><th>19</th><th>有标记点对齐</th><th>RegistratePointCloud::AlignPointCloudByMark</th></tr>
-                        <tr class="danger"><th>20</th><th>无标记点对齐</th><th>RegistratePointCloud::AlignPointCloud; RegistrateGrid::AlignGrid</th></tr>
-                        <tr class="active"><th>21</th><th>ICP注册（刚性）</th><th>RegistratePointCloud::ICPRegistrate; RegistrateGrid::ICPRegistrate</th></tr>
-                        <tr class="danger"><th>22</th><th>全局注册（刚性）</th><th>RegistratePointCloud::GlobalRegistrate</th></tr>
-                        <tr class="active"><th>24</th><th>多帧去除重叠</th><th>SumPointCloud::UpdateSumFunction; SumPointCloud::ExtractPointCloud</th></tr>
-                        <tr class="danger"><th>53</th><th>非刚性ICP</th><th>DeformPointList::NonRigidICP</th></tr>
-                        <tr class="active"><th>54</th><th>非刚性全局注册</th><th>DeformPointList::GlobalNonRigidRegistrate</th></tr>
+                    </tbody>
+                </table>
+
+                <h4>点云注册模块</h4>
+                <table class="table table-bordered">
+                    <thread>
+                        <tr class="active"><th>编号</th><th>名称</th><th>对应API</th></tr>
+                    </thread>
+                    <tbody>
+                        <tr class="danger"><th>19</th><th>有标记点对齐</th><th>RegistratePointCloud::AlignPointCloudByMark</th></tr>
+                        <tr class="active"><th>20</th><th>无标记点对齐</th><th>RegistratePointCloud::AlignPointCloud; RegistrateGrid::AlignGrid</th></tr>
+                        <tr class="danger"><th>21</th><th>ICP注册（刚性）</th><th>RegistratePointCloud::ICPRegistrate; RegistrateGrid::ICPRegistrate</th></tr>
+                        <tr class="active"><th>22</th><th>全局注册（刚性）</th><th>RegistratePointCloud::GlobalRegistrate</th></tr>
+                        <tr class="danger"><th>24</th><th>多帧去除重叠</th><th>SumPointCloud::UpdateSumFunction; SumPointCloud::ExtractPointCloud</th></tr>
+                        <tr class="active"><th>53</th><th>非刚性ICP</th><th>DeformPointList::NonRigidICP</th></tr>
+                        <tr class="danger"><th>54</th><th>非刚性全局注册</th><th>DeformPointList::GlobalNonRigidRegistrate</th></tr>
                     </tbody>
                 </table>
 
