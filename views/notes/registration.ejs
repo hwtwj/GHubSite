@@ -34,7 +34,7 @@
         <p>点云拼接，配准，注册说的是同一个概念，就是把不同位置的点云通过重叠部分的信息，变换到同一个位置。下面我们就用注册这个名词来描述这个过程。注册一般分为三类：粗注册，精细注册和全局注册。</p>
         <li class="contentli">粗注册：一般用于注册两个位置相差很大的点云，比如两帧位于相机坐标系的点云。粗注册方法大致分为两类：有标记点粗注册和无标记点粗注册。标记点可以是用户手动标记的，也可以是物体扫描时贴的标记点。无标记点注册更加方便一些，但是对于一些比较对称或者重合部分很少的情况，可能会有一些失误的。另外还有一些根据设备的参数来计算粗注册变换的方法。</li>
         <li class="contentli">精细注册：这里一般指ICP注册方法。主要用于已经粗注册好的点云，需要提升注册精度的情况。ICP可以加入标记点信息。因为众所周知，一些滑动情况会导致ICP注册失败，但是如果数据本身有标记点的话，可以加入标记点信息来提升注册的成功率。</li>
-        <li class="contentli">全局注册：逐帧注册的点云数据，往往有累积误差。全局注册可以把累积误差分散到每一帧中去，从而减少整体的注册误差。另外，有些时候所有点云已经有了粗注册了，可以应用全局注册一次性把所有点云注册好。如下图所示。</li>
+        <li class="contentli"><a href="/slam#globalreg" target="_blank">全局注册</a>：逐帧注册的点云数据，往往有累积误差。全局注册可以把累积误差分散到每一帧中去，从而减少整体的注册误差。另外，有些时候所有点云已经有了粗注册了，可以应用全局注册一次性把所有点云注册好。如下图所示。</li>
         <img class="featurette-image img-responsive center-block" src="/images/globalregistration.jpg" alt="global registrate">
         <hr class="line-divider">
 
@@ -47,7 +47,7 @@
         <li class="contentli">融合成一个整体e</li>
         <li class="contentli">导入第三帧数据f</li>
         <li class="contentli">与e粗注册到g</li>
-        <li class="contentli">然后重复之前到步骤，最终再对注册好的所有数据做一个全局注册，把所有数据融合到一个整体点云/li>
+        <li class="contentli">然后重复之前到步骤，最终再对注册好的所有数据做一个全局注册，把所有数据融合到一个整体点云</li>
         <img class="featurette-image img-responsive center-block" src="/images/registration_workflow.jpg" alt="regitration workflow">
         <p>总之，不同特点的数据有不同的注册流程，用户可以多试试不同的流程，找到最适合自己数据的注册方式。</p>
         <hr class="line-divider">
