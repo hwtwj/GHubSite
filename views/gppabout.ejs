@@ -38,9 +38,10 @@
           <div class="col-md-6">
             <div class="modulecaption"><a href="/slam" target="_blank">深度视频配准融合</a></div>
             <ul class="moduleul">
-            <li><div class="modulecontent">前端：实时注册 + 融合 + 局部调整</div></li>
-            <li><div class="modulecontent">后端：回路检测 + 全局注册 + 颜色融合</div></li>
-            <li><div class="modulecontent">纯CPU实时计算</div></li>
+            <li><div class="modulecontent">前端：点云实时配准 + 融合 + 局部调整</div></li>
+            <li><div class="modulecontent">后端：回路检测 + <a href="/slam#globalreg" target="_blank">全局注册</a> + <a href="/slam#texture" target="_blank">纹理贴图, 色彩融合</a></div></li>
+            <li><div class="modulecontent">纯CPU计算，前端可达实时</div></li>
+            <li><div class="modulecontent">适用于各类深度视频数据：<a href="/slam#kinect" target="_blank">Kinect数据</a>（前端可达35+fps），<a href="/slam#hand" target="_blank">手持扫描仪数据</a>，<a href="/slam#lidar" target="_blank">激光点云</a></div></li>
             </ul>
           </div>
           <div class="col-md-6">
@@ -56,10 +57,36 @@
           <div class="col-md-5">
             <div class="modulecaption_right"><a href="/slam#texture" target="_blank">纹理贴图制作</a></div>
             <ul class="moduleul_right">
-            <li><div class="modulecontent">点云，网格纹理贴图制作</div></li>
+            <li><div class="modulecontent">全自动点云，网格纹理贴图制作</div></li>
+            <li><div class="modulecontent">可以制作带贴图格式的OBJ文件</div></li>
+            </ul>
+          </div>
+        </div>
+
+        <hr class="featurette-divider">
+        <div class="row featurette">
+          <div class="col-md-3">
+            <div class="modulecaption">纹理贴图优化</div>
+            <ul class="moduleul">
             <li><div class="modulecontent"><a href="/magic3d#texture_map" target="_blank">贴图割缝优化</a></div></li>
             <li><div class="modulecontent"><a href="/magic3d#texture_image" target="_blank">贴图色差融合</a></div></li>
-            <li><div class="modulecontent">可以制作带贴图格式的OBJ文件</div></li>
+            </ul>
+          </div>
+          <div class="col-md-9">
+            <img class="featurette-image img-responsive center-block" src="/images/seamop_textureop.jpg" alt="feature-modeling">
+          </div>
+        </div>
+
+        <hr class="featurette-divider">
+        <div class="row featurette">
+          <div class="col-md-9">
+            <img class="marginleft featurette-image img-responsive center-block" src="/images/bedroom_loop_image_2_res_simplify.jpg" alt="feature-modeling">
+          </div>
+          <div class="col-md-3">
+            <div class="modulecaption_right"><a href="/magic3d#texture_simplify" target="_blank">纹理网格简化</a></div>
+            <ul class="moduleul_right">
+            <li><div class="modulecontent">带纹理坐标的网格简化</div></li>
+            <li><div class="modulecontent">不影响图片的分辨率</div></li>
             </ul>
           </div>
         </div>

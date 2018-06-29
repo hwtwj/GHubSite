@@ -30,21 +30,22 @@
         <hr class="featurette-divider">
         <div class="modulecaption">深度视频配准融合</div>
         <ul class="moduleul">
-            <li><div class="modulecontent">前端：实时注册 + 融合 + 局部调整</div></li>
-            <li><div class="modulecontent">后端：回路检测 + 全局注册 + 颜色融合</div></li>
-            <li><div class="modulecontent">纯CPU计算，Kinect数据可达35+fps</div></li>
-            <li><div class="modulecontent"><a href="http://threepark.net/slamdata/fusedepthvideo.zip" target="_blank" name="downloadprogram">程序下载</a>（程序适用于任何深度视频数据，内附配置文件说明）</div></li>
+            <li><div class="modulecontent">前端：点云实时配准 + 融合 + 局部调整</div></li>
+            <li><div class="modulecontent">后端：回路检测 + <a href="#globalreg">全局注册</a> + <a href="#texture">纹理贴图, 色彩融合</a></div></li>
+            <li><div class="modulecontent">纯CPU计算，前端可达实时</div></li>
+            <li><div class="modulecontent">适用于各类深度视频数据：<a href="#kinect">Kinect数据</a>（前端可达35+fps），<a href="#hand">手持扫描仪数据</a>，<a href="#lidar">激光点云</a></div></li>
+            <li><div class="modulecontent"><a href="http://threepark.net/slamdata/fusedepthvideo.zip" target="_blank" name="downloadprogram">程序下载</a>（内附配置文件说明）</div></li>
         </ul>
 
         <hr class="line-divider">
         <div class="row featurette">
           <div class="col-md-5">            
             <ul class="moduleul">
-            <li><div class="modulecontent">KinectV2室内扫描数据 ( <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part0.rar" target="_blank">part0</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part1.rar" target="_blank">part1</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part2.rar" target="_blank">part2</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part3.rar" target="_blank">part3</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part4.rar" target="_blank">part4</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part5.rar" target="_blank">part5</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part6.rar" target="_blank">part6</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part7.rar" target="_blank">part7</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part8.rar" target="_blank">part8</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part9.rar" target="_blank">part9</a> )</div></li>
+            <li><div class="modulecontent"><a name="kinect">KinectV2室内扫描数据</a> ( <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part0.rar" target="_blank">part0</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part1.rar" target="_blank">part1</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part2.rar" target="_blank">part2</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part3.rar" target="_blank">part3</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part4.rar" target="_blank">part4</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part5.rar" target="_blank">part5</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part6.rar" target="_blank">part6</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part7.rar" target="_blank">part7</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part8.rar" target="_blank">part8</a> | <a href="http://threepark.net/slamdata/bedroom_loop_color_4/part9.rar" target="_blank">part9</a> )</div></li>
             </ul>
           </div>
           <div class="col-md-7">
-            <video class="featurette-image img-responsive center-block" src="/videos/slam_0.mp4" poster="/images/slam_0.png" controls="controls" loop="loop">你的浏览器不支持Video标签, 请换一个浏览器，比如Google浏览器</video>
+            <video class="featurette-image img-responsive center-block" src="/videos/slam_0.mp4" poster="/images/bedroom_loop_image_2_res.png" controls="controls" loop="loop">你的浏览器不支持Video标签, 请换一个浏览器，比如Google浏览器</video>
           </div>
         </div>
 
