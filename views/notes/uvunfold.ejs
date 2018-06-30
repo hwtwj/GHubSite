@@ -37,7 +37,7 @@
         <hr class="line-divider">
 
         <h4>什么样的网格可以做UV展开</h4>
-        <p>那是不是所有的网格都可以做UV展开呢？答案是否定的。只有圆盘拓扑结构的网格才能展开到平面上，比如一个球，无论如何都不可能在不撕裂的情况下展开到平面。对于任意拓扑结构的网格，需要给它添加割缝，把它分割成一片一片的圆盘结构，再做展开。如下图所示，这个模型被分割成了很多片，再展开到了平面。</p>
+        <p>那是不是所有的网格都可以做UV展开呢？答案是否定的。只有圆盘拓扑结构的网格才能展开到平面上，比如一个球，无论如何都不可能在不撕裂的情况下展开到平面。对于任意拓扑结构的网格，需要给它添加<a href="/magic3d#unfold_split" target="_blank">割缝</a>，把它分割成一片一片的圆盘结构，再做<a href="/magic3d#unfold_single" target="_blank">展开</a>。如下图所示，这个模型被分割成了很多片，再展开到了平面。</p>
         <img class="featurette-image img-responsive center-block" src="/images/texturemapping.jpg" alt="texturemapping">
         <h5>图2</h5>
         <hr class="line-divider">
@@ -48,8 +48,8 @@
 
         <h4>固定边界与自由边界</h4>
         <p>如图所示，左图是自由边界的UV展开，右图是固定边界的UV展开。可以看到自由边界的展开结果扭曲程度要小很多。</p>
-        <li class="contentli">自由边界：自由边界的展开结果扭曲程度要小很多。但是边界如果比较复杂的时候，边界处可能会产生自交情况。</li>
-        <li class="contentli">固定边界：固定边界的展开一般应用于特定需求。需要注意的是，边界约束条件的合理性能影响UV展开的效果。</li>
+        <li class="contentli"><a href="/magic3d#unfold_single" target="_blank">自由边界</a>：自由边界的展开结果扭曲程度要小很多。但是边界如果比较复杂的时候，边界处可能会产生自交情况。</li>
+        <li class="contentli"><a href="/magic3d#unfold_cycle" target="_blank">固定边界</a>：固定边界的展开一般应用于特定需求。需要注意的是，边界约束条件的合理性能影响UV展开的效果。</li>
         <img class="featurette-image img-responsive center-block" src="/images/free_fix_boundary.jpg" alt="free_fix_boundary">
         <h5>图3</h5>
         <hr class="line-divider">
@@ -62,8 +62,8 @@
 
         <h4>顶点纹理坐标和三角形纹理坐标</h4>
         <p>严格来讲，顶点并没有纹理坐标的概念，只有三角形有纹理坐标的概念。网格UV展开到平面的时候，如果没有割缝产生，那么每个顶点在其相邻三角形内的纹理坐标都是一样的，故可简称为顶点的纹理坐标。如果有割缝产生，割缝处的顶点在不同三角形内的纹理坐标是不一样的。这时，顶点和纹理坐标是一对多的关系。下面说说在实际程序中，顶点纹理坐标和三角形纹理坐标的应用场景。</p>
-        <li class="contentli">单连通圆盘拓扑的UV展开：如图1情况所示。这种情况下，顶点和纹理坐标是一一对应的，一个顶点可以存一个纹理坐标。一般这类的UV展开，都是使用的顶点纹理坐标的概念。</li>
-        <li class="contentli">任意网格的UV展开：如图2情况所示。这种情况下，缝隙处的顶点和纹理坐标是一对多的关系。可以把纹理坐标存在三角形内。在非缝隙处，纹理坐标的存储有冗余信息。如果需要减少存储空间，也可以把纹理坐标存成一个数组（纹理坐标都不相等），然后每个三角形存纹理坐标的索引，类似OBJ的文件格式。</li>
+        <li class="contentli"><a href="/magic3d#unfold_single" target="_blank">单连通圆盘拓扑的UV展开</a>：如图1情况所示。这种情况下，顶点和纹理坐标是一一对应的，一个顶点可以存一个纹理坐标。一般这类的UV展开，都是使用的顶点纹理坐标的概念。</li>
+        <li class="contentli"><a href="/magic3d#unfold_atlas" target="_blank">任意网格的UV展开</a>：如图2情况所示。这种情况下，缝隙处的顶点和纹理坐标是一对多的关系。可以把纹理坐标存在三角形内。在非缝隙处，纹理坐标的存储有冗余信息。如果需要减少存储空间，也可以把纹理坐标存成一个数组（纹理坐标都不相等），然后每个三角形存纹理坐标的索引，类似OBJ的文件格式。</li>
         <hr class="line-divider">
 
         <h4>网格割缝和纹理坐标缝隙的区别</h4>

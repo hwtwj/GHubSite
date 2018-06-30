@@ -55,26 +55,26 @@
         <img class="featurette-image img-responsive center-block" src="/images/scan_image.jpg" alt="scan image">
         <hr class="line-divider">
 
-        <h4>点像对应割缝优化</h4>
+        <h4><a href="/magic3d#texture_map" target="_blank">点像对应割缝优化</a></h4>
         <p>多角度拍摄模型的时候，帧与帧之间一般有重叠区域。重叠区域的网格顶点有多个图片与其对应，也就是有多个点像对应信息。重叠区域的点像对应的选择，能影响贴图效果。如下图所示，不同的颜色代表不同的图片。左边贴图有明显的图像缝隙痕迹。右边贴图是优化后的结果，图像缝隙色差减小很多。</p>
         <img class="featurette-image img-responsive center-block" src="/images/fuseimagecolorids_face.jpg" alt="fuse imagecolorid">
         <p></p>
         <hr class="line-divider">
 
-        <h4>纹理贴图颜色融合</h4>
+        <h4><a href="/magic3d#texture_image" target="_blank">纹理贴图颜色融合</a></h4>
         <p>在一些图片拍摄环境不是很理想的情况下，即使对点像对应的割缝进行了优化，网格的纹理贴图在不同图片之间，也还会有一些色差。颜色融合的一个基本假设是，同一张图片的颜色是协调的，色差只存在于不同图片之间。基于这个假设，根据三角片对应的图片信息，可以直接对纹理图进行颜色融合。如下图所示，左图的颜色代表了贴图的图片索引号，中图是纹理贴图效果。可以看出，图片接缝处有明显的色差痕迹。右图是颜色融合后的效果。</p>
         <img class="featurette-image img-responsive center-block" src="/images/TuneTextureImageColor_shoe.jpg" alt="fuse texture image">
         <p></p>
         <hr class="line-divider">
 
-        <h4>单光源点云颜色修正</h4>
+        <h4><a href="/magic3d#registration_tune_color" target="_blank">单光源点云颜色修正</a></h4>
         <p>当摄像机固定，物体自身旋转，比如在转台上，然后单光源固定于模型前面。这种方式采集的图像，有个共同的缺点，就是单帧物体的边缘颜色会比较暗。如下图所示，左图是点云真实的颜色，右图是单光源设置下采集的彩色点云，可以看到点云在边界处颜色逐渐变暗。</p>
         <img class="featurette-image img-responsive center-block" src="/images/color_shade_point_compare.jpg" alt="color shade point compare">
         <p>这种点云在多帧融合的时候会出现严重的色差，如下图所示，图1，2是两帧有重叠的点云，图3把这两帧点云注册到一块，可以看到在点云接缝处有严重的色差。单光源点云颜色修正，可以根据不同帧点云重叠的信息，去掉黑边色差。图4就是去掉色差后的点云色彩效果。</p>
         <img class="featurette-image img-responsive center-block" src="/images/tune_single_light.jpg" alt="tune single light">
         <hr class="line-divider">
 
-        <h4>多角度点云颜色融合</h4>
+        <h4><a href="/magic3d#pointcloud_color" target="_blank">多角度点云颜色融合</a></h4>
         <p>有时候，虽然单帧图像色彩质量是好的，但是不同帧之间的光照有差异，比如多个拍照位置的情况。如下图所示，图1，2两帧彩色点云，分别看质量还可以，但是注册到一块时，如图3所示，会有明显的色差。图4就是色彩融合后的效果。</p>
         <img class="featurette-image img-responsive center-block" src="/images/point_color_merge.jpg" alt="point color merge">
 

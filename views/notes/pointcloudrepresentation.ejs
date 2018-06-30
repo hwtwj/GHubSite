@@ -31,7 +31,7 @@
         <h2>三维点云表示 <small></small></h2>
 
         <h4>点云数据结构</h4>
-        <p>点云数据结构非常简单，只有点的三维坐标信息和法线信息。下面是一个点云表示的抽象类：</p>
+        <p><a href="/bgl/document#ipointcloud" target="_blank">点云数据结构</a>非常简单，只有点的三维坐标信息和法线信息。下面是一个点云表示的抽象类：</p>
 <pre class="prettyprint">
     class GPP_EXPORT IPointCloud
     {
@@ -59,7 +59,7 @@
         <li class="contentli">点云顶点的存储格式一般是线性的，获取方便，但是删除会存在一些效率问题。IPointCloud提供了SwapPoint函数把需要删除的元素交换到尾部，然后再通过PopbackPoints删除尾部元素.</li>
         <li class="contentli">Clear函数负责清除Point Coordinate, Point Normal. 回到构造类初始化时的状态.</li>
         <li class="contentli">HasNormal函数主要用意: 有时候点云创建后没有法线信息，IPointCloud提供这个函数查询点云是否有可靠法线信息. SetHasNormal函数可以设置点云是否有法线信息。</li>
-        <p>IPointCloud是一个抽象类，不能直接使用。用户可以继承这个接口类，实现其成员函数。这样设计的一个好处是，用户无需改变自己已有的数据结构，只要实现了这个接口类，就可以调用Geometry++里所有关于点云的算法了。真正体现了即插即用的特点。比如用户已经有了一个点云类MyPointCloudData，则我们可以定义一个类MyPointCloud，并用它来调用Geometry++里的各种点云算法：</p>
+        <p><a href="/bgl/document#ipointcloud" target="_blank">IPointCloud</a>是一个抽象类，不能直接使用。用户可以继承这个接口类，实现其成员函数。这样设计的一个好处是，用户无需改变自己已有的数据结构，只要实现了这个接口类，就可以调用Geometry++里所有关于点云的算法了。真正体现了即插即用的特点。比如用户已经有了一个点云类MyPointCloudData，则我们可以定义一个类MyPointCloud，并用它来调用Geometry++里的各种点云算法：</p>
 <pre class="prettyprint">
     class MyPointCloud : public IPointCloud
     {
@@ -87,7 +87,7 @@
 </pre>
         <hr class="line-divider">
 
-        <h4>有序点云是什么</h4>
+        <h4><a href="/bgl/document#igridpointcloud" target="_blank">有序点云</a>是什么</h4>
         <p>一帧扫描数据是一副深度图，属于灰度图。像素的灰度值代表的是深度信息，可以通过相机参数把每个像素点变换到世界坐标系，这样每个像素就对应一个三维点，有些点是无效的。下图是一个典型的深度点云。</p>
         <img class="featurette-image img-responsive center-block" src="/images/depthdata.jpg" alt="depth data">
         <p>有序点云是一个方阵，如图所示。点云按照方阵一行一行的，从左上角到右下角排列。</p>

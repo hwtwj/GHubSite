@@ -37,7 +37,7 @@
         <li class="contentli">另外法线信息还可以用于区分薄板正反面。</li>
         <hr class="line-divider">
 
-        <h4>怎么计算法线</h4>
+        <h4>怎么<a href="/magic3d#pointcloud_normal" target="_blank">计算法线</a></h4>
         <p>点云采样于物体表面，物体表面的法线即为点云法线，故可先对物体表面的几何进行估计，即可计算出点云法线。一般可用低阶多项式曲面进行局部拟合，如左图所示。如果点云均匀分布，希望计算速度快，也可以用平面进行局部拟合，平面法线即为点云法线，如右图所示。</p>
         <img class="featurette-image img-responsive center-block" src="/images/curve_line.jpg" alt="curve line">
         <p>在特征比较尖锐的地方，如左图所示，法线计算容易被光滑掉。右图直线是物体真实的几何，可以比较红色法线方向的差别。特征点的法线，可以用迭代权重的方法来修正，如先用平面局部拟合，然后给局部的点计算权重，离平面越远的点权重越小，然后再用带权重的点局部拟合平面，如此迭代即可。</p>

@@ -32,7 +32,7 @@
 
         <h4>网格有哪些数据结构</h4>
         <p>网格的数据结构其实就是一个图结构：点，边，面。可以是有向图，比如半边结构，也可以是无向图。在不同的软件或者开发包里，网格数据结构的实现都是有差异的。这种差异主要体现在网格连接关系的记录结构上，比如顶点是否记录邻域点，边，面信息，边是否记录邻域面信息等。记录的信息越多，查询的时候越方便，但是冗余的信息也越多，如果网格连接关系有变动，维护的信息也越多。另外，这些关系的建立也是需要开销的。所以，没有最好的数据结构，只有最适合当前算法的数据结构。</p>
-        <p>下面是一个例子：ITriMesh用于表达网格数据结构。网格算法都是基于ITriMesh接口来调用的，具体如下：</p>
+        <p>下面是一个例子：<a href="/bgl/document#itrimesh" target="_blank">ITriMesh</a>用于表达网格数据结构。网格算法都是基于ITriMesh接口来调用的，具体如下：</p>
 <pre class="prettyprint">
     class ITriMesh
     {
@@ -98,7 +98,7 @@
 </pre>
         <hr class="line-divider">
 
-        <h4>半边结构好用吗</h4>
+        <h4><a href="/bgl/document#halfmesh" target="_blank">半边结构</a>好用吗</h4>
         <p>半边结构是网格数据结构的一种表达方式，它是一个有向图，把一条边表达为两个有向半边，如下图所示。它的优点在于网格信息的拾取非常方便，缺点是网格连接关系变动后，需要维护的信息也比较多。另外，半边结构表达的网格需要是流形结构，半边结构的构造也需要一定的时间开销。所以，一般场合我们都使用ITriMesh这类简单的网格表达方式。</p>
         <img class="featurette-image img-responsive center-block" src="/images/halfedgestructure.jpg" alt="hafl edge structure">
         <hr class="line-divider">
