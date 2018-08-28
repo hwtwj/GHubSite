@@ -27,9 +27,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
-                <h3>Geometry++文档</h3>
+                <h3><a href="#gpp">Geometry++文档</a></h3>
                 <h4><a href="/geometryplusplus">返回</a></h4>
-                <h4><a href="/bgl/document">BGL</a></h4>
                 <h4><a href="#overview">使用简介</a></h4>
                 <h4><a href="#pcsampling">点云</a></h4>
                 <ul class="sideul">
@@ -88,6 +87,8 @@
                 <h4><a href="#faq">常见问题</a></h4>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2" main>
+                <a name="gpp"><h2>Geometry++ Document</h2></a>
+
                 <a name="overview"><h5>简介</h5></a>
                 <p>Geometry++是一个关于三维数据(点云，网格)处理的几何库. 它包含了三维数据处理最基础的算法, 可以作为三维数据处理软件的几何引擎来使用.</p>
                 <hr class="featurette-divider">
@@ -692,10 +693,10 @@ ErrorCode FillMeshHole::FillHoles(ITriMesh* triMesh, const std::vector< Int >* b
                 <p>triMesh: 网格数据</p>
                 <p>boundarySeedIds: 需要补的洞的顶点集合，不需要提供洞所有的顶点，一部分即可。如果它为NULL，则会把网格所有的洞都补上</p>
                 <p>FillMeshHoleType: 补洞类型，目前有FILL_MESH_HOLE_FLAT, FILL_MESH_HOLE_TANGENT和FILL_MESH_HOLE_CURVATURE, FILL_MESH_HOLE_TRIANGULATION四种类型</p>
-                <li>FILL_MESH_HOLE_TRIANGULATION: 对洞的多边形做一个三角化，不添加新顶点</li>
-                <li>FILL_MESH_HOLE_FLAT：在洞的三角化的基础上，加密洞网格</li>
-                <li>FILL_MESH_HOLE_TANGENT：在加密洞的基础上，让洞的边缘光滑，类似G1连续的效果</li>
-                <li>FILL_MESH_HOLE_CURVATURE：在加密洞的基础上，让洞部分的曲率顺接洞边缘的曲率，类似G2的效果</li>
+                <li class="contentli">FILL_MESH_HOLE_TRIANGULATION: 对洞的多边形做一个三角化，不添加新顶点</li>
+                <li class="contentli">FILL_MESH_HOLE_FLAT：在洞的三角化的基础上，加密洞网格</li>
+                <li class="contentli">FILL_MESH_HOLE_TANGENT：在加密洞的基础上，让洞的边缘光滑，类似G1连续的效果</li>
+                <li class="contentli">FILL_MESH_HOLE_CURVATURE：在加密洞的基础上，让洞部分的曲率顺接洞边缘的曲率，类似G2的效果</li>
                 <p>vertexFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样</p>
                 <p>insertedVertexFields: 补洞新增加顶点的属性</p>
                 <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
@@ -1380,9 +1381,9 @@ ErrorCode CreateTextureImageByRefImages(const std::vector< Real >& texCoordinate
                 <p>outputImageHeight: 输出纹理贴图高度</p>
                 <p>outputImageData: 输出纹理贴图颜色数据，按行排列</p>
                 <p>pixelResultInfos: 纹理贴图辅助数据，意义为pixel的类型：0-背景色，1-扩展的像素，2-按顶点插值类型的像素，id(>=3)-参考图像ID＋3。下面是一个详细说明：</p>
-                <li>1-扩展像素：一般UV坐标系下三角形覆盖的区域，会往外扩展，防止图像分辨率带来的割缝痕迹</li>
-                <li>2-按顶点插值类型的像素：如果一个三角片的三个顶点的点像对应不是同一张图，则这个三角片的颜色由三个顶点插值得到。这种情况一般出现在不同图片交接的地方。如果三角形的点像对应不规则，图片有相互渗透的情况，则会导致这个区域的纹理分辨率下降，需要考虑点像对应的优化。</li>
-                <li>id(>=3)-参考图像ID＋3：这个区域的三角片的三个顶点对应于同一张图，纹理由对应的图像三角片拷贝得到。</li>
+                <li class="contentli">1-扩展像素：一般UV坐标系下三角形覆盖的区域，会往外扩展，防止图像分辨率带来的割缝痕迹</li>
+                <li class="contentli">2-按顶点插值类型的像素：如果一个三角片的三个顶点的点像对应不是同一张图，则这个三角片的颜色由三个顶点插值得到。这种情况一般出现在不同图片交接的地方。如果三角形的点像对应不规则，图片有相互渗透的情况，则会导致这个区域的纹理分辨率下降，需要考虑点像对应的优化。</li>
+                <li class="contentli">id(>=3)-参考图像ID＋3：这个区域的三角片的三个顶点对应于同一张图，纹理由对应的图像三角片拷贝得到。</li>
                 <p>下图是一个典型的pixelResultInfos图像：蓝色-0，绿色-1，红色-2，灰色-id>=3的不同区域</p>
                 <img class="featurette-image img-responsive center-block" src="/images/alpha_image.jpg" alt="alpha_image">
                 <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
@@ -2429,22 +2430,22 @@ void SetThreadCount(Int count);
                 <p>1. 可以在Magic3D里重现操作步骤，并且可以重现错误.</p>
                 <p>2. 可以在Magic3D里重现操作步骤，但是重现不了错误：这种情况一般是api的用法有问题，请仔细对比Magic3D的用法。如果用户采用的是自定义的网格和点云类(没有采用PointCloud和TriMesh)，可以在自己程序里先用TriMesh或者PointCloud调用API，如果调用成功，则说明自定义类有问题。请仔细参考PointCloud和TriMesh的函数实现。特别是对一些退化情况的处理。</p>
                 <p>3. 没法在Magic3D里重现操作步骤：采用dump api输入的方式来反馈错误。dump数据的生成步骤是：</p>
-                <li> a) 在需要Dump调试信息的API前使用函数GPP::DumpOnce. 比如需要Dump GlobalRegistrate的调试信息:</li>
+                <li class="contentli"> a) 在需要Dump调试信息的API前使用函数GPP::DumpOnce. 比如需要Dump GlobalRegistrate的调试信息:</li>
 <pre class="prettyprint">
     GPP::DumpOnce();
     GPP::ErrorCode res = GPP::RegistratePointCloud::GlobalRegistrate(pointCloudRef, pointCloudFrom, transform);
 </pre>
-                <li> b) 调试信息在调用API时会输出到程序可执行文件的当前目录下</li>
+                <li class="contentli"> b) 调试信息在调用API时会输出到程序可执行文件的当前目录下</li>
                 <div class="question">问题反馈请发送到邮箱threeparkhelp@qq.com，文件请压缩后发送</div>
                 <div class="question">问题反馈的内容：</div>
-                <li>一次只反馈一个问题，多个问题请分多次反馈。</li>
-                <li>问题的详细描述：请准确，定量的，用专业术语描述问题。</li>
-                <li>数据：Magic3D的操作模型，或者Geometry++的dump文件。</li>
-                <li>Log文件：请保证是操作出错时的Log</li>
-                <li>API返回码</li>
-                <li>结果描述：形式可以是多种多样，如导出结果文件，结果截图，操作视频等。</li>
-                <li>代码片断：可以截取api调用时的代码片断，注意不是整个代码文件</li>
-                <li>其它：任何可以帮助问题重现的资料</li>
+                <li class="contentli">一次只反馈一个问题，多个问题请分多次反馈。</li>
+                <li class="contentli">问题的详细描述：请准确，定量的，用专业术语描述问题。</li>
+                <li class="contentli">数据：Magic3D的操作模型，或者Geometry++的dump文件。</li>
+                <li class="contentli">Log文件：请保证是操作出错时的Log</li>
+                <li class="contentli">API返回码</li>
+                <li class="contentli">结果描述：形式可以是多种多样，如导出结果文件，结果截图，操作视频等。</li>
+                <li class="contentli">代码片断：可以截取api调用时的代码片断，注意不是整个代码文件</li>
+                <li class="contentli">其它：任何可以帮助问题重现的资料</li>
                 <div class="question">注意：问题反馈的内容，主要是为了重现问题。反馈的内容越精确，问题越能得到重现。解决问题是建立在问题重现的基础之上的。</div>
                 <div class="question">问题反馈，请用准确，定量的专业术语来描述。定性的，或者不准确的的问题反馈，很难得到及时有效的回复。比如“我的SDK为什么不能用呢？”“某某功能为什么不能用啊？为什么出错啊？”“我的程序崩溃是怎么回事呢？”</div>
                 <p>程序调试的相关介绍也可以参考<a class="code" href="/notes/debugprogram" target="_blank">程序调试</a>
@@ -2454,37 +2455,37 @@ void SetThreadCount(Int count);
                 <div class="question">请不要在release的环境下debug程序，因为release环境下面的调试信息是不准确的。</div>
 
                 <div class="question">编译有错误</div>
-                <li>请仔细检查头文件，lib库，宏定义是否都配置好了，详细请参考<a href="#usageintroduction">使用简介</a>。如果工程中链接了很多第三方库，可以新建一个简单的工程来链接Geometry++库，来确认Geometry++库是否有问题。</li>
+                <li class="contentli">请仔细检查头文件，lib库，宏定义是否都配置好了，详细请参考<a href="#usageintroduction">使用简介</a>。如果工程中链接了很多第三方库，可以新建一个简单的工程来链接Geometry++库，来确认Geometry++库是否有问题。</li>
 
                 <div class="question">API调用出现问题</div>
-                <li>检查API的返回码：－6属于没有激活开发包；－8属于函数没有定义，如果你有这个函数的授权，可以前来联系。</li>
-                <li>查看log文件，看能不能得到提示</li>
-                <li>其它情况，可以详细参考<a href="#dump">调试</a>部分的介绍。</li>
+                <li class="contentli">检查API的返回码：－6属于没有激活开发包；－8属于函数没有定义，如果你有这个函数的授权，可以前来联系。</li>
+                <li class="contentli">查看log文件，看能不能得到提示</li>
+                <li class="contentli">其它情况，可以详细参考<a href="#dump">调试</a>部分的介绍。</li>
 
                 <div class="question">一般性问题还是特例问题</div>
-                <li>某个api调用出现问题时，可以多试试几个例子，看看是对所有例子都有问题，还是个例有问题。如果对所有例子都有问题，一般都是用法有问题。</li>
+                <li class="contentli">某个api调用出现问题时，可以多试试几个例子，看看是对所有例子都有问题，还是个例有问题。如果对所有例子都有问题，一般都是用法有问题。</li>
 
                 <div class="question">程序崩溃了（Crash）怎么办</div>
-                <li>请仔细确认程序的崩溃点！如果有异常发生，请在软件程序里Catch住异常。异常的捕获处理属于软件部分的内容。</li>
+                <li class="contentli">请仔细确认程序的崩溃点！如果有异常发生，请在软件程序里Catch住异常。异常的捕获处理属于软件部分的内容。</li>
 
                 <div class="question">我程序里的结果没有Magic3D的结果好</div>
-                <li>请确认你的开发包和Magic3D的开发包是同一个版本</li>
-                <li>请确认API的调用参数是一样的，Magic3D的调用参数可以参考其源代码</li>
-                <li>请确认API的输入是一样的</li>
-                <li>总之，肯定是某个地方有区别。这个问题就是一个比较差异的问题，需要一些耐心。问题本身是可以解决的。</li>
+                <li class="contentli">请确认你的开发包和Magic3D的开发包是同一个版本</li>
+                <li class="contentli">请确认API的调用参数是一样的，Magic3D的调用参数可以参考其源代码</li>
+                <li class="contentli">请确认API的输入是一样的</li>
+                <li class="contentli">总之，肯定是某个地方有区别。这个问题就是一个比较差异的问题，需要一些耐心。问题本身是可以解决的。</li>
                 
                 <div class="question">网格为什么需要拓扑修复</div>
-                <li>网格相关的API一般有流形结构的假设前提。软件可以设计成在网格生成或导入时，就进行拓扑修复。特别需要注意的是，拓扑修复可能会改变网格顶点和三角片的个数和顺序，进行拓扑修复后，请及时更新网格相关的各类信息。</li>
+                <li class="contentli">网格相关的API一般有流形结构的假设前提。软件可以设计成在网格生成或导入时，就进行拓扑修复。特别需要注意的是，拓扑修复可能会改变网格顶点和三角片的个数和顺序，进行拓扑修复后，请及时更新网格相关的各类信息。</li>
                 
                 <div class="question">自定义网格类的注意事项</div>
-                <li>用户如果没有丰富的网格处理经验，建议使用TriMesh类来表达三角网格</li>
-                <li>如果用户没有使用TriMesh类，而是从ITriMesh继承，自定义了三角网格类。请仔细参考TriMesh的函数实现。特别是对一些退化情况的处理，比如UpdateNormal函数的实现。</li>
-                <li>调试自定义类的方法，对比自定义类和TriMesh调用同一个API的结果差别。</li>
-                <li>自定义类的最大问题是，有时候问题很难重现：开发者这边用的TriMesh，用户这边用的自定义网格类。遇到这类问题，用户可以先试试TriMesh的结果。如果TriMesh的结果是正确的，则可以比较自定义类和TriMesh类的实现差别。</li>
+                <li class="contentli">用户如果没有丰富的网格处理经验，建议使用TriMesh类来表达三角网格</li>
+                <li class="contentli">如果用户没有使用TriMesh类，而是从ITriMesh继承，自定义了三角网格类。请仔细参考TriMesh的函数实现。特别是对一些退化情况的处理，比如UpdateNormal函数的实现。</li>
+                <li class="contentli">调试自定义类的方法，对比自定义类和TriMesh调用同一个API的结果差别。</li>
+                <li class="contentli">自定义类的最大问题是，有时候问题很难重现：开发者这边用的TriMesh，用户这边用的自定义网格类。遇到这类问题，用户可以先试试TriMesh的结果。如果TriMesh的结果是正确的，则可以比较自定义类和TriMesh类的实现差别。</li>
                 
                 <div class="question">反馈问题时模型的导出</div>
-                <li>导出模型坐标时，确保导出的坐标精度是没有截断的，如std::ofstream导出时可以调用precision来设置精度。</li>
-                <li>网格导出时，一般使用OBJ格式，不要使用STL，因为STL没有网格拓扑信息。不同软件系统重构STL拓扑的实现可能不一样。具体可以参考<a href="/notes/stlformat" target="_blank">为什么不建议使用STL格式。</a></li>
+                <li class="contentli">导出模型坐标时，确保导出的坐标精度是没有截断的，如std::ofstream导出时可以调用precision来设置精度。</li>
+                <li class="contentli">网格导出时，一般使用OBJ格式，不要使用STL，因为STL没有网格拓扑信息。不同软件系统重构STL拓扑的实现可能不一样。具体可以参考<a href="/notes/stlformat" target="_blank">为什么不建议使用STL格式。</a></li>
                 
                 <div class="question">总之，最重要的环节是问题重现。只有问题能够重现出来，才能得到有效的解决。反馈问题前，请先想想反馈的信息是否能够得到问题重现。</div>
                 <hr class="featurette-divider">

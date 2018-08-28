@@ -23,12 +23,11 @@
   </head>
 
   <body>
-    
+    <% include homepagetoolbar %>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
-                <h3>BGL文档</h3>
-                <h4><a href="/geometryplusplus/document">返回</a></h4>
+                <h3><a href="#bgl">BGL文档</a></h3>
                 <h4><a href="#overview">使用简介</a></h4>
                 <h4><a href="#ipointcloud">点云</a></h4>
                 <ul class="sideul">
@@ -48,16 +47,19 @@
                 <ul class="sideul">
                     <li class="sideli"><a href="#nnquery">最近邻域点查询</a></li>
                     <li class="sideli"><a href="#generalmatrix">线性方程组(稠密)</a></li>
+                    <li class="sideli"><a href="#generaleigen">特征值求解(稠密)</a></li>
                     <li class="sideli"><a href="#sparsematrix">线性方程组(稀疏)</a></li>
                     <li class="sideli"><a href="#matrix4x4">齐次变换</a></li>
-                    <li class="sideli"><a href="#multithreadsetting">多线程设置</a></li>
                 </ul>
                 <h4><a href="#download">下载</a></h4>
                 <h4><a href="#faq">常见问题</a></h4>
             </div>
+
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2" main>
-                <a name="overview"><h5>简介</h5></a>
-                <p>BGL (Basic Geometry Library) 是一个关于三维数据(点云，网格)处理的基础几何库. 它包含了三维数据处理最基础的数据结构。</p>
+                <a name="bgl"><h2>Basic Geometry Library</h2></a>
+
+                <!-- <a name="overview"><h5>简介</h5></a> -->
+                <p>BGL (Basic Geometry Library) 是一个关于三维数据(点云，网格)处理的基础几何库. 它包含了三维数据处理最基础的数据结构。用户可以很方便的使用它来开发各种几何相关的算法。</p>
                 <hr class="featurette-divider">
 
                 <a name="usageintroduction"><h5>使用简介</h5></a>
@@ -66,11 +68,45 @@
                 <hr class="featurette-divider">
 
                 <a name="ipointcloud"><h5>IPointCloud</h5></a>
-                <p>点云数据结构接口. Geometry++点云算法都是基于IPointCloud接口来调用的.</p>
-                <p>用法：继承这个接口类，实现其成员函数.</p>
-                <p>优点：可以很方便的在已有的程序中使用Geometry++提供的点云算法，只需要实现这个接口类，就可以调用所有点云相关的算法</p>
+                <p>通用的点云数据表示接口类. 它包含了最基础，最常用的点云操作接口。</p>
+<pre class="prettyprint">
+    // IPointCloud.h
+    class BGL_EXPORT IPointCloud
+    {
+    public:
+        IPointCloud(){}
+
+        virtual Int GetPointCount() const = 0;
+
+        virtual Vector3 GetPointCoord(Int pid) const = 0;
+        virtual void SetPointCoord(Int pid, const Vector3& coord) = 0;
+        
+        virtual bool HasNormal() const = 0;
+        virtual void SetHasNormal(bool has) = 0;
+        virtual Vector3 GetPointNormal(Int pid) const = 0;
+        virtual void SetPointNormal(Int pid, const Vector3& normal) = 0;
+        
+        virtual bool HasColor(void) const = 0;
+        virtual void SetHasColor(bool has) = 0;
+        virtual Vector3 GetPointColor(Int pid) const = 0;
+        virtual void SetPointColor(Int pid, const Vector3& color) = 0;
+        
+        // Return inserted point id
+        virtual Int InsertPoint(const Vector3& coord) = 0;
+        // Return inserted point id
+        virtual Int InsertPoint(const Vector3& coord, const Vector3& normal) = 0;
+        
+        virtual void SwapPoint(Int pointId0, Int pointId1) = 0; 
+        virtual void PopbackPoints(Int popCount) = 0;
+        virtual void Clear(void) = 0;
+
+        virtual ~IPointCloud(){}
+    };
+</pre>
+                <p>用法：继承这个接口类，实现其成员函数。BGL的<a href="#pointcloud">PointCloud</a>是IPointCloud的一个实现，可以直接拿来用。</p>
+                <p>接口类的优点：使用接口类实现算法，用户只需要实现这个接口类，就可以调用所有相关的算法。在实际工程中，点云往往有各种不同的数据结构表示，用户不需要为每一个数据结构都去实现一遍算法。就好比用户面向OpenGL编程，显卡的硬件实现，可以是N卡，也可以是A卡。</p>
                 <p>用法说明:</p>
-                <li>假设用户表示点云数据的类为MyPointCloudData, 则可以定义一个类MyPointCloud</li>
+                <li class="contentli">假设用户表示点云数据的类为MyPointCloudData, 则可以定义一个类MyPointCloud</li>
 <pre class="prettyprint">
     class MyPointCloud : public IPointCloud
     {
@@ -93,36 +129,177 @@
     };
 
     MyPointCloud pointCloud(myPointCloudData); // 用自己的点云数据初始化MyPointCloud
-    ErrorCode res = ConsolidatePointCloud::LaplaceSmooth(pointCloud, 0.2, 5); // 调用点云算法API来修改自己的点云数据
-    res = ConsolidatePointCloud::CalculatePointCloudNormal(pointCloud);
+    ErrorCode res = LaplaceSmooth(pointCloud); // 调用点云算法API来修改自己的点云数据
+    res = CalculatePointCloudNormal(pointCloud);
     // 其它点云算法API的具体用法可以参考相应模块的介绍
 </pre>
-                <li>构造点云：通过InsertPoint不断的往点云里加点.</li>
-                <li>点云顶点的存储格式是线性的，获取方便，但是删除会存在一些效率问题. IPointCloud提供了SwapPoint函数把需要删除的元素交换到尾部，然后再通过PopbackPoints删除尾部元素.</li>
-                <li>Clear函数负责清除Point Coordinate, Point Normal, Point Color. 回到构造类初始化时的状态.</li>
-                <li>HasNormal, HasColor函数主要用意: 有时候点云创建后没有法线或者颜色信息，IPointCloud提供这些函数查询点云是否有可靠的法线或者颜色信息. SetHasNormal, SetHasColor函数可以设置点云是否有法线或者颜色信息</li>
+                <li class="contentli">构造点云：通过InsertPoint不断的往点云里加点.</li>
+<pre class="prettyprint">
+    IPointCloud* pointCloud = new PointCloud;
+    for (int pid = 0; pid < pointSize; pid++)
+    {
+        pointCloud->InsertPoint(pointCoords.at(pid));
+        /* If pointCloud has Normal information
+        pointCloud->InsertPoint(pointCoords.at(pid), pointNormals.at(pid));
+        */
+    }
+</pre>
+                <li class="contentli">点云顶点的存储格式是线性的，获取方便，但是删除会存在一些效率问题. IPointCloud提供了SwapPoint函数把需要删除的元素交换到尾部，然后再通过PopbackPoints删除尾部元素。下面是一个删除点云点的示例：</li>
+<pre class="prettyprint">
+    // BglToolPointCloud.h
+    // deleteIndex could have duplicate index
+    // originPointIds->at(pid_AfterDelete) = pid_OriginId
+    ErrorCode DeletePointCloudElements(IPointCloud* pointCloud, const std::vector< Int >& deleteIndex, std::vector< Int >* originPointIds)
+    {
+        if (pointCloud == NULL )
+        {
+            return GPP_INVALID_INPUT;
+        }
+        Int pointCount = pointCloud->GetPointCount();
+        if (originPointIds)
+        {
+            originPointIds->resize(pointCount);
+            for (Int pid = 0; pid < pointCount; pid++)
+            {
+                originPointIds->at(pid) = pid;
+            }
+        }
+        if (deleteIndex.empty())
+        {
+            return GPP_NO_ERROR;
+        }
+        std::vector< bool > validFlag(pointCount, 1);
+        for (std::vector< Int >::const_iterator itr = deleteIndex.begin(); itr != deleteIndex.end(); ++itr)
+        {
+            validFlag.at(*itr) = 0;
+        }
+        Int validDeleteCount = 0;
+        for (Int pid = 0; pid < pointCount; pid++)
+        {
+            if (!validFlag.at(pid))
+            {
+                validDeleteCount++;
+            }
+        }
+        Int nonNullId = -1;
+        for (Int pid = pointCount - 1; pid >= 0; pid--)
+        {
+            if (validFlag.at(pid))
+            {
+                nonNullId = pid;
+                break;
+            }
+        }
+        if (nonNullId == -1)
+        {
+            pointCloud->PopbackPoints(pointCount);
+            if (originPointIds)
+            {
+                originPointIds->clear();
+            }
+            return GPP_NO_ERROR;
+        }
+        for (Int pid = 0; pid <= nonNullId; pid++)
+        {
+            if (!validFlag.at(pid))
+            {
+                pointCloud->SwapPoint(pid, nonNullId);
+                if (originPointIds)
+                {
+                    Int tempId = originPointIds->at(pid);
+                    originPointIds->at(pid) = originPointIds->at(nonNullId);
+                    originPointIds->at(nonNullId) = tempId;
+                }
+                validFlag.at(nonNullId) = 0;
+                validFlag.at(pid) = 1;
+                nonNullId--;
+                while (!validFlag.at(nonNullId))
+                {
+                    nonNullId--;
+                }
+            }
+            if (!validFlag.at(pid))
+            {
+                break;
+            }
+        }
+        pointCloud->PopbackPoints(validDeleteCount);
+        if (originPointIds)
+        {
+            originPointIds->erase(originPointIds->begin() + pointCount - validDeleteCount, originPointIds->end());
+        }
+        return GPP_NO_ERROR;
+    }
+</pre>
+                <li class="contentli">Clear函数负责清除Point Coordinate, Point Normal, Point Color. 回到构造类初始化时的状态.</li>
+                <li class="contentli">HasNormal, HasColor函数主要用意: 有时候点云创建后没有法线或者颜色信息，IPointCloud提供这些函数查询点云是否有可靠的法线或者颜色信息. SetHasNormal, SetHasColor函数可以设置点云是否有法线或者颜色信息</li>
                 <hr class="line-divider">
 
                 <a name="igridpointcloud"><h5>IGridPointCloud</h5></a>
                 <p>有序点云的数据结构接口，它继承于IPointCloud。</p>
-                <p>有序点云是一个方阵，如图所示。点云按照方阵一行一行的，从左上角到右下角排列。</p>
+<pre class="prettyprint">
+    // IGridPointCloud.h
+    class BGL_EXPORT IGridPointCloud : public IPointCloud
+    {
+    public:
+        IGridPointCloud() {}
+
+        // Initialise all variables
+        virtual void InitGrid(Int width, Int height) = 0;
+        // Making valid grid bounding box as small as possible
+        virtual void RemoveOuterBlankGrids(void) = 0;
+        virtual bool HasGridTopology(void) const = 0;
+
+        virtual Int GetWidth(void) const = 0;
+        virtual Int GetHeight(void) const = 0;
+        
+        virtual bool IsGridValid(Int wid, Int hid) const = 0;
+        virtual void InvalidateGrid(Int wid, Int hid) = 0;
+
+        virtual Int GetGridPointId(Int wid, Int hid) const = 0;;
+        virtual void GetPointGridId(Int pointId, Int& wid, Int& hid) const = 0;
+        
+        // If grid is valid: it will set grid coord 
+        // If grid is invalid: it will make grid valid, and set its coord.
+        virtual void SetGridCoord(Int wid, Int hid, const Vector3& coord) = 0;
+        virtual Vector3 GetGridCoord(Int wid, Int hid) const = 0;
+        
+        // Grid should be valid and GridPointCloud should has normal
+        virtual void SetGridNormal(Int wid, Int hid, const Vector3& normal) = 0;
+        virtual Vector3 GetGridNormal(Int wid, Int hid) const = 0;
+
+        virtual void SetGridColor(Int wid, Int hid, const Vector3& color) = 0;
+        virtual Vector3 GetGridColor(Int wid, Int hid) const = 0;
+        
+        virtual ~IGridPointCloud() {}
+    };
+</pre>
+                <p>有序点云是一个方阵，如图所示。点云按照方阵一行一行的，从左上角到右下角排列。相比IPointCloud，IGridPointCloud多了点云的位置连接关系信息。相关的计算可以更加快速。</p>
                 <img class="featurette-image img-responsive center-block" src="/images/grid_coordinate.jpg" alt="Grid Point Cloud">
-                <p>优点：相比IPointCloud，IGridPointCloud多了点云的位置连接关系信息。相关的计算可以更加快速。</p>
                 <p>用法说明：</p>
-                <li>构造有序点云：首先通过InitGrid初始化有序点云，设置长宽。初始化的点云格点默认为invalid。然后通过SetGridCoord往点云里加点。与IPointCloud不同的是，它不能通过InsertPoint函数来加点，因为这个函数没有格点坐标信息。</li>
-                <li>RemoveOuterBlankGrids：移出掉四周无效的点，并重新设置点云的长宽。如下图所示，原始点云变为了红色框内缩小长宽的有序点云。</li>
+                <li class="contentli">构造有序点云：首先通过InitGrid初始化有序点云，设置长宽。初始化的点云格点默认为invalid。然后通过SetGridCoord往点云里加点。与IPointCloud不同的是，它不能通过InsertPoint函数来加点，因为这个函数没有格点坐标信息。</li>
+<pre class="prettyprint">
+    IGridPointCloud* pointCloud = new PointCloud;
+    pointCloud->InitGrid(width, height);
+    for (Int pid = 0; pid < pointCount; pid++)
+    {
+        pointCloud->SetGridCoord(xidList.at(pid), yidList.at(pid), coordList.at(pid));
+    }
+</pre>
+                <li class="contentli">RemoveOuterBlankGrids：移出掉四周无效的点，并重新设置点云的长宽。如下图所示，原始点云变为了红色框内缩小长宽的有序点云。</li>
                 <img class="featurette-image img-responsive center-block" src="/images/RemoveOuterBlankGrids.jpg" alt="RemoveOuterBlankGrids">
-                <li>SetGridCoord：为格点设置坐标。也可以通过此函数来向点云里加点，因为格点默认是invalid，设置坐标以后就valid</li>
-                <li>SetGridNormal：为格点设置法线信息。注意，此格点必须是valid</li>
-                <li>GetGridPointId：获取格点对应的有效格点的索引。若格点无效，则返回-1</li>
-                <li>GetPointGridId：获取有效格点对应的格点坐标</li>
-                <li>导入导出：可以使用gbg和gtg格式的文件存储有序点云。</li>
+                <li class="contentli">SetGridCoord：为格点设置坐标。也可以通过此函数来向点云里加点，因为格点默认是invalid，设置坐标以后就valid</li>
+                <li class="contentli">SetGridNormal：为格点设置法线信息。注意，此格点必须是valid</li>
+                <li class="contentli">GetGridPointId：获取格点对应的有效格点的索引。若格点无效，则返回-1</li>
+                <li class="contentli">GetPointGridId：获取有效格点对应的格点坐标</li>
+                <li class="contentli">导入导出：可以使用gbg和gtg格式的文件存储有序点云。</li>
                 <hr class="line-divider">
 
                 <a name="pointcloud"><h5>PointCloud</h5></a>
                 <p>PointCloud是IPointCloud接口类和IGridPointCloud接口类的一个实现，用户可以直接使用它来表示点云数据</p>
                 <p>这是PointCloud的一个实现示例：</p>
 <pre class="prettyprint">
+    // PointCloud.h
     Int PointCloud::GetPointCount() const
     {
         return mCoordList.size();
@@ -300,13 +477,13 @@
     {
         mGridWidth = width;
         mGridHeight = height;
-        std::vector<Int>().swap(mPoint2GridMap);
-        std::vector<Int>().swap(mGrid2PointMap);
+        std::vector< Int >().swap(mPoint2GridMap);
+        std::vector< Int >().swap(mGrid2PointMap);
         mGrid2PointMap.resize(width * height, -1);
         mIsGrid = true;
-        std::vector<Vector3>().swap(mCoordList);
-        std::vector<Vector3>().swap(mNormalList);
-        std::vector<Vector3>().swap(mColorList);
+        std::vector< Vector3 >().swap(mCoordList);
+        std::vector< Vector3 >().swap(mNormalList);
+        std::vector< Vector3 >().swap(mColorList);
     }
 
     bool PointCloud::IsGridValid(Int wid, Int hid) const
@@ -403,15 +580,15 @@
     }
 </pre>                
                 <p>注意事项：</p>
-                <li>UnifyCoords的典型使用场景：在多帧点云使用过程中，如果对第一帧点云应用了前一个UnifyCoords，为了保持之后帧的点云做同样的平移缩放变换，可以用前一个UnifyCoords的返回值来设置这个UnifyCoords，使得每一帧的点云做同样的变换</li>
-                <li>有序点云在调用了InsertPoint之后，会变成无序点云</li>
+                <li class="contentli">UnifyCoords的典型使用场景：在多帧点云使用过程中，如果对第一帧点云应用了前一个UnifyCoords，为了保持之后帧的点云做同样的平移缩放变换，可以用前一个UnifyCoords的返回值来设置这个UnifyCoords，使得每一帧的点云做同样的变换</li>
+                <li class="contentli">有序点云在调用了InsertPoint之后，会变成无序点云</li>
                 <hr class="featurette-divider">
 
                 <a name="pcparser"><h5>点云导入导出</h5></a>
 <pre class="prettyprint">
 PointCloud* Parser::ImportPointCloud(std::string fileName);
 </pre>
-                <p>目前支持的文件格式：obj, asc. 用户也可以导入其它格式的点云数据, 只需要自己写一个Parser, 然后用导入的数据创建点云类(例如PointCloud)即可使用了</p>
+                <p>目前支持的文件格式：obj, asc，gbg，gtg. 用户也可以导入其它格式的点云数据, 只需要自己写一个Parser, 然后用导入的数据创建点云类(例如PointCloud)即可使用了</p>
                 <p>fileName: 格式为path/xxx.obj, path/xxx.asc, path可以是绝对路径，也可以相对路径</p>
                 <p>返回值: 如果导入失败则返回NULL</p>
                 <hr class="line-divider">
@@ -432,11 +609,56 @@ void Parser::ExportGridPointCloud(std::string fileName, const IGridPointCloud* p
 
 
                 <a name="itrimesh"><h5>ITriMesh</h5></a>
-                <p>三角网格数据结构接口. Geometry++网格算法都是基于ITriMesh接口来调用的.</p>
-                <p>用法：继承这个接口类，实现其成员函数.</p>
-                <p>优点：可以很方便的在已有的程序中使用Geometry++提供的网格算法，只需要实现这个接口类，就可以调用所有网格相关的算法</p>
+                <p>通用的三角网格数据表示接口类. 它包含了最基础，最常用的三角网格操作接口。</p>
+<pre class="prettyprint">
+    // ITriMesh.h
+    class BGL_EXPORT ITriMesh
+    {
+    public:
+        ITriMesh(){}
+
+        virtual Int GetVertexCount(void) const = 0;
+        virtual Int GetTriangleCount(void) const = 0;
+
+        virtual Vector3 GetVertexCoord(Int vid) const = 0;
+        virtual void SetVertexCoord(Int vid, const Vector3& coord) = 0;
+        virtual Vector3 GetVertexNormal(Int vid) const = 0;
+        virtual void SetVertexNormal(Int vid, const Vector3& normal) = 0;
+        // Sometimes, Mesh doesn't need vertex normal information
+        virtual bool HasVertexNormal(void) const = 0;
+
+        // vertexIds are in a consistent order in all connected triangles
+        virtual void GetTriangleVertexIds(Int fid, Int vertexIds[3]) const = 0;
+        // make sure vertexIdx are in a consistent order in its connected triangles
+        virtual void SetTriangleVertexIds(Int fid, Int vertexId0, Int vertexId1, Int vertexId2) = 0;
+        virtual Vector3 GetTriangleNormal(Int fid) const = 0;
+        virtual void SetTriangleNormal(Int fid, const Vector3& normal) = 0;
+        // Sometimes, Mesh doesn't need triangular normal information
+        virtual bool HasTriangleNormal(void) const = 0;
+        
+        // Return inserted triangle id
+        virtual Int InsertTriangle(Int vertexId0, Int vertexId1, Int vertexId2) = 0;
+        // Return inserted vertex id
+        virtual Int InsertVertex(const Vector3& coord) = 0;
+        
+        // Be careful: if you swap vertex and popback them, then vertex index after the deleted vertices will be changed.
+        // If you want to delete some vertices, please use api DeleteTriMeshVertex in BglToolMesh.h which is still developping.
+        virtual void SwapVertex(Int vertexId0, Int vertexId1) = 0; 
+        virtual void PopbackVertices(Int popCount) = 0;
+        virtual void SwapTriangles(Int fid0, Int fid1) =0;
+        virtual void PopbackTriangles(Int popCount) = 0;
+
+        virtual void UpdateNormal(void) = 0;
+        // Clear all geometry information to initial state
+        virtual void Clear(void) = 0;
+
+        virtual ~ITriMesh(){};
+    };
+</pre>
+                <p>用法：继承这个接口类，实现其成员函数。BGL的<a href="#trimesh">TriMesh</a>是ITriMesh的一个实现，可以直接拿来用。</p>
+                <p>接口类的优点：与IPointCloud类似，使用接口类实现算法，用户只需要实现这个接口类，就可以调用所有相关的算法。在实际工程中，网格往往有各种不同的数据结构表示，用户不需要为每一个数据结构都去实现一遍算法。</p>
                 <p>用法说明：</p>
-                <li>假设用户表示三角网格数据的类为MyTriMeshData, 则可以定义一个类MyTriMesh:</li>
+                <li class="contentli">假设用户表示三角网格数据的类为MyTriMeshData, 则可以定义一个类MyTriMesh:</li>
 <pre class="prettyprint">
     class MyTriMesh : public ITriMesh
     {
@@ -468,7 +690,7 @@ void Parser::ExportGridPointCloud(std::string fileName, const IGridPointCloud* p
     res = ConsolidateMesh::MakeTriMeshManifold(triMesh);
     // 其它网格算法API的具体用法可以参考相应模块的介绍
 </pre>
-                <li>构建网格示例:</li>
+                <li class="contentli">构建网格示例:</li>
 <pre class="prettyprint">
     for (GPP::Int vid = 0; vid < vertexCount; vid++)
     {
@@ -480,8 +702,8 @@ void Parser::ExportGridPointCloud(std::string fileName, const IGridPointCloud* p
     }
     triMesh->UpdateNormal();
 </pre>       
-                <li>三角网格顶点和面的存储格式是线性的，获取方便，但是删除会存在一些效率问题. ITriMesh提供了SwapVertex(SwapTriangles) 函数把需要删除的元素交换到尾部，然后再通过PopbackVertices(PopbackTriangles)删除尾部元素.</li>
-                <a name="topology"><li>网格拓扑改变后，顶点和三角片所对应的属性如何相应的改变：这里的拓扑改变是指Swap**, Popback**函数。TriMesh在调用这类函数之后，顶点或三角片的顺序发生了变化。如果我们能知道变化后和变化前，顶点和三角片的对应，则可以其对应的属性就可以做相应的更新了。一般有两种思路：1. 属性属于网格的成员变量，则可以在Swap**, Popback**里做相应的属性更新，具体可以参考TriMesh的实现；2. 属性独立于网格存在，则用户可以在网格类里添加顶点和三角片的Id信息，并在Swap**, Popback**里做相应的Id更新，这样就可以得到改变后顶点或三角片与之前的对应信息了，下面是一个示例：</li></a>
+                <li class="contentli">三角网格顶点和面的存储格式是线性的，获取方便，但是删除会存在一些效率问题. ITriMesh提供了SwapVertex(SwapTriangles) 函数把需要删除的元素交换到尾部，然后再通过PopbackVertices(PopbackTriangles)删除尾部元素。用户也可以直接调用BglToolMesh.h里的DeleteTriMeshVertices / DeleteTriMeshTriangles来删除顶点或者三角片。</li>
+                <a name="topology"><li class="contentli">网格拓扑改变后，顶点和三角片所对应的属性如何相应的改变：这里的拓扑改变是指Swap**, Popback**函数。TriMesh在调用这类函数之后，顶点或三角片的顺序发生了变化。如果我们能知道变化后和变化前，顶点和三角片的对应，则可以其对应的属性就可以做相应的更新了。一般有两种思路：1. 属性属于网格的成员变量，则可以在Swap**, Popback**里做相应的属性更新，具体可以参考TriMesh的实现；2. 属性独立于网格存在，则用户可以在网格类里添加顶点和三角片的Id信息，并在Swap**, Popback**里做相应的Id更新，这样就可以得到改变后顶点或三角片与之前的对应信息了，下面是一个示例：</li></a>
 <pre class="prettyprint">
     void MyTriMesh::SwapVertex(Int vertexId0, Int vertexId1)
     {
@@ -507,8 +729,8 @@ void Parser::ExportGridPointCloud(std::string fileName, const IGridPointCloud* p
         mTriangleIds.erase(mTriangleIds.begin() + mTriangleIds.size() - popCount, mTriangleIds.end());
     }
 </pre>
-                <li>Clear函数负责清除Vertex Coordinate, Vertex Normal, Triangle Index, Triangle Normal. 回到构造类初始化时的状态.</li>
-                <li>UpdateNormal负责重新计算网格的顶点和三角面的法线信息.</li>
+                <li class="contentli">Clear函数负责清除Vertex Coordinate, Vertex Normal, Triangle Index, Triangle Normal. 回到构造类初始化时的状态.</li>
+                <li class="contentli">UpdateNormal负责重新计算网格的顶点和三角面的法线信息.</li>
                 <hr class="featurette-divider">
                 
                 <a name="trimesh"><h5>TriMesh</h5></a>
@@ -850,8 +1072,8 @@ void Parser::ExportGridPointCloud(std::string fileName, const IGridPointCloud* p
     }
 </pre>
                 <p>注意事项：</p>
-                <li>如果导入的网格是STL格式，请使用FuseVertex建立网格的连接关系. 顶点位置相同的点会被处理为一个顶点. STL格式不能表示带缝的网格，因为它没有拓扑信息, 属于Triangle Soup. 建议使用OBJ格式的网格</li>
-                <li>UnifyCoords使得TriMesh的顶点坐标会被平移和均匀缩放到范围(-bboxSize, bboxSize)以内</li>
+                <li class="contentli">如果导入的网格是STL格式，请使用FuseVertex建立网格的连接关系. 顶点位置相同的点会被处理为一个顶点. STL格式不能表示带缝的网格，因为它没有拓扑信息, 属于Triangle Soup. 建议使用OBJ格式的网格</li>
+                <li class="contentli">UnifyCoords使得TriMesh的顶点坐标会被平移和均匀缩放到范围(-bboxSize, bboxSize)以内</li>
                 <hr class="featurette-divider">
 
                 <a name="halfmesh"><h5>半边结构</h5></a>
@@ -923,42 +1145,229 @@ void Parser::ExportTriMesh(std::string fileName, const ITriMesh* triMesh);
 
 
                 <a name="generalmatrix"><h5>线性方程组(稠密)</h5></a>
-                <p>求解稠密矩阵的线性方程组。</p>
-                <p>GeneralMatrix：稠密矩阵</p>
-                <p>GeneralMatrix3：3X3的稠密矩阵。与GeneralMatrix的区别在于，GeneralMatrix3的特征值求解速度更快一些。</p>
-                <p>LinearGeneralLUSolver：线性方程组求解，LU分解法。</p>
-                <p>LeastSquareGeneralLDLSolver：最小二乘求解，LDL分解法。</p>
-                <p>SelfAdjointEigenSolver：特征值求解。</p>
-                <p>OrthgonalApproximation：仿射变换的旋转矩阵近似求解。</p>
+                <p>求解稠密矩阵的线性方程组：AX = b</p>
+                <p>GeneralMatrix(GeneralMatrix.h)：稠密矩阵</p>
+                <p>GeneralMatrix3(GeneralMatrix.h)：3X3的稠密矩阵。与GeneralMatrix的区别在于，GeneralMatrix3的特征值求解速度更快一些。</p>
+                <p>LinearGeneralLUSolver(GeneralMatrix.h)：线性方程组求解，LU分解法。</p>
+<pre class="prettyprint">
+    GeneralMatrix A(matrixSize, matrixSize);
+    std::vector< Real > b(matrixSize, 0);
+    for (Int rid = 0; rid < matrixSize; rid++)
+    {
+        A.SetValue(rid, rid, 1.0);
+        b.at(rid) = Real(rid);
+    }
+    LinearGeneralLUSolver solver;
+    if (solver.Factorize(A) != GPP_NO_ERROR)
+    {
+        return false;
+    }
+    std::vector< Real > result;
+    if (solver.Solve(A, b, &result) != GPP_NO_ERROR)
+    {
+        return false;
+    }
+</pre>
+                <p>LeastSquareGeneralLDLSolver(GeneralMatrix.h)：最小二乘求解，LDL分解法。</p>
+<pre class="prettyprint">
+    // fit a sphere by points
+    Int pointSize = points.size(); // pointSize >= 4
+    GeneralMatrix matA(pointSize, 4);
+    std::vector< Real > vecB(pointSize, 1);
+    for (Int rid = 0; rid < supportNum; rid++)
+    {
+        Vector3 pos = points.at(rid);
+        Vector3 nor = pointNormals.at(rid);
+        matA.SetValue(rid, 0, nor[0]);
+        matA.SetValue(rid, 1, nor[1]);
+        matA.SetValue(rid, 2, nor[2]);
+        matA.SetValue(rid, 3, 1.0);
+        vecB.at(rid) = pos * nor;
+    }
+    LeastSquareGeneralLDLSolver solver;
+    if (solver.Factorize(matA) != GPP_NO_ERROR)
+    {
+        GPPDebug << "FitSphere solver Factorize failed " << std::endl;
+        return false;
+    }
+    std::vector< Real > result;
+    if (solver.Solve(matA, vecB, &result) != GPP_NO_ERROR)
+    {
+        GPPDebug << "FitSphere solver Solve failed " << std::endl;
+        return false;
+    }
+    sphereCenter = Vector3(result.at(0), result.at(1), result.at(2));
+    sphereRadius = fabs(result.at(3));
+</pre>   
+                
+                <p>OrthgonalApproximation(GeneralMatrix.h)：仿射变换的旋转矩阵近似求解。</p>
+                <hr class="featurette-divider">
+
+
+                <a name="generaleigen"><h5>特征值求解(稠密)</h5></a>
+                <p>SelfAdjointEigenSolver(GeneralMatrix.h)：特征值求解。</p>
+<pre class="prettyprint">
+    // compute point cloud normal
+    std::vector< Vector3 > deltaCoord(neighborCount)
+    for (Int nid = 0; nid < neighborCount; nid++)
+    {
+        deltaCoord.at(nid) = neighorCoords.at(nid) - pointCoord;
+    }
+    GeneralMatrix3 matrix;
+    for (Int rid = 0; rid < 3; rid++)
+    {
+        for (Int cid = rid; cid < 3; cid++)
+        {
+            Real v = 0;
+            for (Int kk = 0; kk < neighborCount; kk++)
+            {
+                v += deltaCoord.at(kk)[rid] * deltaCoord.at(kk)[cid];
+            }
+            matrix.SetValue(rid, cid, v);
+            matrix.SetValue(cid, rid, v);
+        }
+    }
+    SelfAdjointEigenSolver eigenSolver;
+    res = eigenSolver.Compute(matrix);
+    if (res != GPP_NO_ERROR)
+    {
+        GPPInfo << "EigenSolver Compute failed " << res << std::endl;
+        return res;
+    }
+    eigenSolver.GetEigenVector(0, eigenVector);
+    pointCloud->SetPointNormal(pid, Vector3(eigenVector.at(0), eigenVector.at(1), eigenVector.at(2)));
+</pre>
                 <hr class="featurette-divider">
 
 
                 <a name="sparsematrix"><h5>线性方程组(稀疏)</h5></a>
                 <p>求解稀疏矩阵的线性方程组。</p>
-                <p>SparseMatrix：稀疏矩阵</p>
-                <p>LinearSparseLUSolver：线性方程组求解，LU分解法。</p>
-                <p>LinearSparseLLTSolver：线性方程组求解，LLT分解法。</p>
-                <p>LinearSparseCGSolver：线性方程组求解，共轭梯度法。</p>
-                <p>LeastSquareSparseLLTSolver：最小二乘求解，LLT分解法。</p>
-                <p>LeastSquareSparseCGSolver：最小二乘求解，共轭梯度法。</p>
+                <p>SparseMatrix(SparseMatrix.h)：稀疏矩阵</p>
+                <p>LinearSparseLUSolver(SparseMatrix.h)：线性方程组求解，LU分解法。</p>
+                <p>LinearSparseLLTSolver(SparseMatrix.h)：线性方程组求解，LLT分解法。其中矩阵必须为对称正定矩阵。</p>
+<pre class="prettyprint">
+    SparseMatrix matA(matrixSize, matrixSize);
+    std::vector< Real > vecB(matrixSize);
+    for (int eid = 0; eid < entitySize; eid++)
+    {
+        matA.AddTriplet(rows.at(eid), cols.at(eid), values.at(eid));
+    }
+    if (!matA.BuildFromTriplets())
+    {
+        return false;
+    }
+    LinearSparseLUSolver solver;
+    // if matA is symmetric positive definite, user can use LinearSparseLLTSolver here.
+    ErrorCode res = solver.Factorize(sparseMatrix);
+    if (res != GPP_NO_ERROR)
+    {
+        return false;
+    }
+    std::vector< Real > result;
+    res = solver.Solve(vecB, &result);
+    if (res != GPP_NO_ERROR)
+    {
+        return false;
+    }
+    solver.Free();
+</pre>
+                <p>LinearSparseCGSolver(SparseMatrix.h)：线性方程组求解，共轭梯度法。适合有初始值的大型稀疏矩阵求解。</p>
+<pre class="prettyprint">
+    SparseMatrix matA(matrixSize, matrixSize);
+    std::vector< Real > vecB(matrixSize);
+    for (int eid = 0; eid < entitySize; eid++)
+    {
+        matA.AddTriplet(rows.at(eid), cols.at(eid), values.at(eid));
+    }
+    if (!matA.BuildFromTriplets())
+    {
+        return false;
+    }
+    LinearSparseCGSolver solver;
+    ErrorCode res = solver.Factorize(sparseMatrix);
+    if (res != GPP_NO_ERROR)
+    {
+        return false;
+    }
+    solver.SetMaxIteration(maxIterationSize);
+    std::vector< Real > result;
+    res = solver.Solve(vecB, &result, &initValue);
+    if (res != GPP_NO_ERROR)
+    {
+        return false;
+    }
+    solver.Free();
+</pre>
+                <p>LeastSquareSparseLLTSolver(SparseMatrix.h)：最小二乘求解，LLT分解法。</p>
+<pre class="prettyprint">
+    SparseMatrix matA(rowSize, colSize);  // rowSize >= colSize
+    std::vector< Real > vecB(matrixSize);
+    for (int eid = 0; eid < rowSize; eid++)
+    {
+        matA.AddTriplet(rows.at(eid), cols.at(eid), values.at(eid));
+    }
+    if (!matA.BuildFromTriplets())
+    {
+        return false;
+    }
+    LeastSquareSparseLLTSolver solver;
+    ErrorCode res = solver.Factorize(sparseMatrix);
+    if (res != GPP_NO_ERROR)
+    {
+        return false;
+    }
+    std::vector< Real > result;
+    res = solver.Solve(vecB, &result);
+    if (res != GPP_NO_ERROR)
+    {
+        return false;
+    }
+    solver.Free();
+</pre>
+                <p>LeastSquareSparseCGSolver(SparseMatrix.h)：最小二乘求解，共轭梯度法。适合有初始值的大型稀疏矩阵求解。</p>
+<pre class="prettyprint">
+    SparseMatrix matA(rowSize, colSize);  // rowSize >= colSize
+    std::vector< Real > vecB(matrixSize);
+    for (int eid = 0; eid < rowSize; eid++)
+    {
+        matA.AddTriplet(rows.at(eid), cols.at(eid), values.at(eid));
+    }
+    if (!matA.BuildFromTriplets())
+    {
+        return false;
+    }
+    LeastSquareSparseCGSolver solver;
+    ErrorCode res = solver.Factorize(sparseMatrix);
+    if (res != GPP_NO_ERROR)
+    {
+        return false;
+    }
+    solver.SetMaxIteration(maxIterationSize);
+    std::vector< Real > result;
+    res = solver.Solve(vecB, &result, &initValue);
+    if (res != GPP_NO_ERROR)
+    {
+        return false;
+    }
+    solver.Free();
+</pre>
                 <hr class="featurette-divider">
 
 
                 <a name="matrix4x4"><h5>齐次变换</h5></a>
-                <p>Matrix4X4: 齐次变换矩阵。</p>
+                <p>Matrix4X4: 齐次变换矩阵。主要用于表示三维的透视变换，仿射变换和刚体变换。其中刚体变换最为常用。</p>
                 <p>齐次坐标，就是在传统坐标后面加入一维变量：C -> (C, W)。在三维空间中，它把三维坐标(X, Y, Z)提升到了四维的射影空间中(X, Y, Z, W)，对应的线性变换就是射影变换。齐次坐标转回三维空间坐标分两种情况，如果W为0，则(X, Y, Z)表示三维空间中的一个方向，如果W不为0，则对应的三维点坐标为(X/W, Y/W, Z/W)。齐次坐标表示有两个好处：一个是可以区分向量和点，另一个是齐次坐标下的矩阵可以表示平移变换。</p>
-                <li>透视变换：一般的射影变换是一个4X4的矩阵变换，如下图1所示，它可以表示射影空间中任意的线性变换，如透视变换。</li>
-                <li>仿射变换：如果把矩阵元素做一些限制到下图2，则为一个仿射变换。它可以表示三维空间中任意的线性变换。</li>
-                <li>刚体变换：如果把图2的a元素的矩阵块限制为正交矩阵块r，如下图3所示，它就变成了一个刚体变换。它可以表示旋转变换和平移变换。</li>
+                <li class="contentli">透视变换：一般的射影变换是一个4X4的矩阵变换，如下图1所示，它可以表示射影空间中任意的线性变换，如透视变换。</li>
+                <li class="contentli">仿射变换：如果把矩阵元素做一些限制到下图2，则为一个仿射变换。它可以表示三维空间中任意的线性变换。</li>
+                <li class="contentli">刚体变换：如果把图2的a元素的矩阵块限制为正交矩阵块r，如下图3所示，它就变成了一个刚体变换。它可以表示旋转变换和平移变换。</li>
                 <img class="featurette-image img-responsive center-block" src="/images/transform_matrix.jpg" alt="transform matrix">
-                <hr class="featurette-divider">
-
-
-                <a name="multithreadsetting"><h5>多线程设置</h5></a>
-<pre class="prettyprint">
-void SetThreadCount(Int count);
-</pre>
-                <p>Geometry++有些API使用了多线程。这个API可以设置线程个数(>=0)。默认参数为0-根据CPU核心数自动设置。</p>
+                <p>Matrix4X4的一些工具函数：</p>
+                <li class="contentli">GenerateScale: 缩放变换矩阵</li>
+                <li class="contentli">GenerateTranslation：平移变换矩阵</li>
+                <li class="contentli">GenerateVectorToVectorRotation：一个方向旋转到另一个方向的旋转矩阵</li>
+                <li class="contentli">GenerateLShapeRotation：一个L形状旋转到另一个L形状的旋转矩阵</li>
+                <li class="contentli">GenerateUnitQuaternionRotation：单位四元数对应的旋转矩阵</li>
+                <li class="contentli">AffineInverse：仿射逆矩阵</li>
                 <hr class="featurette-divider">
 
                 
@@ -971,21 +1380,21 @@ void SetThreadCount(Int count);
                 <div class="question">请不要在release的环境下debug程序，因为release环境下面的调试信息是不准确的。</div>
 
                 <div class="question">编译有错误</div>
-                <li>请仔细检查头文件，lib库，宏定义是否都配置好了，详细请参考<a href="#usageintroduction">使用简介</a>。如果工程中链接了很多第三方库，可以新建一个简单的工程来链接BGL库，来确认BGL库是否有问题。</li>
+                <li class="contentli">请仔细检查头文件，lib库，宏定义是否都配置好了，详细请参考<a href="#usageintroduction">使用简介</a>。如果工程中链接了很多第三方库，可以新建一个简单的工程来链接BGL库，来确认BGL库是否有问题。</li>
 
                 <div class="question">API调用出现问题</div>
-                <li>检查API的返回码：－6属于没有激活开发包；－8属于函数没有定义，如果你有这个函数的授权，可以前来联系。</li>
-                <li>查看log文件，看能不能得到提示</li>
+                <li class="contentli">检查API的返回码：－6属于没有激活开发包；－8属于函数没有定义，如果你有这个函数的授权，可以前来联系。</li>
+                <li class="contentli">查看log文件，看能不能得到提示</li>
 
                 <div class="question">一般性问题还是特例问题</div>
-                <li>某个api调用出现问题时，可以多试试几个例子，看看是对所有例子都有问题，还是个例有问题。如果对所有例子都有问题，一般都是用法有问题。</li>
+                <li class="contentli">某个api调用出现问题时，可以多试试几个例子，看看是对所有例子都有问题，还是个例有问题。如果对所有例子都有问题，一般都是用法有问题。</li>
 
                 <div class="question">程序崩溃了（Crash）怎么办</div>
-                <li>请仔细确认程序的崩溃点！如果有异常发生，请在软件程序里Catch住异常。异常的捕获处理属于软件部分的内容。</li>
+                <li class="contentli">请仔细确认程序的崩溃点！如果有异常发生，请在软件程序里Catch住异常。异常的捕获处理属于软件部分的内容。</li>
 
                 <div class="question">反馈问题时模型的导出</div>
-                <li>导出模型坐标时，确保导出的坐标精度是没有截断的，如std::ofstream导出时可以调用precision来设置精度。</li>
-                <li>网格导出时，一般使用OBJ格式，不要使用STL，因为STL没有网格拓扑信息。不同软件系统重构STL拓扑的实现可能不一样。具体可以参考<a href="/notes/stlformat" target="_blank">为什么不建议使用STL格式。</a></li>
+                <li class="contentli">导出模型坐标时，确保导出的坐标精度是没有截断的，如std::ofstream导出时可以调用precision来设置精度。</li>
+                <li class="contentli">网格导出时，一般使用OBJ格式，不要使用STL，因为STL没有网格拓扑信息。不同软件系统重构STL拓扑的实现可能不一样。具体可以参考<a href="/notes/stlformat" target="_blank">为什么不建议使用STL格式。</a></li>
                 
                 <div class="question">总之，最重要的环节是问题重现。只有问题能够重现出来，才能得到有效的解决。反馈问题前，请先想想反馈的信息是否能够得到问题重现。</div>
                 <hr class="featurette-divider">
