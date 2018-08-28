@@ -45,11 +45,12 @@
                 </ul>
                 <h4><a href="#multithreadsetting">工具</a></h4>
                 <ul class="sideul">
-                    <li class="sideli"><a href="#nnquery">最近邻域点查询</a></li>
+                    <li class="sideli"><a href="#nnquery">最近邻点查询</a></li>
                     <li class="sideli"><a href="#generalmatrix">线性方程组(稠密)</a></li>
                     <li class="sideli"><a href="#generaleigen">特征值求解(稠密)</a></li>
                     <li class="sideli"><a href="#sparsematrix">线性方程组(稀疏)</a></li>
                     <li class="sideli"><a href="#matrix4x4">齐次变换</a></li>
+                    <li class="sideli"><a href="#profiler">时间统计</a></li>
                 </ul>
                 <h4><a href="#download">下载</a></h4>
                 <h4><a href="#faq">常见问题</a></h4>
@@ -59,7 +60,8 @@
                 <a name="bgl"><h2>Basic Geometry Library</h2></a>
 
                 <!-- <a name="overview"><h5>简介</h5></a> -->
-                <p>BGL (Basic Geometry Library) 是一个关于三维数据(点云，网格)处理的基础几何库. 它包含了三维数据处理最基础的数据结构。用户可以很方便的使用它来开发各种几何相关的算法。</p>
+                <p>BGL (Basic Geometry Library) 是一个关于三维数据(点云，网格)处理的基础几何库。它包含了三维数据处理最基础的数据结构。用户可以很方便的使用它来开发各种几何相关的算法。</p>
+                <p>它可以免费的，无限制的使用，包括科研，商业产品等。</p>
                 <hr class="featurette-divider">
 
                 <a name="usageintroduction"><h5>使用简介</h5></a>
@@ -1135,12 +1137,63 @@ void Parser::ExportTriMesh(std::string fileName, const ITriMesh* triMesh);
                 <p>fileName: 格式为path/xxx.obj, path/xxx.stl, path可以是绝对路径，也可以相对路径</p>
                 <hr class="featurette-divider">
 
-                <a name="nnquery"><h5>最近邻域点查询</h5></a>
-                <p>NNQuery: Nearest Neighbor Query。最近邻域查询工具。</p>
+
+                <a name="nnquery"><h5>最近邻点查询</h5></a>
+                <p>NNQuery(ToolNNQuery.h): Nearest Neighbor Query。最近邻域查询工具。</p>
                 <p>NNQuery::Init: NNQuery初始化。它给空间的点集建立一个KD Tree，提供最近邻域点的查询效率。</p>
                 <p>NNQuery::FindKNN: 查找最近的K个点，按照距离的升序排列。</p>
                 <p>NNQuery::FindRadiusNN: 查找半径内的点集，无序。注意squareRadius是半径平方。</p>
-
+<pre class="prettyprint">
+    // Compute point cloud density
+    ErrorCode CalculatePointCloudDensity(const IPointCloud* pointCloud, Int neighborCount, Real& density)
+    {
+        if (pointCloud == NULL)
+        {
+            return GPP_INVALID_INPUT;
+        }
+        Int pointCount = pointList->GetPointCount();
+        if (pointCount < 1 || neighborCount < 1)
+        {
+            return GPP_INVALID_INPUT;
+        }
+        neighborCount++;
+        PointCloudPointList pointList(pointCloud);
+        NNQuery nnQuery;
+        ErrorCode res = nnQuery.Init(&pointList);
+        if (res != GPP_NO_ERROR)
+        {
+            return res;
+        }
+        if (pointCount < neighborCount)
+        {
+            neighborCount = pointCount;
+        }
+        Real* distanceRes = new Real[pointCount * neighborCount];
+        res = nnQuery.FindKNN(pointList, NULL, neighborCount, NULL, distanceRes);
+        if (res != GPP_NO_ERROR)
+        {
+            GPPFREEARRAY(distanceRes);
+            return res;
+        }
+        std::vector< Real > densityList(pointCount, 0);
+        Real avgWeight = 1.0 / Real(neighborCount - 1);
+        for (Int pid = 0; pid < pointCount; pid++)
+        {
+            Int nBase = pid * neighborCount;
+            Real curDensity = 0.0;
+            for (Int nid = 1; nid < neighborCount; nid++)
+            {
+                curDensity += sqrt(distanceRes[nBase + nid]);
+            }
+            densityList.at(pid) = curDensity * avgWeight;
+        }
+        Int halfPointId = ceil(Real(pointCount) / 2.0) - 1;
+        std::nth_element(densityList.begin(), densityList.begin() + halfPointId, densityList.end());
+        density = densityList.at(halfPointId);
+        GPPFREEARRAY(distanceRes);
+        return GPP_NO_ERROR;
+    }
+</pre>
                 <hr class="featurette-divider">
 
 
@@ -1371,6 +1424,15 @@ void Parser::ExportTriMesh(std::string fileName, const ITriMesh* triMesh);
                 <hr class="featurette-divider">
 
                 
+                <a name="profiler"><h5>时间统计</h5></a>
+                <p>Profiler(Profiler.h): 获取当前时间。可通过时间差来计算某段程序执行的时间。</p>
+<pre class="prettyprint">
+    Real startTime = Profiler::GetTime();
+    ...........
+    Real deltaTime = Profiler::GetTime() - startTime;
+</pre>
+
+
                 <a name="download"><h5>下载</h5></a>
                 <p><a href="http://threepark.net/bgl/bgl-vs2013-64bit.zip" target="_blank">VS2013_64bit</a> | <a href="http://threepark.net/bgl/bgl-vs2015-64bit.zip" target="_blank">VS2015_64bit</a> | <a href="http://threepark.net/bgl/bgl-vs2017-64bit.zip" target="_blank">VS2017_64bit</a><p>
                 <hr class="featurette-divider">
@@ -1383,7 +1445,7 @@ void Parser::ExportTriMesh(std::string fileName, const ITriMesh* triMesh);
                 <li class="contentli">请仔细检查头文件，lib库，宏定义是否都配置好了，详细请参考<a href="#usageintroduction">使用简介</a>。如果工程中链接了很多第三方库，可以新建一个简单的工程来链接BGL库，来确认BGL库是否有问题。</li>
 
                 <div class="question">API调用出现问题</div>
-                <li class="contentli">检查API的返回码：－6属于没有激活开发包；－8属于函数没有定义，如果你有这个函数的授权，可以前来联系。</li>
+                <li class="contentli">检查API的返回码(BglDefines.h)：－6属于没有激活开发包；－8属于函数没有定义，如果你有这个函数的授权，可以前来联系。</li>
                 <li class="contentli">查看log文件，看能不能得到提示</li>
 
                 <div class="question">一般性问题还是特例问题</div>
@@ -1396,7 +1458,7 @@ void Parser::ExportTriMesh(std::string fileName, const ITriMesh* triMesh);
                 <li class="contentli">导出模型坐标时，确保导出的坐标精度是没有截断的，如std::ofstream导出时可以调用precision来设置精度。</li>
                 <li class="contentli">网格导出时，一般使用OBJ格式，不要使用STL，因为STL没有网格拓扑信息。不同软件系统重构STL拓扑的实现可能不一样。具体可以参考<a href="/notes/stlformat" target="_blank">为什么不建议使用STL格式。</a></li>
                 
-                <div class="question">总之，最重要的环节是问题重现。只有问题能够重现出来，才能得到有效的解决。反馈问题前，请先想想反馈的信息是否能够得到问题重现。</div>
+                <div class="question">总之，最重要的环节是问题重现。只有问题能够重现出来，才能得到有效的解决。反馈问题前，请先想想反馈的信息是否能够得到问题重现。问题反馈请发送到邮箱geometryhub@qq.com，文件请压缩后发送.</div>
                 <hr class="featurette-divider">
 
             </div>
