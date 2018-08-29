@@ -8,7 +8,7 @@
     <meta name="keywords" content="三维建模，细分建模，webgl，sketchup, stl, obj, 3d打印, 模型下载，三维设计，数字几何处理">
     <link rel="icon" href="/images/favicon.png">
 
-    <title>从Delaunay三角化到网格质量</title>
+    <title>重新网格化Remesh</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
@@ -28,21 +28,29 @@
     <% include ../homepagetoolbar %>
     
     <div class="container">
-        <h2>从Delaunay三角化到网格质量 <small></small></h2>
+        <h2>重新网格化Remesh <small></small></h2>
 
         <h4>Delaunay三角化</h4>
-        <p>Delaunay三角化，就是点云的一种三角化方法，它具有某些好的性质：</p>
+        <p>Delaunay三角化，是点云的一种三角化方法，它具有某些好的性质：</p>
         <li class="contentli">网格中的最小角最大化</li>
         <li class="contentli">任意三角形的外接圆内不含三角形以外的顶点</li>
         <li class="contentli">三角化的网格是点云的凸包</li>
         <li class="contentli">最大化所有三角面片的内切圆的平均值</li>
         <li class="contentli">其它......</li>
         <img class="featurette-image img-responsive center-block" src="/images/delaunayproperty.jpg" alt="delaunay property">
+        <p>，</p>
+        <p></p>
         <hr class="line-divider">
 
-        <h4><a href="/magic3d#mesh_remesh" target="_blank">带约束的Delaunay三角化</a></h4>
+        <h4>带约束的Delaunay三角化</h4>
         <p>有时候，点云包含一些线段连接约束，如下图1所示。有些约束边并不满足Denaulay性质，所以，它并不能得到整体的Delaunay三角化结果(如下图2是点云的一个Delaunay三角化结果)。我们可以放开一些Delaunay性质约束，使其尽量的接近Delaunay三角化。下图3是一个带约束的Denaulay三角化的结果。可以比较一下图2和图3的结果差异。</p>
         <img class="featurette-image img-responsive center-block" src="/images/cdt.jpg" alt="constrained delaunay triangulation">
+        <hr class="line-divider">
+
+        <h4><a href="/magic3d#mesh_remesh" target="_blank">Delaunay网格优化</a></h4>
+        <p>Delaunay优化，可以优化网格的连接关系，减少狭长三角形，保持网格顶点数目和位置不变。如下图所示，图2和图3是图1点云不同的三角化结果。图2经过一系列拓扑优化，如Delaunay边翻转操作，得到图3的高质量网格。</p>
+        <p>Delaunay优化只改变了网格顶点的连接关系，一般是局部的Delaunay边翻转。由于顶点保持不变，它可以极大可能的保持住原始网格的几何信息。缺点是，在顶点分布很差的情况下，优化的效果有限。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/tupologyquality.jpg" alt="tupology quality">
         <hr class="line-divider">
 
         <h4>Voronoi图</h4>
@@ -51,16 +59,14 @@
         <img class="featurette-image img-responsive center-block" src="/images/voronoi_diagram.jpg" alt="voronoi_diagram">
         <hr class="line-divider">
 
-        <h4><a href="/magic3d#mesh_remesh" target="_blank">重心Voronoi图</a></h4>
+        <h4>重心Voronoi图</h4>
         <p>重心Voronoi图，是一种特殊的Voronoi图，其每个区域的重心和其对应点重合。如右图所示，这就是一个重新Voronoi图。</p>
         <img class="featurette-image img-responsive center-block" src="/images/cvt.jpg" alt="cvt">
         <hr class="line-divider">
 
-        <h4>网格质量</h4>
-        <p>网格质量包含两方面的内容：拓扑质量和几何质量。</p>
-        <li class="contentli">拓扑质量：如下图所示，图2和图3是图1点云不同的三角化结果。图2经过一系列拓扑优化，如Delaunay边翻转操作，得到图3的高质量网格。</li>
-        <img class="featurette-image img-responsive center-block" src="/images/tupologyquality.jpg" alt="tupology quality">
-        <li class="contentli">几何质量：几何质量一般指顶点的坐标分布。如下图1所示，虽然这是一个Delaunay三角化，但明显可以看出其网格质量很很差的，经过一系列几何优化（如重心Voronoi优化）后，顶点分布更加均匀，然后再做一个Delaunay三角化就得到了图2的结果。</li>
+        <h4><a href="/magic3d#mesh_remesh" target="_blank">重心Voronoi优化</a></h4>
+        <p>重心Voronoi优化，可以减少狭长三角形。它和Delaunay优化的区别是，它不仅优化网格顶点的连接关系，还要优化顶点的位置。如下图1所示，虽然这是一个Delaunay三角化，但明显可以看出其网格质量很很差的，经过一系列几何优化（如重心Voronoi优化）后，顶点分布更加均匀，然后再做一个Delaunay三角化就得到了图2的结果。</p>
+        <p>重心Voronoi优化，虽然可以优化顶点分布，但其优化程度有限，在顶点分布极其不均匀的时候，效果还是不理想的。</p>
         <img class="featurette-image img-responsive center-block" src="/images/geometry_optimization.jpg" alt="geometry optimization">
         <hr class="line-divider">
 
