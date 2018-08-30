@@ -30,6 +30,14 @@
     <div class="container">
         <h2>重新网格化Remesh <small></small></h2>
 
+        <p>Remesh并没有一个严格的定义，简单的讲，Remesh就是从一个输入网格生成另一个网格，并且满足一定的要求。根据网格改动大小，可以分为这么几类：</p>
+        <li class="contentli">保持顶点拓扑和几何信息，优化网格连接关系</li>
+        <li class="contentli">保持顶点拓扑信息，同时优化顶点几何和网格连接关系</li>
+        <li class="contentli">顶点重采样，优化网格连接关系</li>
+        <p>Remesh对原网格的改动比较大，实际应用中要谨慎使用。尽量使用改动比较小的Remesh方法。</p>
+        <p></p>
+        <hr class="line-divider">
+
         <h4>Delaunay三角化</h4>
         <p>Delaunay三角化，是点云的一种三角化方法，它具有某些好的性质：</p>
         <li class="contentli">网格中的最小角最大化</li>
@@ -66,19 +74,24 @@
 
         <h4><a href="/magic3d#mesh_remesh" target="_blank">重心Voronoi优化</a></h4>
         <p>重心Voronoi优化，可以减少狭长三角形。它和Delaunay优化的区别是，它不仅优化网格顶点的连接关系，还要优化顶点的位置。如下图1所示，虽然这是一个Delaunay三角化，但明显可以看出其网格质量很很差的，经过一系列几何优化（如重心Voronoi优化）后，顶点分布更加均匀，然后再做一个Delaunay三角化就得到了图2的结果。</p>
-        <p>重心Voronoi优化，虽然可以优化顶点分布，但其优化程度有限，在顶点分布极其不均匀的时候，效果还是不理想的。</p>
+        <p>重心Voronoi优化，虽然可以优化顶点分布，但其优化程度有限，在顶点分布极不均匀的情况下，效果还是不理想的。</p>
         <img class="featurette-image img-responsive center-block" src="/images/geometry_optimization.jpg" alt="geometry optimization">
         <hr class="line-divider">
 
         <h4><a href="/magic3d#mesh_remesh" target="_blank">重新网格化(Remesh)<a href="/magic3d#mesh_remesh" target="_blank"></h4>
-        <p>Remesh并没有一个严格的定义，简单的讲，Remesh就是从一个输入网格生成另一个网格，并且满足一定的要求。常见的有三角网格到三角网格的Remesh，或者三角网格到四边网格的Remesh。这是一个典型的应用驱动的功能，不同的应用所需要的性质是有差别的，即使是同一个性质，有时候是硬约束，有时候是软约束。常见的一些性质有：</p>
+        <p>这里的Remesh，主要是指顶点重新采样的类型。前面提到的Delaunay优化和重心Voronoi优化也属于Remesh的范畴，但它们对顶点分布的优化能力有限。</p>
+        <p>Remesh的目标有很多种，一般是应用驱动的，不同的应用所需要的性质是有差别的，即使是同一个性质，有时候是硬约束，有时候是软约束。常见的一些性质有：</p>
         <li class="contentli">新网格是原网格的一个好的逼近</li>
-        <li class="contentli">避免狭长面片，退化面片</li>
-        <li class="contentli">网格顶点的度数尽量均匀</li>
-        <li class="contentli">网格顶点分布要光滑，比如均匀分布，几何相关的各项异性分布</li>
-        <li class="contentli">新网格要保持流形结构</li>
+        <li class="contentli">新网格复杂度（网格顶点或面片数量）</li>
+        <li class="contentli">网格面片质量满足一定的要求：避免狭长和退化面片；顶点度数为6；顶点分布满足均匀分布或几何相关的各项异性分布；网格边长要求。</li>
         <li class="contentli">保持特征边</li>
-        <img class="featurette-image img-responsive center-block" src="/images/remesh_head.jpg" alt="remesh">
+        <li class="contentli">新网格要保持流形结构</li>
+        <p>通常情况下，这些性质很难同时满足，有些性质是矛盾的：</p>
+        <li class="contentli">网格复杂度与逼近误差</li>
+        <li class="contentli">网格顶点均匀分布与逼近误差</li>
+        <li class="contentli">保持特征边与网格面片质量</li>
+
+        <img class="featurette-image img-responsive center-block" src="/images/remesh_egea.jpg" alt="remesh">
         <p>Remesh的方法，大致可以分为局部和全局的：</p>
         <li class="contentli">局部方法：经过一系列的局部拓扑和几何操作的迭代，来Remesh整个网格。它的优点是计算速度比较快，容易实现；缺点是缺乏整体质量的把控，是一种启发式方法。</li>
         <li class="contentli">全局方法：一般指把网格分割成一片一片的，然后分片参数化子网格。参数化的过程中，保持住边界的连续性。也有一些全局参数化的方法，不要网格分割这一步。最后再把参数域的网格拓扑结构反映射回原网格。它的优点是网格的全局质量容易把控，缺点也显而易见，强烈的依赖参数化方法，稳定高质量的实现会比较困难。</li>
