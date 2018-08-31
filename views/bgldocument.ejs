@@ -35,6 +35,7 @@
                     <li class="sideli"><a href="#igridpointcloud">IGridPointCloud</a></li>
                     <li class="sideli"><a href="#pointcloud">PointCloud</a></li>
                     <li class="sideli"><a href="#pcparser">导入导出</a></li>
+                    <li class="sideli"><a href="#pctool">点云工具箱</a></li>
                 </ul>
                 <h4><a href="#itrimesh">网格</a></h4>
                 <ul class="sideul">
@@ -609,6 +610,62 @@ void Parser::ExportGridPointCloud(std::string fileName, const IGridPointCloud* p
                 <p>fileName: 格式为path/xxx.gbg, path/xxx.gtg, path可以是绝对路径，也可以相对路径</p>
                 <hr class="featurette-divider">
 
+                <a name="pctool"><h5>点云工具箱</h5></a>
+                <p>BglToolPointCloud.h</p>
+<pre class="prettyprint">
+ErrorCode CalculatePointListDensity(const IPointList* pointList, Int neighborCount, Real& density);
+</pre>
+                <p>计算点云密度：计算每个点的neighborCount邻域点的平均距离。</p>
+                <p>neighborCount > 0，值越大，density也越大</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode UniformSamplePointList(const IPointList* pointList, Int sampleCount, std::vector< Int >& sampleIndex, Int seedId = 0, Int quality = 0);
+</pre>
+                <p>均匀采样：采样结果分布均匀。</p>
+                <p>pointList: 点列数据</p>
+                <p>sampleCount: 采样的目标点数，点数应小于点云点的个数</p>
+                <p>sampleIndex: 返回采样点的索引结果</p>
+                <p>seedId: 采样种子点，不同的种子点得到的采样结果不一样</p>
+                <p>quality: 采样质量，0-低质量，速度快；1-高质量，速度慢</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode GeometrySamplePointList(const IPointList* pointList, Int sampleCount, std::vector< Int >& sampleIndex, Real uniformWeight = 0.1, Int neighborCount = 9, Int seedId = 0, Int quality = 1, Real* planeRatio = NULL);
+</pre>
+                <p>几何采样：采样结果在几何特征明显的地方数量会多一些。</p>
+                <p>pointList: 点列数据</p>
+                <p>sampleCount: 采样的目标点数，点数应小于点云点的个数</p>
+                <p>sampleIndex: 返回采样点的索引结果</p>
+                <p>uniformWeight: 采样结果的均匀性，范围[0, 1]. 参数越大，均匀性越好.</p>
+                <p>neighborCount: 点云邻域个数，主要用于计算几何特征. 默认参数为9，如果点云均匀性不好，可以提高此参数以获得更好的稳定性</p>
+                <p>seedId: 采样种子点，不同的种子点得到的采样结果不一样</p>
+                <p>quality: 采样质量，0-低质量，速度快；1-高质量，速度慢</p>
+                <p>planeRatio：点云平面点个数与总点数的比值</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode GridSamplePointList(const IPointList* pointList, Real interval, std::vector< Int >& sampleIndex);
+</pre>
+                <p>格栅采样：根据点间距把空间分为一个一个的格子，每个格子采样一个点，并且使得采样的点云尽量均匀。</p>
+                <p>pointList: 点列数据</p>
+                <p>interval: 点间距</p>
+                <p>sampleIndex: 返回采样点的索引结果</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode EstimateCameraDirection(const IPointCloud* depthData, const std::vector< Int >* sampleList, Vector3& cameraDir);
+</pre>
+                <p>估计深度相机方向。</p>
+                <p>depthData: 深度点云数据，需要带法线</p>
+                <p>sampleList: 采样的点云索引，如果输入值是NULL，则对所有点进行整体估计</p>
+                <p>cameraDir: 深度相机方向，与点云法线相反</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
 
                 <a name="itrimesh"><h5>ITriMesh</h5></a>
                 <p>通用的三角网格数据表示接口类. 它包含了最基础，最常用的三角网格操作接口。</p>

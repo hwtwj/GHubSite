@@ -30,7 +30,7 @@
                 <h3><a href="#gpp">Geometry++文档</a></h3>
                 <h4><a href="/geometryplusplus">返回</a></h4>
                 <h4><a href="#overview">使用简介</a></h4>
-                <h4><a href="/bgl/document" target="_blank">BGL</a></h4>
+                <h4><a href="#bgl">BGL</a></h4>
                 <h4><a href="#pcsampling">点云</a></h4>
                 <ul class="sideul">
                     <li class="sideli"><a href="#pcsampling">采样</a></li>
@@ -94,6 +94,9 @@
                 <p>Geometry++是一个关于三维数据(点云，网格)处理的几何库. 它包含了三维数据处理最基础的算法, 可以作为三维数据处理软件的几何引擎来使用.</p>
                 <hr class="featurette-divider">
 
+                <a name="bgl"><h5>Basic Geometry Library</h5></a>
+                <p><a href="/bgl/document" target="_blank">BGL (Basic Geometry Library)</a> 是一个关于三维数据(点云，网格)处理的基础几何库。它包含了三维数据处理最基础的数据结构。Geometry++的所有算法，都是基于BGL的数据结构开发的。</p>
+                <hr class="featurette-divider">
 
                 <a name="usagescenario"><h5>使用场景</h5></a>
                 <p>1. 用户已经拥有了一套三维数据处理系统, 想调用Geometry++里面的一些功能. 这种情况只需要实现IPointCloud和ITriMesh两个接口类, 便可以调用所有的算法. 具体的用法可以参考<a href="/bgl/document#ipointcloud">IPointCloud</a>, <a href="/bgl/document#itrimesh">ITriMesh</a>和相应API的介绍.</p>
