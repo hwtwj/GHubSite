@@ -298,6 +298,7 @@
                 <li class="contentli"><a name="registration_icp">对齐-ICP(支持有序点云)</a>：ICP注册用于有初始对齐的点云，它能提升对齐精度. 目前支持无法线ICP. 建议使用带法线ICP：精度更高，速度更快。注意，有序点云ICP需要先计算法线。<a class="code" href="http://threepark.net/file/grid_icp_test.rar" target="_blank">有序点云ICP测试数据下载</a></li>
                 <li class="contentli"><a name="registration_nonrigid_icp">对齐-非刚体</a>：背景：ICP注册主要用于已经粗注册好的点云，提升注册精度。传统ICP注册是刚体变换。在数据有误差或者微小形变的时候，刚体变换无法完全对齐点云。为了提升注册精度，引入非刚性变换。参数意义为非刚体变换的数量，每个刚体变换作用于点云的一个子片区。数量越多，非刚性越强。数量为1时，即为刚体变换。<a class="code" href="http://threepark.net/file/bust.rar" target="_blank">有形变点云数据下载</a></li>
                 <li class="contentli">对齐-融合：两个点云融合成一个红色点云，去除点云重叠部分的点。这个融合不改变点云坐标。</li>
+                <li class="contentli">对齐-重叠检测：计算两个点云的重合度，参数为几何采样的均匀度，值越大，采样越均匀。</li>
                 
                 <hr class="line-divider">
                 <a name="registration_global_reg"><h4>全局注册融合</h4></a>

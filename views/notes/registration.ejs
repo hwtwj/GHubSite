@@ -52,7 +52,7 @@
         <p>总之，不同特点的数据有不同的注册流程，用户可以多试试不同的流程，找到最适合自己数据的注册方式。</p>
         <hr class="line-divider">
 
-        <h4><a href="/magic3d#registration_align_free" target="_blank">无标记点注册</a>需要多少重合度</h4>
+        <h4><a href="/magic3d#registration_align_free" target="_blank">无标记点注册</a>需要多少<a name="overlap">重合度</a></h4>
         <p>无标记点注册需要多少重合度？这是很多用户在做无标记注册时经常问的问题。比如用户在扫描物体的时候，到底帧与帧之间重合多少比较合适。一般来讲，重叠区域的特征越明显，越独特，重叠区域的重合度可以越低。</p>
         <p>两个三维点云，理论上只需要三个点对（无退化情况）就可以确定一个刚体变换。用户可以穷举出所有可能的刚体变换，然后选择一个“最好的”变换。由于穷举的个数太多，为了提高效率，一般会采样一些刚体变换来选择最优的解。一般的无标记注册方法都采用了这个过程，这里面有些问题需要考虑：</p>
         <li class="contentli">“最好的”定义：一般是计算两个点云的重叠区域的大小，重叠区域可以根据点云特征来加权计算。需要注意的是，有时候用户期望的变换，并不是“最好的”。</li>
@@ -64,11 +64,27 @@
         <p>有标记注册，很大程度上是影响“最好的”刚体变换的定义，并且减小了刚体变换空间的采样范围。</p>
         <hr class="line-divider">
 
-        <h4>提升无标记点注册的成功率</h4>
+        <h4><a name="enhancealignfree">提升无标记点注册的成功率</a></h4>
         <p><a href="/magic3d#registration_align_free" target="_blank">无标记点注册</a>，一般用于点云的粗对齐。其成功率依赖于点云的重叠区域大小，重叠部分特征的显著性，以及模型本身的对称性等。下面从几个方面聊聊如何提高对齐的成功率：</p>
         <li class="contentli">重叠区域的特征尽可能的明显</li>
         <li class="contentli">注册时采用两两注册的方式。这样可以减少两帧点云非重叠部分的区域，也就减小了歧义性。比如对称模型的扫描注册，如果采用一边注册一边融合的方法，对称部分的点云在无标记注册时，有可能对齐到对称部分。而两两注册可以减少这类歧义性的发生</li>
         <li class="contentli">如果物体本身特征不明显，可以增大重叠区域的面积来提供对齐的稳定性</li>
+        <hr class="line-divider">
+
+        <h4><a name="icp">ICP注册</a></h4>
+        <p><a href="/magic3d#registration_icp" target="_blank">ICP注册</a>(Iterative Closest Point最近点迭代)，一般用于点云的精细注册，点云需要初始对齐好。经典的ICP的算法框架：</p>
+        <p>输入初始对齐的点云Source和Target，输出Target的刚体变换Transform，使得能量 || Source - Transform(Target) || 最小。</p>
+        <li class="contentli">a) 采样：一般对Target进行采样，包括均匀采样和各种属性相关的采样。</li>
+        <li class="contentli">b) 找对应点：给采样点找最近距离的对应点。这个距离可以是欧式距离，或者是属性相关的其它距离。采样点也可以没有对应点，一般应用点云属性进行过滤。</li>
+        <li class="contentli">c) 优化目标能量：常见的能量有纯几何能量，包括点到点，点到平面，平面到平面的能量；也有加入了一些属性相关的能量，常见的属性如点云对应的彩色图像。</li>
+        <li class="contentli">d) 迭代步骤b和c，直到能量收敛到最小值，或者达到迭代次数上限。</li>
+        <p>ICP注册从90年代初就有了，到目前有接近30年的历史了。ICP发展到现在，已经算是一种精细注册的思想了。它有很多变种，包括每个步骤策略的选择，参数如何自适应调整等。</p>
+        <hr class="line-divider">
+
+        <h4><a name="globalreg">全局注册</a></h4>
+        <p><a href="/magic3d#registration_global" target="_blank">全局注册</a>属于点云的精细注册，点云需要初始对齐好。它和ICP注册的区别在于，它是多个点云同时注册，点云个数一般大于2。</p>
+        <p>点云个数比较多的时候，注册误差会累积得很厉害。如下图所示，第一列截取了三对ICP注册后的点云，局部来看注册得很好。然后逐对点云两两ICP注册，如中图所示，点云注册的效果并不好，累计误差很严重。第三列是点云经过全局注册后效果，注册误差被分散到每一帧中去了，从而减少整体的注册误差。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/kinect_global_registrate.jpg" alt="kinect_global_registrate">
         <hr class="line-divider">
 
         <h4>注册成功的判定</h4>
@@ -85,7 +101,13 @@
 
         <h4>如何去掉点云的重影</h4>
         <p>多帧点云注册去除重叠后，得到一个整体点云后，有时候会出现局部点云有重影的情况。常见的原因是数据本身有误差，有微小形变，刚体变换不可能把多帧点云完全对齐。根据点云处理的工作流程，下面介绍几种去除重影的方法：</p>
-        <li class="contentli"><a href="/magic3d#registration_nonrigid_icp" target="_blank">非刚体ICP注册</a>：既然数据有误差，刚体变换无法完全对齐点云，可以引入非刚体注册。对于两帧数据的注册，可以应用非刚体ICP。如图所示，a)是输入的两个点云；b)是无标记对齐的结果；c)是ICP精细对齐的结果，可以看到点云有些部位的对齐还是有误差的；d)是非刚体的ICP对齐的结果，对齐误差明显降低了；e)是c的注册结果去除重叠，再更新法线的结果。可以看到有些局部法线出现了毛刺的效果，这是对齐误差的体现；f)是d的注册结果去除重叠，再更新法线的结果。可以看出对齐误差明显小了很多。</li>
+        <li class="contentli"><a href="/magic3d#registration_nonrigid_icp" target="_blank">非刚体ICP注册</a>：既然数据有误差，刚体变换无法完全对齐点云，可以引入非刚体注册。对于两帧数据的注册，可以应用非刚体ICP。如图所示:</li>
+        <li class="contentli">(a)是输入的两个点云</li>
+        <li class="contentli">(b)是无标记对齐的结果</li>
+        <li class="contentli">(c)是ICP精细对齐的结果，可以看到点云有些部位的对齐还是有误差的</li>
+        <li class="contentli">(d)是非刚体的ICP对齐的结果，对齐误差明显降低了</li>
+        <li class="contentli">(e)是(c)的注册结果去除重叠，再更新法线的结果。可以看到有些局部法线出现了毛刺的效果，这是对齐误差的体现</li>
+        <li class="contentli">(f)是(d)的注册结果去除重叠，再更新法线的结果。可以看出对齐误差明显小了很多。</li>
         <img class="featurette-image img-responsive center-block" src="/images/nonrigid_compare.png" alt="nonrigid_compare">
         <li class="contentli"><a href="/magic3d#registration_nonrigid_global" target="_blank">非刚体全局注册</a>：对于多帧数据的注册，可以应用非刚体全局注册。如图所示，左图全局注册的结果，右图是非刚体全局注册的结果。明显的，非刚体注册大幅的提升了注册精度。</li>
         <img class="featurette-image img-responsive center-block" src="/images/global_nonrigid_car.png" alt="global_nonrigid_registrate">
