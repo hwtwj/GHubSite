@@ -258,6 +258,11 @@ router.get("/notes/numericaloptimization", function (req, res) {
     res.render('notes/numericaloptimization.ejs');
 });
 
+router.get("/notes/decimation", function (req, res) {
+    "use strict";
+    res.render('notes/decimation.ejs');
+});
+
 router.get("/scandata", function (req, res) {
     "use strict";
     res.render('scandata.ejs');
