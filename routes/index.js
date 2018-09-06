@@ -263,6 +263,16 @@ router.get("/notes/decimation", function (req, res) {
     res.render('notes/decimation.ejs');
 });
 
+router.get("/notes/fillmeshhole", function (req, res) {
+    "use strict";
+    res.render('notes/fillmeshhole.ejs');
+});
+
+router.get("/notes/deformation", function (req, res) {
+    "use strict";
+    res.render('notes/deformation.ejs');
+});
+
 router.get("/scandata", function (req, res) {
     "use strict";
     res.render('scandata.ejs');
