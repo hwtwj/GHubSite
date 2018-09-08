@@ -41,22 +41,39 @@
         <hr class="line-divider">
 
         <h4>顶点简化</h4>
-        <p></p>
-        <li class="contentli"></li>
-        <p></p>
-        <p></p>
+        <p>基于顶点的简化分为两步：</p>
+        <li class="contentli">移除顶点和顶点的邻接三角片，产生一个洞</li>
+        <li class="contentli">把洞补上</li>
+        <img class="featurette-image img-responsive center-block" src="/images/VertexRemoval.png" alt="VertexRemoval">
         <hr class="line-divider">
 
         <h4>边简化</h4>
-        <p></p>
+        <p>基于边的简化分为两步：</p>
+        <li class="contentli">移除边以及边相邻的三角片</li>
+        <li class="contentli">把边的两个端点合并为一个顶点</li>
+        <img class="featurette-image img-responsive center-block" src="/images/EdgeCollapse.png" alt="EdgeCollapse">
+        <hr class="line-divider">
+
+        <h4>简化误差度量</h4>
+        <p>基于局部操作的误差度量：每次误差计算，都是与上次迭代的局部面片做比较。它的特点：</p>
+        <li class="contentli">操作简单，计算速度快</li>
+        <li class="contentli">局部迭代有累计误差</li>
+        <p>基于全局操作的误差度量：每次误差计算，都是与原始网格做比较。它的特点：</p>
+        <li class="contentli">计算速度相对较慢</li>
+        <li class="contentli">对整体误差的控制优于局部操作</li>
         <hr class="line-divider">
 
         <h4>带纹理坐标的网格简化</h4>
-        <p></p>
-        <hr class="line-divider">
+        <p>单纯的网格简化和带纹理坐标的网格简化是有区别的，前者的简化的对象是下面左图所示的网格，后者的简化对象是UV域的网格（下面右图所示）。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/texture_uvunfold_origin.png" alt="texture_uvunfold_origin">
+        <p>带纹理坐标的网格简化，不仅要尽量保持住网格的几何特征，而且还要保持住UV域网格的边界几何。特别是后者，如果UV网格的边界几何变化比较大，会使得网格纹理贴图在UV边界处的颜色割缝比较明显。在UV域边界几何比较复杂的时候，UV边界处的顶点数目不可能简化太多。当网格简化数目太多的时候，绝大部分的简化点发生在UV网格的内部顶点，这也会导致原始网格的几何简化的比较厉害，并且在UV边界处的几何扭曲会比较大。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/texture_uvunfold_result.png" alt="texture_uvunfold_result">
+        <p>提升带纹理坐标的网格简化的质量，可以考虑减小UV网格边界处的几何复杂度。比如<a href="/magic3d#unfold_smoothuvboundary" target="_blank">光滑UV网格的边界</a>（如下左图所示），或者减少边界的长度（如下右图所示）。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/texture_uvunfold_enhancement.png" alt="texture_uvunfold_enhancement">
+<!--         <hr class="line-divider">
 
         <h4>带结构信息的网格简化</h4>
-        <p></p>
+        <p></p> -->
  
     </div>
 
