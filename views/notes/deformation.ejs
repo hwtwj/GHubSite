@@ -32,20 +32,44 @@
 
         <h4>三维变形</h4>
         <p>三维变形广泛应用于计算机图形相关的各种应用里。常见的变形类型有：</p>
-        <li class="contentli">类型1</li>
-        <li class="contentli">其它......</li>
-        <hr class="line-divider">
-
-        <h4>三维点云变形</h4>
-        <p>描述</p>
-        <hr class="line-divider">
-
-        <h4>三维网格变形</h4>
-        <p>描述</p>
+        <li class="contentli">基于控制网格的变形</li>
+        <li class="contentli">Laplacian网格编辑</li>
+        <li class="contentli">空间分片刚性变形</li>
         <hr class="line-divider">
 
         <h4>基于控制网格的变形</h4>
-        <p>Cage Deformation</p>
+        <p>这类变形的基本思想，是基于这么一个表示：模型 = 控制网格 * 基于控制网格的坐标</p>
+        <p>变形的基本方法有两步：首先构造控制网格，然后计算出模型基于控制网格的坐标。在变形的时候，用户通过操作控制网格，来达到模型的相应变形。</p>
+        <p>控制网格是模型的一个简单近似，它比较容易编辑操作。常见的控制网格有三角形网格，四边形网格。</p>
+        <p>基于控制网格的坐标，一般具有各自的特点，常见的有这么几类：</p>
+        <li class="contentli">Mean Value Coordinates：全局空间的一个仿射变换，计算速度快。</li>
+        <img class="featurette-image img-responsive center-block" src="/images/mvc.png" alt="mvc">
+        <li class="contentli">Harmonic Coordinates：基于局部空间的一个调和变换。如下图所示，左图是原始模型，中间是MVC的变形结果，右图是HC的变形结果。明显可以看出，在控制网格局部凹陷比较严重的区域，基于局部空间的变形结果优于基于全局空间的变形。</li>
+        <img class="featurette-image img-responsive center-block" src="/images/hc.png" alt="hc">
+        <li class="contentli">Green Coordinates：基于局部空间的一个近似刚性变换。如下图所示，左图是原始模型，中间是GC的变形结果，右图是MVC的变形结果。明显可以看出，GC的结果在保持模型的刚性上具有一定的优势。</li>
+        <img class="featurette-image img-responsive center-block" src="/images/gc.png" alt="gc">
+        <p></p>
+        <hr class="line-divider">
+
+        <h4>Laplacian网格编辑</h4>
+        <p>网格微分坐标：如下图所示，它刻画网格的局部细节，也就是信号处理里的高频信号。网格在变形的过程中，尽量保持住局部的微分坐标不变，就能保持住网格的局部细节。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/differentialcoordinates.png" alt="differentialcoordinates">
+        <p>微分坐标可以应用于各种网格编辑操作，如细节转移：</p>
+        <img class="featurette-image img-responsive center-block" src="/images/detailtransfer.png" alt="detailtransfer">
+        <p>细节混合：</p>
+        <img class="featurette-image img-responsive center-block" src="/images/detailmixing.png" alt="detailmixing">
+        <p>网格移植：</p>
+        <img class="featurette-image img-responsive center-block" src="/images/meshtransplant.png" alt="meshtransplant">
+        <hr class="line-divider">
+
+        <h4>空间分片刚性变形</h4>
+        <p>基于控制点的变形，原理是分片刚性变形。在点云中采样N个控制点，每个控制点附着一个刚性变换。控制点越多，变形的非刚性越强。控制点数为1的时候，即为刚性变形。</p>
+        <img class="featurette-image img-responsive center-block" src="/images/deformpointlist.png" alt="deformpointlist">
+        <li class="contentli">在<a href="/magic3d#deform_pointcloud" target="_blank">三维变形应用</a>里，导入需要变形的点云。注：也可以导入网格，因为网格也可以看作是一个点云（抛掉网格连接关系）</li>
+        <li class="contentli">初始化控制点：设置控制点数目，默认值为300. 点数越多，变形越精确，但是速度也会越慢。如图a所示。</li>
+        <li class="contentli">控制点选择：控制点分为两种类型，一种是固定的(红色)，一种是可以动的(蓝色). 把需要变形区域的控制点选择为蓝色. 选择方式是通过鼠标右键框选添加或者去掉控制点。如图b所示</li>
+        <li class="contentli">变形操作：通过移动蓝色控制点来变形。右键拖动控点到目标位置，控制点变为绿色，目标位置为灰色。如图c所示。</li>
+        <li class="contentli">最后变形，如图d所示</li>
         <hr class="line-divider">
 
     </div>
