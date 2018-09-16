@@ -402,8 +402,8 @@
                 <img class="featurette-image img-responsive center-block" src="/images/single_patch_unfold.jpg" alt="single_patch_unfold">
                 
                 <hr class="line-divider">
-                <a name="unfold_cycle"><h4>展开到圆盘：这个展开功能用于展开单连通圆盘拓扑结构网格，边界映射到圆盘上。与“单片展开”不同的是，它需要严格的单连通圆盘结构。如下图所示，左图是自由边界的展开结果，右图是固定边界的展开结果，可以看到自由边界的展开结果扭曲程度要小很多。固定边界的展开一般应用于特定需求。</h4></a>
-                <img class="featurette-image img-responsive center-block" src="/images/free_fix_boundary.jpg" alt="free_fix_boundary">
+                <a name="unfold_cycle"><h4>展开到圆盘：这个展开功能用于展开单连通圆盘拓扑结构网格，边界映射到圆盘上。与“单片展开”不同的是，它需要严格的单连通圆盘结构。参数为虚拟边界的扩展个数。虚拟边界可以在一定程度上达到自由边界的效果。如下图所示，左图为虚拟边界为0的结果，右图为虚拟边界为100的结果。</h4></a>
+                <img class="featurette-image img-responsive center-block" src="/images/virtual_boundary.png" alt="virtual_boundary">
                 
                 <hr class="line-divider">
                 <a name="unfold_atlas"><h4>Atlas：网格全自动UV展开，自动生成割线展开UV，参数分别为初始的分割数目；是否自动产生割线；patch展开后如果有重叠，是否把patch劈成两半再展开。如果网格是高亏格或者展开扭曲大，网格会自动进行再分割展开。此功能一般用于全自动的纹理坐标计算。如图所示，图2的参数为(1, 0, 0)，图3的参数为(5, 0, 1)。SmoothUV-是否光滑展开后的UV坐标边界。 <a class="code" href="http://threepark.net/file/face_female.rar" target="_blank">网格数据下载</a></h4></a>
