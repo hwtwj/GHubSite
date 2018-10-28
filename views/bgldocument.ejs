@@ -35,6 +35,8 @@
                     <li class="sideli"><a href="#igridpointcloud">IGridPointCloud</a></li>
                     <li class="sideli"><a href="#pointcloud">PointCloud</a></li>
                     <li class="sideli"><a href="#pcparser">导入导出</a></li>
+                    <li class="sideli"><a href="#pcnormal">法向量</a></li>
+                    <li class="sideli"><a href="#pcsampling">采样</a></li>
                     <li class="sideli"><a href="#pctool">点云工具箱</a></li>
                 </ul>
                 <h4><a href="#itrimesh">网格</a></h4>
@@ -63,6 +65,7 @@
                 <!-- <a name="overview"><h5>简介</h5></a> -->
                 <p>BGL (Basic Geometry Library) 是一个关于三维数据(点云，网格)处理的基础几何库。它包含了三维数据处理最基础的数据结构。用户可以很方便的使用它来开发各种几何相关的算法。</p>
                 <p>它可以免费的，无限制的使用，包括科研，商业产品等。</p>
+                <p>当前SDK更新时间：2018.10.28</p>
                 <hr class="featurette-divider">
 
                 <a name="usageintroduction"><h5>使用简介</h5></a>
@@ -610,6 +613,156 @@ void Parser::ExportGridPointCloud(std::string fileName, const IGridPointCloud* p
                 <p>fileName: 格式为path/xxx.gbg, path/xxx.gtg, path可以是绝对路径，也可以相对路径</p>
                 <hr class="featurette-divider">
 
+                <a name="pcnormal"><h5>点云法向量</h5></a>
+                <p>点云法线的介绍可以参考<a class="code" href="/notes/pointcloudnormal" target="_blank">点云法线</a>，特别是如何给点云法线完美的定向。</p>
+<pre class="prettyprint">
+ErrorCode PointCloudNormal::Compute(IPointCloud* pointCloud, PointCloudInfo* pointCloudInfo, bool isDepthImage = false, Int neighborCount = 9, const Real* sampleInterval = NULL);
+</pre>
+                <p>pointCloud：点云数据</p>
+                <p>pointCloudInfo：点云缓存信息，第二次计算的时候可以加速计算。如不需要，可设置为NULL</p>
+                <p>isDepthImage: 如果点云是深度图数据(一般扫描仪扫描一帧的点云数据), 所有法线的z坐标会大于0(面向相机), 并且计算速度更加快</p>
+                <p>neighborCount: 计算法线时点邻域个数. 默认值是9，如果点云均匀性不好，可以适当调大参数来保证计算结果的稳定. 如果是深度点云，可以设置为5.</p>
+                <p>sampleInterval：点云如果严重非均匀，比如线激光扫描的点云，可以设置sampleInterval先对点云进行采样</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode PointCloudNormal::Smooth(IPointCloud* pointCloud, PointCloudInfo* pointCloudInfo, Real smoothWeight = 0.5, Int iterationCount = 1, Int neighborCount = 9, const std::vector<Int>* fixedIndex = NULL);
+</pre>
+                <p>pointCloud：点云数据</p>
+                <p>pointCloudInfo：点云缓存信息，第二次计算的时候可以加速计算。如不需要，可设置为NULL</p>
+                <p>smoothWeight: 权重越大，Smooth程度越大. 参数范围是(0, infinity), 默认为1.0</p>
+                <p>iterationCount: 光滑迭代次数</p>
+                <p>neighborCount: 光滑法线时点邻域个数. 默认值是9，如果点云均匀性不好，可以适当调大参数来保证计算结果的稳定</p>
+                <p>fixedIndex: 法线需要固定的点索引。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode PointCloudNormal::Update(IPointCloud* pointCloud, PointCloudInfo* pointCloudInfo, Int neighborCount);
+ErrorCode PointCloudNormal::UpdateByRadius(IPointCloud* pointCloud, Real neighborRadius);
+</pre>
+                <p>更新点云法线，不改变法线定向</p>
+                <p>pointCloud：点云需要有法线信息。</p>
+                <p>pointCloudInfo：点云缓存信息，第二次计算的时候可以加速计算。如不需要，可设置为NULL</p>
+                <p>neighborCount: 计算法线时点邻域个数. 默认值是9，如果点云均匀性不好，可以适当调大参数来保证计算结果的稳定. 如果是深度点云，可以设置为5.</p>
+                <p>neighborRadius：计算法线时点邻域半径</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode PointCloudNormal::Orient(IPointCloud* pointCloud, PointCloudInfo* pointCloudInfo, Int neighborCount, const std::vector< Int >* fixedIndex);
+</pre>
+                <p>重新定向点云法向量</p>
+                <p>pointCloud：点云需要有法线信息</p>
+                <p>pointCloudInfo：点云缓存信息，第二次计算的时候可以加速计算。如不需要，可设置为NULL</p>
+                <p>neighborCount: 点云邻域个数。法线定向通过邻域往外传播扩散，一般可以设置为9</p>
+                <p>fixedIndex: 法线需要固定的点索引。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode PointCloudNormal::CalculateGridNormal(IGridPointCloud* pointCloud);
+</pre>
+                <p>计算有序点云法线</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode PointCloudNormal::SmoothGridNormal(IGridPointCloud* pointCloud, Int neighborWidth, Int iterationCount);
+</pre>
+                <p>光滑有序点云法线</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>neighborWidth：点云光滑邻域大小</p>
+                <p>iterationCount：光滑迭代次数</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+
+                <a name="pcsampling"><h5>点云采样</h5></a>
+<pre class="prettyprint">
+ErrorCode SamplePointCloud::UniformSample(const IPointCloud* pointCloud, Int sampleCount, std::vector< Int>& sampleIndex, Int seedId = 0, SampleQuality quality = SAMPLE_QUALITY_HIGH);
+</pre>
+                <p>均匀采样：采样结果分布均匀</p>
+                <p>pointCloud: 点云数据</p>
+                <p>sampleCount: 采样的目标点数，点数应小于点云点的个数</p>
+                <p>sampleIndex: 返回采样点的索引结果</p>
+                <p>seedId: 采样种子点，不同的种子点得到的采样结果不一样</p>
+                <p>quality: 采样质量，目前有SAMPLE_QUALITY_LOW和SAMPLE_QUALITY_HIGH两种类型</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode SamplePointCloud::GeometrySample(const IPointCloud* pointCloud, Int sampleCount, std::vector< Int>& sampleIndex, Real uniformWeight = 0.1, Int neighborCount = 9, Int seedId = 0, SampleQuality quality = SAMPLE_QUALITY_HIGH, Real* planeRatio = NULL);
+</pre>
+                <p>几何采样：采样结果在几何特征明显的地方数量会多一些</p>
+                <p>pointCloud: 点云数据</p>
+                <p>sampleCount: 采样的目标点数，点数应小于点云点的个数</p>
+                <p>sampleIndex: 返回采样点的索引结果</p>
+                <p>uniformWeight: 采样结果的均匀性，范围[0, 1]. 参数越大，均匀性越好.</p>
+                <p>neighborCount: 点云邻域个数，主要用于计算几何特征. 默认参数为9，如果点云均匀性不好，可以提高此参数以获得更好的稳定性</p>
+                <p>seedId: 采样种子点，不同的种子点得到的采样结果不一样</p>
+                <p>quality: 采样质量，目前有SAMPLE_QUALITY_LOW和SAMPLE_QUALITY_HIGH两种类型</p>
+                <p>planeRatio: 返回值，*planeRatio = 平面点数 / 总点数</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode SamplePointCloud::GridSample(const IPointCloud* pointCloud, Real interval, std::vector< Int >& sampleIndex);
+</pre>
+                <p>格栅采样：根据点间距把空间分为一个一个的格子，每个格子采样一个点，并且使得采样的点云尽量均匀。</p>
+                <p>pointCloud: 点云数据</p>
+                <p>interval: 点间距</p>
+                <p>sampleIndex: 返回采样点的索引结果</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode SamplePointCloud::RandSample(Int pointCount, Int sampleCount, const std::vector< Real >* pointWeights, std::vector< Int >& sampleIndex);
+</pre>
+                <p>点云随机采样</p>
+                <p>pointCount: 点云个数</p>
+                <p>sampleCount: 采样的目标点数，点数应小于点云点的个数</p>
+                <p>pointWeights: 点云采样权重，权重值越大的点，采到的几率越大</p>
+                <p>sampleIndex: 返回采样点的索引结果</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode SampleGrid::UniformSample(const IGridPointCloud* pointCloud, Int sampleCount, std::vector< std::pair< Int, Int > >* sampleIndex);
+</pre>
+                <p>有序点云均匀采样</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>sampleCount：采样的目标点数，点数应小于点云点的个数</p>
+                <p>sampleIndex：返回采样点的索引结果</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode SampleGrid::GeometrySample(const IGridPointCloud* pointCloud, Int sampleCount, Real uniformWeight, std::vector< std::pair< Int, Int > >* sampleIndex, Real* planeRatio);
+</pre>
+                <p>有序点云几何采样，采样结果在几何特征明显的地方数量会多一些</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>sampleCount：采样的目标点数，点数应小于点云点的个数</p>
+                <p>uniformWeight：采样结果的均匀性，范围[0, 1]. 参数越大，均匀性越好.</p>
+                <p>sampleIndex：返回采样点的索引结果</p>
+                <p>planeRatio: 返回值，*planeRatio = 平面点数 / 总点数</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+                <pre class="prettyprint">
+ErrorCode SampleGrid::Simplify(const IGridPointCloud* pointCloud, Real interval, GridSimplifyType type, IGridPointCloud* simplifiedCloud);
+</pre>
+                <p>有序点云简化：根据点间距做点云简化。</p>
+                <p>pointCloud：输入的有序点云</p>
+                <p>interval：简化目标点间距。注意，此间距是一个参考值，简化后的点云密度在此值附近，不一定严格相等。</p>
+                <p>type：GRID_SIMPLIFY_SAMPLE-从原始点云采样；GRID_SIMPLIFY_MERGE-简化时候会合并点云</p>
+                <p>simplifiedCloud：简化后的点云。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+
                 <a name="pctool"><h5>点云工具箱</h5></a>
                 <p>BglToolPointCloud.h</p>
 <pre class="prettyprint">
@@ -620,42 +773,6 @@ ErrorCode CalculatePointListDensity(const IPointList* pointList, Int neighborCou
                 <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
                 <hr class="line-divider">
 
-<pre class="prettyprint">
-ErrorCode UniformSamplePointList(const IPointList* pointList, Int sampleCount, std::vector< Int >& sampleIndex, Int seedId = 0, Int quality = 0);
-</pre>
-                <p>均匀采样：采样结果分布均匀。</p>
-                <p>pointList: 点列数据</p>
-                <p>sampleCount: 采样的目标点数，点数应小于点云点的个数</p>
-                <p>sampleIndex: 返回采样点的索引结果</p>
-                <p>seedId: 采样种子点，不同的种子点得到的采样结果不一样</p>
-                <p>quality: 采样质量，0-低质量，速度快；1-高质量，速度慢</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="line-divider">
-
-<pre class="prettyprint">
-ErrorCode GeometrySamplePointList(const IPointList* pointList, Int sampleCount, std::vector< Int >& sampleIndex, Real uniformWeight = 0.1, Int neighborCount = 9, Int seedId = 0, Int quality = 1, Real* planeRatio = NULL);
-</pre>
-                <p>几何采样：采样结果在几何特征明显的地方数量会多一些。</p>
-                <p>pointList: 点列数据</p>
-                <p>sampleCount: 采样的目标点数，点数应小于点云点的个数</p>
-                <p>sampleIndex: 返回采样点的索引结果</p>
-                <p>uniformWeight: 采样结果的均匀性，范围[0, 1]. 参数越大，均匀性越好.</p>
-                <p>neighborCount: 点云邻域个数，主要用于计算几何特征. 默认参数为9，如果点云均匀性不好，可以提高此参数以获得更好的稳定性</p>
-                <p>seedId: 采样种子点，不同的种子点得到的采样结果不一样</p>
-                <p>quality: 采样质量，0-低质量，速度快；1-高质量，速度慢</p>
-                <p>planeRatio：点云平面点个数与总点数的比值</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="line-divider">
-
-<pre class="prettyprint">
-ErrorCode GridSamplePointList(const IPointList* pointList, Real interval, std::vector< Int >& sampleIndex);
-</pre>
-                <p>格栅采样：根据点间距把空间分为一个一个的格子，每个格子采样一个点，并且使得采样的点云尽量均匀。</p>
-                <p>pointList: 点列数据</p>
-                <p>interval: 点间距</p>
-                <p>sampleIndex: 返回采样点的索引结果</p>
-                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
-                <hr class="line-divider">
 
 <pre class="prettyprint">
 ErrorCode EstimateCameraDirection(const IPointCloud* depthData, const std::vector< Int >* sampleList, Vector3& cameraDir);
@@ -1491,7 +1608,7 @@ void Parser::ExportTriMesh(std::string fileName, const ITriMesh* triMesh);
 
 
                 <a name="download"><h5>下载</h5></a>
-                <p><a href="http://threepark.net/bgl/bgl-vs2013-64bit.zip" target="_blank">VS2013_64bit</a> | <a href="http://threepark.net/bgl/bgl-vs2015-64bit.zip" target="_blank">VS2015_64bit</a> | <a href="http://threepark.net/bgl/bgl-vs2017-64bit.zip" target="_blank">VS2017_64bit</a><p>
+                <p><a href="http://threepark.net/bgl/bgl-vs2013-64bit.zip" target="_blank">VS2013_64bit</a> | <a href="http://threepark.net/bgl/bgl-vs2015-64bit.zip" target="_blank">VS2015_64bit</a> | <a href="http://threepark.net/bgl/bgl-vs2017-64bit.zip" target="_blank">VS2017_64bit</a> 更新时间 2018.10.28<p>
                 <hr class="featurette-divider">
 
 
