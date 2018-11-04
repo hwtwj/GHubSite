@@ -330,7 +330,6 @@
                 <li class="contentli">测地线-曲率: 网格上近似测地线，线过顶点，并且会吸附到极小主曲率方向。需要先计算主曲率。</li>
                 <li class="contentli">测地线-光滑: 目前只支持PointOnVertex, PointOnEdge类型Curve光滑，比如顶点选择模式下的测地线和截面线。注意是顶点选择模式，面点选择模式下，则引入了PointOnFace。目前不支持PointOnFace类型曲线的光滑。</li>
                 <li class="contentli">截面线: 经过两点的平面截面线。这个平面由这两点，加上两点的法线平均来确定这个截平面。另外，还有一种确定截平面的方式，比如屏幕视角的方向加上这两点。这种方式目前还没有在magic3d里实现。</li>
-                <li class="contentli">面曲线: 连接两点的网格曲线。此曲线没有在Geometry++里没有对应的api开放出来。</li>
                 
                 <hr class="line-divider">
                 <a name="measure_cut"><h4>切割：应用网格曲线切割网格。</h4></a>

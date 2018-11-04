@@ -28,7 +28,7 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <h3><a href="#bgl">BGL文档</a></h3>
-                <h4><a href="#overview">使用简介</a></h4>
+                <h4><a href="#overview">使用场景和简介</a></h4>
                 <h4><a href="#ipointcloud">点云</a></h4>
                 <ul class="sideul">
                     <li class="sideli"><a href="#ipointcloud">IPontCloud</a></li>
@@ -45,6 +45,9 @@
                     <li class="sideli"><a href="#trimesh">TriMesh</a></li>
                     <li class="sideli"><a href="#halfmesh">半边结构</a></li>
                     <li class="sideli"><a href="#meshparser">导入导出</a></li>
+                    <li class="sideli"><a href="#meshsubdivision">细分加密</a></li>
+                    <li class="sideli"><a href="#meshtriangulation">带约束Delaunay三角化</a></li>
+                    <li class="sideli"><a href="#meshtool">网格工具箱</a></li>
                 </ul>
                 <h4><a href="#multithreadsetting">工具</a></h4>
                 <ul class="sideul">
@@ -64,11 +67,20 @@
 
                 <!-- <a name="overview"><h5>简介</h5></a> -->
                 <p>BGL (Basic Geometry Library) 是一个关于三维数据(点云，网格)处理的基础几何库。它包含了三维数据处理最基础的数据结构。用户可以很方便的使用它来开发各种几何相关的算法。</p>
-                <p>它可以免费的，无限制的使用，包括科研，商业产品等。</p>
+                <p>它是免费的，可以无限制的使用，包括科研，商业产品等。</p>
                 <p>当前SDK更新时间：2018.10.28</p>
                 <hr class="featurette-divider">
 
-                <a name="usageintroduction"><h5>使用简介</h5></a>
+                <a name="overview"><h5>使用场景</h5></a>
+                <p>BGL最大的特点是简单易用：</p>
+                <li class="contentli">SDK的数据结构简单，API之间的依赖少</li>
+                <li class="contentli">语法简单：BGL只使用了一些基本的C++语法，除了STL，基本没有用到模板等比较复杂的C++特性</li>
+                <li class="contentli">即插即用</li>
+                <p>1. 用户已经拥有了一套三维数据处理系统, 想调用BGL里面的一些功能. 这种情况只需要实现IPointCloud和ITriMesh两个接口类, 便可以调用所有的算法. 具体的用法可以参考<a href="/bgl/document#ipointcloud">IPointCloud</a>, <a href="/bgl/document#itrimesh">ITriMesh</a>和相应API的介绍.</p>
+                <p>2. 用户的三维数据处理模块打算基于BGL. 这种情况用户可以使用PointCloud和TriMesh两个类来表示自己的三维数据, 再调用所有的算法. </p>
+                <hr class="featurette-divider">
+
+                <h5>使用简介</h5>
                 <p>1. 头文件: 所有的头文件都在include文件夹里, 设置好头文件包含路径, 在使用api的源文件里包含BGL.h</p>
                 <p>2. 库: 设置好对应版本动态链接库的路径. 如果是Windows平台，需要在预处理里定义宏BGL_DLL_EXPORT，WIN32</p>
                 <hr class="featurette-divider">
@@ -681,10 +693,12 @@ ErrorCode PointCloudNormal::SmoothGridNormal(IGridPointCloud* pointCloud, Int ne
 
 
                 <a name="pcsampling"><h5>点云采样</h5></a>
+                <p>点云采样广泛应用于三维数据处理的各个方面，它可以降低数据数据，也可以用于点云特征的计算。</p>
+                <img class="featurette-image img-responsive center-block" src="/images/pointcloudsampling.png" alt="pointcloudsampling">
 <pre class="prettyprint">
 ErrorCode SamplePointCloud::UniformSample(const IPointCloud* pointCloud, Int sampleCount, std::vector< Int>& sampleIndex, Int seedId = 0, SampleQuality quality = SAMPLE_QUALITY_HIGH);
 </pre>
-                <p>均匀采样：采样结果分布均匀</p>
+                <p>均匀采样：采样结果分布均匀，如上图中所示</p>
                 <p>pointCloud: 点云数据</p>
                 <p>sampleCount: 采样的目标点数，点数应小于点云点的个数</p>
                 <p>sampleIndex: 返回采样点的索引结果</p>
@@ -696,7 +710,7 @@ ErrorCode SamplePointCloud::UniformSample(const IPointCloud* pointCloud, Int sam
 <pre class="prettyprint">
 ErrorCode SamplePointCloud::GeometrySample(const IPointCloud* pointCloud, Int sampleCount, std::vector< Int>& sampleIndex, Real uniformWeight = 0.1, Int neighborCount = 9, Int seedId = 0, SampleQuality quality = SAMPLE_QUALITY_HIGH, Real* planeRatio = NULL);
 </pre>
-                <p>几何采样：采样结果在几何特征明显的地方数量会多一些</p>
+                <p>几何采样：采样结果在几何特征明显的地方数量会多一些，如上图右所示</p>
                 <p>pointCloud: 点云数据</p>
                 <p>sampleCount: 采样的目标点数，点数应小于点云点的个数</p>
                 <p>sampleIndex: 返回采样点的索引结果</p>
@@ -1309,6 +1323,91 @@ void Parser::ExportTriMesh(std::string fileName, const ITriMesh* triMesh);
 </pre>
                 <p>目前支持的文件格式: obj, stl, ply</p>
                 <p>fileName: 格式为path/xxx.obj, path/xxx.stl, path可以是绝对路径，也可以相对路径</p>
+                <hr class="featurette-divider">
+
+                <a name="meshsubdivision"><h5>网格细分加密</h5></a>
+<pre class="prettyprint">
+ErrorCode SubdivideMesh::LoopSubdivideMesh(ITriMesh* triMesh, const std::vector< Real >* vertexFields = NULL, std::vector< Real >* insertedVertexFields = NULL);
+</pre>
+                <p>网格Loop细分</p>
+                <p>triMesh: 网格数据</p>
+                <p>vertexFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样</p>
+                <p>insertedVertexFields: 新增加顶点的属性</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode SubdivideMesh::DensifyMesh(ITriMesh* triMesh, Int targetVertexCount, const std::vector< Real >* vertexFields = NULL, std::vector< Real >* insertedVertexFields = NULL);
+</pre>
+                <p>加密网格顶点，新增加的顶点位于输入网格的三角面片上，加密后的网格不会改变输入网格的几何</p>
+                <p>triMesh: 网格数据</p>
+                <p>targetVertexCount: 加密网格的目标顶点个数，应大于输入网格顶点个数</p>
+                <p>vertexFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样</p>
+                <p>insertedVertexFields: 新增加顶点的属性</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+                <a name="meshtriangulation"><h5>带约束Delaunay三角化</h5></a>
+<pre class="prettyprint">
+ErrorCode ConstrainedDelaunay2D(const std::vector< Vector2 >& inputPointList, const std::vector< std::vector< Int > >* polylineList, const std::vector< std::vector< Int > >* directPolylineList, std::vector< Int >& triangleList, std::vector< Int >* noUsePointList);
+</pre>
+                <p>带约束的Delaunay三角化的介绍可以参考<a href="/notes/delaunaytriangulation" target="_blank">重新网格化Remesh</a></p>
+                <p>inputPointList: 输入的二维点列</p>
+                <p>polylineList: 无向边约束</p>
+                <p>directPolylineList: 有向边约束</p>
+                <p>triangleList: 三角化结果</p>
+                <p>noUsePointList: 没有用到的点索引序列</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+
+                <a name="meshtool"><h5>网格工具箱</h5></a>
+                <p>BglToolMesh.h</p>
+<pre class="prettyprint">
+ErrorCode ComputeTriMeshArea(const ITriMesh* triMesh, Real& area);
+</pre>
+                <p>计算网格面积。</p>
+                <p>triMesh：输入网格</p>
+                <p>area：网格面积</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+
+<pre class="prettyprint">
+ErrorCode ComputeTriMeshVolume(const ITriMesh* triMesh, Real& volume);
+</pre>
+                <p>计算网格体积。</p>
+                <p>triMesh：输入网格</p>
+                <p>volume：网格体积</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+bool IsTriMeshManifold(const ITriMesh* triMesh, Int* invalidVertexId = NULL);
+</pre>
+                <p>判断网格是否是流形结构。流形结构是指网格每一个点的邻域是圆盘拓扑结构，并且是单连通的。典型的非流形结构包括：边的邻面多于2个，点的邻域面是多连通区域，孤立点等。</p>
+                <p>triMesh：输入网格</p>
+                <p>invalidVertexId：流形检测过程中，遇到的第一个非流形点</p>
+                <p>返回值: 如果网格是流形结构，返回true；反之返回false</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+bool IsGeometryDegenerate(const ITriMesh* triMesh);
+</pre>
+                <p>判断网格是否有退化三角形。这里的退化情况指面积为0的三角形</p>
+                <p>triMesh：输入网格</p>
+                <p>返回值: 如果网格有退化三角形，返回true；反之返回false</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode FindMeshHoles(const ITriMesh* triMesh, TriMeshInfo* meshInfo, const std::vector< Int >* boundarySeedIds, std::vector< std::vector< Int > > *holesIds);
+</pre>
+                <p>查找网格的洞</p>
+                <p>triMesh：输入网格</p>
+                <p>meshInfo：API需要网格的edgeInfo，meshInfo可以避免重复计算EdgeInfo。如果没有此信息，可以设置为NULL</p>
+                <p>boundarySeedIds：只有包含了boundarySeedIds的洞会被查询出来。如果boundarySeedIds为NULL，则查询网格所有的洞</p>
+                <p>holesIds: 返回一个二维数组，记录了hole loop vertex ids，每一个一维vector< Int >记录了一条洞的边界顶点，顶点是顺序排列的</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
                 <hr class="featurette-divider">
 
 
