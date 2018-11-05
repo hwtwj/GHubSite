@@ -43,6 +43,11 @@ router.get("/bgl/document", function (req, res) {
     res.render('bgldocument.ejs');
 });
 
+router.get("/bgl/download", function (req, res) {
+    "use strict";
+    res.render('bgldownload.ejs');
+});
+
 router.get("/testformat", function (req, res) {
     "use strict";
     res.render('testformat.ejs');

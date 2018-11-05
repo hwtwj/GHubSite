@@ -35,12 +35,9 @@
                     </thread>
                     <tbody>
                         <tr class="danger"><th>0</th><th>网格重建(点云三角化)</th><th>ReconstructMesh::Reconstruct</th></tr>
-                        <tr class="active"><th>1</th><th>点云采样（均匀，几何，格栅，简化）</th><th>SamplePointCloud::UniformSample; SamplePointCloud::GeometrySample; SamplePointCloud::GridSample; SamplePointCloud::Simplify; SampleGrid::UniformSample; SampleGrid::GeometrySample; SampleGrid::Simplify</th></tr>
-                        <tr class="danger"><th>2</th><th>点云光滑</th><th>ConsolidatePointCloud::SmoothGeometry; ConsolidateGrid::SmoothGridGeometry</th></tr>
-                        <tr class="active"><th>3</th><th>点云法线计算</th><th>ConsolidatePointCloud::CalculatePointCloudNormal; ConsolidatePointCloud::SmoothNormal; ConsolidateGrid::CalculateGridNormal; ConsolidateGrid::SmoothGridNormal</th></tr>
+                        <tr class="active"><th>2</th><th>点云光滑</th><th>ConsolidatePointCloud::SmoothGeometry; ConsolidateGrid::SmoothGridGeometry</th></tr>
                         <tr class="danger"><th>4</th><th>点云去飞点，去孤立项</th><th>ConsolidatePointCloud::CalculateIsolation; ConsolidateGrid::CalculateGridIsolation</th></tr>
                         <tr class="active"><th>52</th><th>点云去重影</th><th>ConsolidatePointCloud::DetectOverlap</th></tr>
-                        <tr class="danger"><th>58</th><th>有序点云边界检测</th><th>ConsolidateGrid::DetectGridBoundary</th></tr>
                     </tbody>
                 </table>
 
@@ -72,8 +69,6 @@
                         <tr class="active"><th>9</th><th>网格拓扑修整</th><th>ConsolidateMesh::MakeTriMeshManifold</th></tr>
                         <tr class="warning"><th>10</th><th>网格几何修整</th><th>ConsolidateMesh::ConsolidateGeometry</th></tr>
                         <tr class="active"><th>11</th><th>网格简化</th><th>SimplifyMesh::QuadricSimplify</th></tr>
-                        <tr class="warning"><th>12</th><th>网格加密</th><th>SubdivideMesh::DensifyMesh</th></tr>
-                        <tr class="active"><th>13</th><th>Loop细分</th><th>SubdivideMesh::LoopSubdivideMesh</th></tr>
                         <tr class="warning"><th>14</th><th>网格去噪</th><th>ConsolidateMesh::RemoveGeometryNoise</th></tr>
                         <tr class="active"><th>15</th><th>网格光滑</th><th>FilterMesh::LaplaceSmooth</th></tr>
                         <tr class="warning"><th>16</th><th>几何细节增强</th><th>FilterMesh::EnhanceDetail</th></tr>
@@ -82,7 +77,6 @@
                         <tr class="active"><th>44</th><th>重新网格化(Remesh)</th><th>Remesh::UniformRemesh</th></tr>
                         <tr class="warning"><th>45</th><th>带约束的Delaunay网格优化</th><th>Triangulation::ConstrainedDelaunayOptimization</th></tr>
                         <tr class="active"><th>46</th><th>重心Voronoi网格优化</th><th>Triangulation::CentroidVoronoiOptimization</th></tr>
-                        <tr class="warning"><th>47</th><th>网格点采样</th><th>SampleMesh::UniformSample</th></tr>
                     </tbody>
                 </table>
 
@@ -109,10 +103,9 @@
                         <tr class="warning"><th>48</th><th>平面截网格线</th><th>OptimiseCurve::ConnectVertexByCuttingPlane; OptimiseCurve::ConnectFacePointByCuttingPlane</th></tr>
                         <tr class="active"><th>40</th><th>网格线切割网格</th><th>SplitMesh::SplitByLines; SplitMesh::InsertSplitLinesByEdgePoints; SplitMesh::InsertSplitLinesByFacePoints</th></tr>
                         <tr class="warning"><th>49</th><th>网格线光滑</th><th>OptimiseCurve::SmoothCurveOnMesh; OptimiseCurve::SmoothCurveCrossMesh</th></tr>
-                        <tr class="active"><th>27</th><th>网格表面积, 体积</th><th>MeasureMesh::ComputeArea; MeasureMesh::ComputeVolume</th></tr>
-                        <tr class="warning"><th>28</th><th>网格曲率（平均，高斯，主曲率）</th><th>MeasureMesh::ComputeMeanCurvature; MeasureMesh::ComputeGaussCurvature; MeasureMesh::ComputePrincipalCurvature</th></tr>
-                        <tr class="active"><th>41</th><th>网格厚度测量，射线与网格求交</th><th>MeasureMesh::ComputeThickness; MeshQueryTool::RayIntersections</th></tr>
-                        <tr class="warning"><th>42</th><th>点到网格距离测量</th><th>MeshQueryTool::QueryNearestTriangle</th></tr> 
+                        <tr class="active"><th>28</th><th>网格曲率（平均，高斯，主曲率）</th><th>MeasureMesh::ComputeMeanCurvature; MeasureMesh::ComputeGaussCurvature; MeasureMesh::ComputePrincipalCurvature</th></tr>
+                        <tr class="warning"><th>41</th><th>网格厚度测量，射线与网格求交</th><th>MeasureMesh::ComputeThickness; MeshQueryTool::RayIntersections</th></tr>
+                        <tr class="active"><th>42</th><th>点到网格距离测量</th><th>MeshQueryTool::QueryNearestTriangle</th></tr> 
                     </tbody>
                 </table>
 

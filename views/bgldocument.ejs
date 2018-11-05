@@ -28,7 +28,7 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <h3><a href="#bgl">BGL文档</a></h3>
-                <h4><a href="#overview">使用场景和简介</a></h4>
+                <h4><a href="#overview">简介和使用</a></h4>
                 <h4><a href="#ipointcloud">点云</a></h4>
                 <ul class="sideul">
                     <li class="sideli"><a href="#ipointcloud">IPontCloud</a></li>
@@ -37,6 +37,7 @@
                     <li class="sideli"><a href="#pcparser">导入导出</a></li>
                     <li class="sideli"><a href="#pcnormal">法向量</a></li>
                     <li class="sideli"><a href="#pcsampling">采样</a></li>
+                    <li class="sideli"><a href="#pcfitting">拟合基本形</a></li>
                     <li class="sideli"><a href="#pctool">点云工具箱</a></li>
                 </ul>
                 <h4><a href="#itrimesh">网格</a></h4>
@@ -47,10 +48,12 @@
                     <li class="sideli"><a href="#meshparser">导入导出</a></li>
                     <li class="sideli"><a href="#meshsubdivision">细分加密</a></li>
                     <li class="sideli"><a href="#meshtriangulation">带约束Delaunay三角化</a></li>
+                    <li class="sideli"><a href="#meshsampling">网格采样</a></li>
                     <li class="sideli"><a href="#meshtool">网格工具箱</a></li>
                 </ul>
                 <h4><a href="#multithreadsetting">工具</a></h4>
                 <ul class="sideul">
+                    <li class="sideli"><a href="#plane3">三维平面</a></li>
                     <li class="sideli"><a href="#nnquery">最近邻点查询</a></li>
                     <li class="sideli"><a href="#generalmatrix">线性方程组(稠密)</a></li>
                     <li class="sideli"><a href="#generaleigen">特征值求解(稠密)</a></li>
@@ -71,16 +74,14 @@
                 <p>当前SDK更新时间：2018.10.28</p>
                 <hr class="featurette-divider">
 
-                <a name="overview"><h5>使用场景</h5></a>
+                <a name="overview"><h5>简介</h5></a>
                 <p>BGL最大的特点是简单易用：</p>
-                <li class="contentli">SDK的数据结构简单，API之间的依赖少</li>
-                <li class="contentli">语法简单：BGL只使用了一些基本的C++语法，除了STL，基本没有用到模板等比较复杂的C++特性</li>
-                <li class="contentli">即插即用</li>
-                <p>1. 用户已经拥有了一套三维数据处理系统, 想调用BGL里面的一些功能. 这种情况只需要实现IPointCloud和ITriMesh两个接口类, 便可以调用所有的算法. 具体的用法可以参考<a href="/bgl/document#ipointcloud">IPointCloud</a>, <a href="/bgl/document#itrimesh">ITriMesh</a>和相应API的介绍.</p>
-                <p>2. 用户的三维数据处理模块打算基于BGL. 这种情况用户可以使用PointCloud和TriMesh两个类来表示自己的三维数据, 再调用所有的算法. </p>
+                <li class="contentli">不依赖第三方库</li>
+                <li class="contentli">数据结构，语法简单：BGL只使用了一些基本的C++语法，基本没有用到模板（除了STL）等比较复杂的C++特性</li>
+                <li class="contentli">即插即用：用户可以非常方便的调用BGL的功能，无需做网格点云的数据结构转换。 因为BGL的算法全部基于接口类，用户只需要实现网格点云的接口类, 便可以调用所有的算法。具体的用法可以参考<a href="/bgl/document#ipointcloud">IPointCloud</a>, <a href="/bgl/document#itrimesh">ITriMesh</a>和相应API的介绍。</li>
                 <hr class="featurette-divider">
 
-                <h5>使用简介</h5>
+                <h5>SDK使用配置</h5>
                 <p>1. 头文件: 所有的头文件都在include文件夹里, 设置好头文件包含路径, 在使用api的源文件里包含BGL.h</p>
                 <p>2. 库: 设置好对应版本动态链接库的路径. 如果是Windows平台，需要在预处理里定义宏BGL_DLL_EXPORT，WIN32</p>
                 <hr class="featurette-divider">
@@ -310,7 +311,7 @@
                 <li class="contentli">SetGridNormal：为格点设置法线信息。注意，此格点必须是valid</li>
                 <li class="contentli">GetGridPointId：获取格点对应的有效格点的索引。若格点无效，则返回-1</li>
                 <li class="contentli">GetPointGridId：获取有效格点对应的格点坐标</li>
-                <li class="contentli">导入导出：可以使用gbg和gtg格式的文件存储有序点云。</li>
+                <li class="contentli">导入导出：可以使用gbg和gtg格式的文件存储有序点云。gtg是文本格式；gbg是二进制格式，读取速度会更快。</li>
                 <hr class="line-divider">
 
                 <a name="pointcloud"><h5>PointCloud</h5></a>
@@ -777,10 +778,61 @@ ErrorCode SampleGrid::Simplify(const IGridPointCloud* pointCloud, Real interval,
                 <hr class="featurette-divider">
 
 
+                <a name="pcfitting"><h5>拟合基本形</h5></a>
+<pre class="prettyprint">
+bool FitPointCloud::FitPlane(const std::vector< Vector3 >& supportCoords, const std::vector< Vector3 >* supportNormals, Vector3& planeCenter, Vector3& planeNormal);
+</pre>
+                <p>拟合平面：若少于3个点，则必须提供点法线</p>
+                <p>supportCoords: 点云坐标</p>
+                <p>supportNormals: 点云法线，可以没有法线</p>
+                <p>planeCenter: 平面中心坐标</p>
+                <p>planeNormal: 平面法线</p>
+                <p>返回值: 如果拟合成功则返回true</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+bool FitPointCloud::FitSphere(const std::vector< Vector3 >& supportCoords, const std::vector< Vector3 >& supportNormals, Vector3& center, Real& radius);
+</pre>
+                <p>拟合球面：至少提供2个点</p>
+                <p>supportCoords: 点云坐标</p>
+                <p>supportNormals: 点云法线</p>
+                <p>center: 球心坐标</p>
+                <p>radius: 球面半径</p>
+                <p>返回值: 如果拟合成功则返回true</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+bool FitPointCloud::FitCylinder(const std::vector< Vector3 >& supportCoords, const std::vector< Vector3 >& supportNormals, const Vector3* initDir, Vector3& center, Vector3& dir, Real& radius);
+</pre>
+                <p>拟合圆柱面：至少提供2个点</p>
+                <p>supportCoords: 点云坐标</p>
+                <p>supportNormals: 点云法线</p>
+                <p>initDir: 圆柱面中轴线的方向估计，可以设置为NULL</p>
+                <p>center: 圆柱面中心坐标</p>
+                <p>dir: 圆柱面中轴线方向</p>
+                <p>radius: 圆柱面横截面圆半径</p>
+                <p>返回值: 如果拟合成功则返回true</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+bool FitPointCloud::FitCone(const std::vector< Vector3 >& supportCoords, const std::vector< Vector3 >& supportNormals, Vector3& apex, Vector3& dir, Real& angle);
+</pre>
+                <p>拟合圆锥面：至少提供3个点</p>
+                <p>supportCoords: 点云坐标</p>
+                <p>supportNormals: 点云法线</p>
+                <p>apex: 圆锥面顶点</p>
+                <p>dir: 圆锥面中心线方向</p>
+                <p>angle: 圆锥面夹角</p>
+                <p>返回值: 如果拟合成功则返回true</p>
+                <hr class="featurette-divider">
+
+
                 <a name="pctool"><h5>点云工具箱</h5></a>
                 <p>BglToolPointCloud.h</p>
 <pre class="prettyprint">
+ErrorCode CalculatePointCloudDensity(const IPointCloud* pointCloud, PointCloudInfo* pointCloudInfo, Int neighborCount, Real& density, const std::vector< Int >* selectIndex = NULL);
 ErrorCode CalculatePointListDensity(const IPointList* pointList, Int neighborCount, Real& density);
+ErrorCode CalculateGridDensity(const IGridPointCloud* pointCloud, Real& density);
 </pre>
                 <p>计算点云密度：计算每个点的neighborCount邻域点的平均距离。</p>
                 <p>neighborCount > 0，值越大，density也越大</p>
@@ -796,7 +848,30 @@ ErrorCode EstimateCameraDirection(const IPointCloud* depthData, const std::vecto
                 <p>sampleList: 采样的点云索引，如果输入值是NULL，则对所有点进行整体估计</p>
                 <p>cameraDir: 深度相机方向，与点云法线相反</p>
                 <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode DetectGridBoundary(const IGridPointCloud* pointCloud, Int boundarySize, std::vector< Int >& boundaryIds);
+</pre>
+                <p>检测有序点云的边界点</p>
+                <p>pointCloud: 输入的有序点云</p>
+                <p>boundarySize: 边界厚度</p>
+                <p>boundaryIds: 边界点索引序列</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode ComputePointCloudFieldGradient(const IPointCloud* pointCloud, PointCloudInfo* info, const std::vector< Real >& fields, Int neighborCount, std::vector< Vector3 >* gradients);
+</pre>
+                <p>计算点云标量场的梯度</p>
+                <p>pointCloud: 输入点云，需要有法线信息。</p>
+                <p>info: 点云信息，可以设置为NULL</p>
+                <p>fields: 点云标量场</p>
+                <p>neighborCount: 点云邻域点个数</p>
+                <p>gradients: fields对应的梯度场</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
                 <hr class="featurette-divider">
+
 
                 <a name="itrimesh"><h5>ITriMesh</h5></a>
                 <p>通用的三角网格数据表示接口类. 它包含了最基础，最常用的三角网格操作接口。</p>
@@ -1329,7 +1404,7 @@ void Parser::ExportTriMesh(std::string fileName, const ITriMesh* triMesh);
 <pre class="prettyprint">
 ErrorCode SubdivideMesh::LoopSubdivideMesh(ITriMesh* triMesh, const std::vector< Real >* vertexFields = NULL, std::vector< Real >* insertedVertexFields = NULL);
 </pre>
-                <p>网格Loop细分</p>
+                <p>网格Loop细分：根据Loop细分规则加密网格，同时磨光网格几何</p>
                 <p>triMesh: 网格数据</p>
                 <p>vertexFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样</p>
                 <p>insertedVertexFields: 新增加顶点的属性</p>
@@ -1338,12 +1413,25 @@ ErrorCode SubdivideMesh::LoopSubdivideMesh(ITriMesh* triMesh, const std::vector<
 
 <pre class="prettyprint">
 ErrorCode SubdivideMesh::DensifyMesh(ITriMesh* triMesh, Int targetVertexCount, const std::vector< Real >* vertexFields = NULL, std::vector< Real >* insertedVertexFields = NULL);
+ErrorCode DensifyMesh(ITriMesh* triMesh, Int targetVertexCount, std::vector< std::vector< PointOnFace > >* insertVertexCoords);
+ErrorCode DensifyMeshByLength(ITriMesh* triMesh, Real maxEdgeLength, std::vector< std::vector< PointOnFace > >* insertVertexCoords);
 </pre>
                 <p>加密网格顶点，新增加的顶点位于输入网格的三角面片上，加密后的网格不会改变输入网格的几何</p>
                 <p>triMesh: 网格数据</p>
                 <p>targetVertexCount: 加密网格的目标顶点个数，应大于输入网格顶点个数</p>
                 <p>vertexFields: 网格可以自带一些属性，具体格式和<a href="#pcreconstruction">点云重建</a>里的pointFields一样</p>
                 <p>insertedVertexFields: 新增加顶点的属性</p>
+                <p>insertVertexCoords: 新增加顶点在原网格的重心坐标PointOnFace。如果顶点位于网格边或者顶点上，则表示为多个PointOnFace的交。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode MutualTessellation(ITriMesh* triMesh, const std::vector< PointOnFace >* pointsOnFace, const std::vector< PointOnEdge >* pointsOnEdge, std::vector< bool >* pointValidFlags);
+</pre>
+                <p>加密网格：通过pointsOnFace，pointsOnEdge点来加密网格</p>
+                <p>triMesh: 网格数据</p>
+                <p>pointsOnFace，pointsOnFace：加入的新顶点。注意新顶点不能位于原始网格顶点上，pointsOnFace点应该严格位于三角面内部</p>
+                <p>pointValidFlags: 新增加顶点是否有效的加入了新网格，可以设置为NULL</p>
                 <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
                 <hr class="featurette-divider">
 
@@ -1351,12 +1439,44 @@ ErrorCode SubdivideMesh::DensifyMesh(ITriMesh* triMesh, Int targetVertexCount, c
 <pre class="prettyprint">
 ErrorCode ConstrainedDelaunay2D(const std::vector< Vector2 >& inputPointList, const std::vector< std::vector< Int > >* polylineList, const std::vector< std::vector< Int > >* directPolylineList, std::vector< Int >& triangleList, std::vector< Int >* noUsePointList);
 </pre>
-                <p>带约束的Delaunay三角化的介绍可以参考<a href="/notes/delaunaytriangulation" target="_blank">重新网格化Remesh</a></p>
+                <p>有时候，点云包含一些线段连接约束，如下左图所示。有些约束边并不满足Denaulay性质，所以，它并不能得到整体的Delaunay三角化结果(如下中图是点云的一个Delaunay三角化结果)。我们可以放开一些Delaunay性质约束，使其尽量的接近Delaunay三角化。下右图是一个带约束的Denaulay三角化的结果。可以比较一下中图和右图的结果差异。Denaulay三角化的相关知识可以参考<a href="/notes/delaunaytriangulation#cdt" target="_blank"> 带约束的Delaunay三角化 </a>的介绍</p>
+                <img class="featurette-image img-responsive center-block" src="/images/cdt.jpg" alt="cdt">
                 <p>inputPointList: 输入的二维点列</p>
-                <p>polylineList: 无向边约束</p>
-                <p>directPolylineList: 有向边约束</p>
+                <p>polylineList: 无向边约束。如左图左下角的线段约束</p>
+                <p>directPolylineList: 有向边约束。如左图右上角的有向线段约束。有向边约束可以表达网格洞，如右图所示</p>
                 <p>triangleList: 三角化结果</p>
-                <p>noUsePointList: 没有用到的点索引序列</p>
+                <p>noUsePointList: 没有用到的点索引序列：比如inputPointList中的重复点，在三角化时只取一个点。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+
+                <a name="meshsampling"><h5>网格采样</h5></a>
+<pre class="prettyprint">
+ErrorCode SampleMesh::UniformSample(const ITriMesh* triMesh, Int sampleCount, Real sharpAngle, std::vector< PointOnFace >& pointsOnFace, std::vector< PointOnEdge >& pointsOnEdge, std::vector< Int >& pointsOnVertex, bool excludeBoundary);
+</pre>
+                <p>网格采样：在网格上均匀采样点。</p>
+                <p>triMesh: 网格数据。</p>
+                <p>sampleCount: 采样点数。</p>
+                <p>sharpAngle: 网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。sharp边上一定会采点。参数范围是(0, 180 * ONE_RADIAN)。</p>
+                <p>pointsOnFace: 采样点－三角形内部的点</p>
+                <p>pointsOnEdge: 采样点－网格边上的点</p>
+                <p>pointsOnVertex: 采样点－网格顶点上的点</p>
+                <p>excludeBoundary: 采样时是否排除网格边界。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode SampleMesh::GeometrySample(const ITriMesh* triMesh, Int sampleCount, Real sharpAngle, Real uniformWeight, std::vector< PointOnFace >& pointsOnFace, std::vector< PointOnEdge >& pointsOnEdge, std::vector< Int >& pointsOnVertex, bool excludeBoundary);
+</pre>
+                <p>网格采样：在网格上均匀采样点。</p>
+                <p>triMesh: 网格数据。</p>
+                <p>sampleCount: 采样点数。</p>
+                <p>sharpAngle: 网格边的相邻面夹角大于sharpAngle，则认为是一个sharp边。sharp边上一定会采点。参数范围是(0, 180 * ONE_RADIAN)。</p>
+                <p>uniformWeight：范围[0, 1]。数值越大，采样的点越均匀。</p>
+                <p>pointsOnFace: 采样点－三角形内部的点</p>
+                <p>pointsOnEdge: 采样点－网格边上的点</p>
+                <p>pointsOnVertex: 采样点－网格顶点上的点</p>
+                <p>excludeBoundary: 采样时是否排除网格边界。</p>
                 <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
                 <hr class="featurette-divider">
 
@@ -1387,14 +1507,14 @@ bool IsTriMeshManifold(const ITriMesh* triMesh, Int* invalidVertexId = NULL);
 </pre>
                 <p>判断网格是否是流形结构。流形结构是指网格每一个点的邻域是圆盘拓扑结构，并且是单连通的。典型的非流形结构包括：边的邻面多于2个，点的邻域面是多连通区域，孤立点等。</p>
                 <p>triMesh：输入网格</p>
-                <p>invalidVertexId：流形检测过程中，遇到的第一个非流形点</p>
+                <p>invalidVertexId：流形检测过程中，遇到的第一个非流形点。注意，API在检测到第一个非流形点的时候，就会返回false</p>
                 <p>返回值: 如果网格是流形结构，返回true；反之返回false</p>
                 <hr class="line-divider">
 
 <pre class="prettyprint">
 bool IsGeometryDegenerate(const ITriMesh* triMesh);
 </pre>
-                <p>判断网格是否有退化三角形。这里的退化情况指面积为0的三角形</p>
+                <p>判断网格是否有退化三角形。这里的退化情况指面积小于REAL_TOL的三角形</p>
                 <p>triMesh：输入网格</p>
                 <p>返回值: 如果网格有退化三角形，返回true；反之返回false</p>
                 <hr class="line-divider">
@@ -1408,8 +1528,68 @@ ErrorCode FindMeshHoles(const ITriMesh* triMesh, TriMeshInfo* meshInfo, const st
                 <p>boundarySeedIds：只有包含了boundarySeedIds的洞会被查询出来。如果boundarySeedIds为NULL，则查询网格所有的洞</p>
                 <p>holesIds: 返回一个二维数组，记录了hole loop vertex ids，每一个一维vector< Int >记录了一条洞的边界顶点，顶点是顺序排列的</p>
                 <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode CalculateIsolation(ITriMesh* triMesh, std::vector< Real >* isolation);
+</pre>
+                <p>网格去孤立项用法：计算网格每个顶点的孤立值. 孤立值越小, 孤立项的几率越大，范围是(0, 1). 比如可以认为孤立值小于0.1的点就为孤立项</p>
+                <p>triMesh：网格数据</p>
+                <p>isolation: 网格顶点孤立值，范围是(0, 1］</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+<pre class="prettyprint">
+    // 去除点云孤立项示例
+    std::vector< GPP::Real > isolations;
+    GPP::ErrorCode res = GPP::CalculateIsolation(triMesh, &isolations);
+    GPP::Real cutValue = 0.1;
+    std::vector< GPP::Int > deleteIndex;
+    for (GPP::Int vid = 0; vid < vertexCount; vid++)
+    {
+        if (isolations.at(vid) < cutValue)
+        {
+            deleteIndex.push_back(vid);
+        }
+    }
+    res = DeleteTriMeshVertiecs(triMesh, deleteIndex);
+</pre>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode SmoothTriangleNormal(ITriMesh* triMesh, TriMeshInfo* meshInfo, Real sharpAngle, Real normalWeight);
+</pre>
+                <p>光滑网格面法线</p>
+                <p>triMesh：输入网格</p>
+                <p>meshInfo：如果没有此信息，可以设置为NULL</p>
+                <p>sharpAngle：相邻面法线夹角大于sharpAngle，则不做光滑</p>
+                <p>normalWeight: 法线光滑时，保持原法线的权重。数值越大，法线光滑的效果越弱</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
                 <hr class="featurette-divider">
 
+
+                <a name="plane3"><h5>三维平面</h5></a>
+<pre class="prettyprint">
+Real Plane3::SignedDistance(const Vector3& point) const;
+</pre>
+                <p>计算点到平面距离</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+Vector3 Plane3::Intersection(const Vector3& startPoint, const Vector3& endPoint, Real* ratio) const;
+</pre>
+                <p>计算线段与平面的交点</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+Vector3 Plane3::ProjectPoint(const Vector3& point) const;
+</pre>
+                <p>计算点到平面的投影</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+Vector3 Plane3::ProjectVector(const Vector3& vec3) const;
+</pre>
+                <p>计算向量到平面的投影</p>
+                <hr class="featurette-divider">
 
                 <a name="nnquery"><h5>最近邻点查询</h5></a>
                 <p>NNQuery(ToolNNQuery.h): Nearest Neighbor Query。最近邻域查询工具。</p>
@@ -1706,8 +1886,8 @@ ErrorCode FindMeshHoles(const ITriMesh* triMesh, TriMeshInfo* meshInfo, const st
 </pre>
 
 
-                <a name="download"><h5>下载</h5></a>
-                <p><a href="http://threepark.net/bgl/bgl-vs2013-64bit.zip" target="_blank">VS2013_64bit</a> | <a href="http://threepark.net/bgl/bgl-vs2015-64bit.zip" target="_blank">VS2015_64bit</a> | <a href="http://threepark.net/bgl/bgl-vs2017-64bit.zip" target="_blank">VS2017_64bit</a> 更新时间 2018.10.28<p>
+                <a name="download"><h5>下载 </h5></a>
+                <p><a href="/bgl/download" target="_blank">下载页面</a>，更新时间 2018.10.28<p>
                 <hr class="featurette-divider">
 
 
