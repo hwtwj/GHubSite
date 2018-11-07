@@ -49,6 +49,8 @@
                     <li class="sideli"><a href="#meshsubdivision">细分加密</a></li>
                     <li class="sideli"><a href="#meshtriangulation">带约束Delaunay三角化</a></li>
                     <li class="sideli"><a href="#meshsampling">网格采样</a></li>
+                    <li class="sideli"><a href="#meshoffset">抽壳(等距网格)</a></li>
+                    <li class="sideli"><a href="#meshcutcurve">UV展开割线</a></li>
                     <li class="sideli"><a href="#meshtool">网格工具箱</a></li>
                 </ul>
                 <h4><a href="#multithreadsetting">工具</a></h4>
@@ -1480,6 +1482,49 @@ ErrorCode SampleMesh::GeometrySample(const ITriMesh* triMesh, Int sampleCount, R
                 <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
                 <hr class="featurette-divider">
 
+                <a name="meshoffset"><h5>网格抽壳(等距网格)</h5></a>
+<pre class="prettyprint">
+ErrorCode OffsetMesh::UniformApproximate(ITriMesh* triMesh, Real offsetValue);
+</pre>
+                <p>网格均匀抽壳：计算网格的近似等距网格，如果是开网格，会把原始网格和等距网格的边界连接起来形成一个封闭网格。</p>
+                <p>triMesh: 网格数据</p>
+                <p>offsetValue: 等距值。正值代表平移方向朝网格外，负值代表平移方向朝网格内。</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
+
+
+                <a name="meshcutcurve"><h5>UV展开割线</h5></a>
+                <p>UV展开的应用里，经常需要创建一些网格割缝。好的割缝，一般有这些性质：</p>
+                <li class="contentli">长度很短</li>
+                <li class="contentli">割线光滑</li>
+                <li class="contentli">沿着特征边</li>
+                <li class="contentli">分布在视觉不明显的地方</li>
+                <li class="contentli">在全自动UV展开应用里，割缝首先要能把网格割成一片一片的圆盘结构</li>
+                <p>下图是一些网格割线示例，第二行为<a href="/geometryplusplus/document#meshunfold" target="_blank">UV展开</a>结果：</p>
+                <img class="featurette-image img-responsive center-block" src="/images/MeshCutCurve.png" alt="MeshCutCurve">
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode MeshCutCurve::GenerateGaussianSingularity(const ITriMesh* triMesh, TriMeshInfo* meshInfo, Int maxSingularityCount, std::vector< Int >* singularityList);
+ErrorCode MeshCutCurve::GenerateConeSingularity(const ITriMesh* triMesh, Int maxSingularityCount, std::vector< Int >* singularityList);
+</pre>
+                <p>生成网格奇异点</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode MeshCutCurve::GenerateSingularitySplitLines(const ITriMesh* triMesh, TriMeshInfo* meshInfo, const std::vector< Int >& singularityList, std::vector< std::vector< Int > >* splitLines);
+</pre>
+                <p>连接网格奇异点，生成网格割线</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="line-divider">
+
+<pre class="prettyprint">
+ErrorCode MeshCutCurve::GenerateAtlasSplitLines(const ITriMesh* triMesh, Int initChartCount, std::vector< std::vector< Int > >& splitLines);
+</pre>
+                <p>生成网格拓扑割线</p>
+                <p>返回值: 如果成功则返回GPP_NO_ERROR</p>
+                <hr class="featurette-divider">
 
                 <a name="meshtool"><h5>网格工具箱</h5></a>
                 <p>BglToolMesh.h</p>

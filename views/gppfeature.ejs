@@ -72,8 +72,6 @@
                         <tr class="warning"><th>14</th><th>网格去噪</th><th>ConsolidateMesh::RemoveGeometryNoise</th></tr>
                         <tr class="active"><th>15</th><th>网格光滑</th><th>FilterMesh::LaplaceSmooth</th></tr>
                         <tr class="warning"><th>16</th><th>几何细节增强</th><th>FilterMesh::EnhanceDetail</th></tr>
-                        <tr class="active"><th>17</th><th>网格去孤立项</th><th>ConsolidateMesh::CalculateIsolation</th></tr>
-                        <tr class="warning"><th>18</th><th>网格均匀抽壳</th><th>OffsetMesh::UniformApproximate</th></tr>
                         <tr class="active"><th>44</th><th>重新网格化(Remesh)</th><th>Remesh::UniformRemesh</th></tr>
                         <tr class="warning"><th>45</th><th>带约束的Delaunay网格优化</th><th>Triangulation::ConstrainedDelaunayOptimization</th></tr>
                         <tr class="active"><th>46</th><th>重心Voronoi网格优化</th><th>Triangulation::CentroidVoronoiOptimization</th></tr>
@@ -103,9 +101,8 @@
                         <tr class="warning"><th>48</th><th>平面截网格线</th><th>OptimiseCurve::ConnectVertexByCuttingPlane; OptimiseCurve::ConnectFacePointByCuttingPlane</th></tr>
                         <tr class="active"><th>40</th><th>网格线切割网格</th><th>SplitMesh::SplitByLines; SplitMesh::InsertSplitLinesByEdgePoints; SplitMesh::InsertSplitLinesByFacePoints</th></tr>
                         <tr class="warning"><th>49</th><th>网格线光滑</th><th>OptimiseCurve::SmoothCurveOnMesh; OptimiseCurve::SmoothCurveCrossMesh</th></tr>
-                        <tr class="active"><th>28</th><th>网格曲率（平均，高斯，主曲率）</th><th>MeasureMesh::ComputeMeanCurvature; MeasureMesh::ComputeGaussCurvature; MeasureMesh::ComputePrincipalCurvature</th></tr>
-                        <tr class="warning"><th>41</th><th>网格厚度测量，射线与网格求交</th><th>MeasureMesh::ComputeThickness; MeshQueryTool::RayIntersections</th></tr>
-                        <tr class="active"><th>42</th><th>点到网格距离测量</th><th>MeshQueryTool::QueryNearestTriangle</th></tr> 
+                        <tr class="active"><th>41</th><th>网格厚度测量，射线与网格求交</th><th>MeasureMesh::ComputeThickness; MeshQueryTool::RayIntersections</th></tr>
+                        <tr class="warning"><th>42</th><th>点到网格距离测量</th><th>MeshQueryTool::QueryNearestTriangle</th></tr> 
                     </tbody>
                 </table>
 
